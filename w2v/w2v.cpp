@@ -13,7 +13,7 @@
 #include <sys/time.h>
 #include <thread>
 #include <omp.h>
-//#include <numa.h>
+#include <numa.h>
 
 #define WORD_EMBEDDINGS_FILE "input_graph"
 #define N_NODES 106
@@ -50,12 +50,12 @@ double **model;
 
 using namespace std;
 
-/*void pin_to_core(size_t core) {
+void pin_to_core(size_t core) {
   cpu_set_t cpuset;
   CPU_ZERO(&cpuset);
   CPU_SET(core, &cpuset);
   pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
-  }*/
+}
 
 long int get_time() {
     struct timeval tp;
