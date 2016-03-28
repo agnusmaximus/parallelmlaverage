@@ -1,6 +1,6 @@
 LIBS=-lpthread -lnuma -lgomp -fopenmp
 FLAGS=-O3 -std=c++11
-CC=g++-5
+CC=g++
 
 cyc_word_embeddings_hog:
 	rm -rf word_embeddings_hog

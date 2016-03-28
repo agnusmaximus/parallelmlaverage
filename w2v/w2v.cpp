@@ -16,8 +16,8 @@
 #include <numa.h>
 
 #define WORD_EMBEDDINGS_FILE "input_graph"
-#define N_NODES 106
-#define N_DATAPOINTS 1096
+#define N_NODES 3510
+#define N_DATAPOINTS 81147
 
 #ifndef NTHREAD
 #define NTHREAD 4
