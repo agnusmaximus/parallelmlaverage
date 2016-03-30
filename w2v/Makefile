@@ -1,4 +1,4 @@
-LIBS=-lpthread -lnuma -lgomp -fopenmp
+LIBS=-lpthread -lgomp -fopenmp -lnuma
 FLAGS=-O3 -std=c++11
 CC=g++
 
