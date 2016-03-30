@@ -23,7 +23,7 @@
 #endif
 
 #ifndef PRINT_LOSS
-#define PRINT_LOSS 1
+#define PRINT_LOSS 0
 #endif
 
 double GAMMA = START_GAMMA;

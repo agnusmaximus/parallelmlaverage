@@ -108,4 +108,17 @@ void allocate_memory(vector<DataPoint> &points, double ***model, double **C_sum_
     }
 }
 
+void allocate_memory_on_node(vector<DataPoint> &points, double ***model, double **C_sum_mult, double **C_sum_mult2, int n_coords, int vector_length, int nthread, int node_to_alloc_on) {
+    *model = (double **)malloc(sizeof(double *) * n_coords);
+    for (int i = 0; i < n_coords; i++) {
+	(*model)[i] = (double *)numa_alloc_onnode(sizeof(double) * vector_length, node_to_alloc_on);
+    }
+    for (int i = 0; i < nthread; i++) {
+	int n_points = n_datapoints_for_thread(points, i, nthread);
+	C_sum_mult[i] = (double *)numa_alloc_onnode(sizeof(double) * n_points, node_to_alloc_on);
+	C_sum_mult2[i] = (double *)numa_alloc_onnode(sizeof(double) * n_points, node_to_alloc_on);
+	memset(C_sum_mult[i], 0, sizeof(double) * n_points);
+	memset(C_sum_mult2[i], 0, sizeof(double) * n_points);
+    }
+}
 #endif

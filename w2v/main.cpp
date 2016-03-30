@@ -5,7 +5,8 @@
 #include "hog_w2v_model_replication.h"
 
 #define HOG_SHARED 1
-#define HOG_MOD_REP 2
+#define HOG_MOD_REP_PER_CORE 2
+#define HOG_MOD_REP_PER_NODE 3
 
 #ifndef METHOD
 #define METHOD HOG_SHARED
@@ -18,7 +19,9 @@ int main(void) {
     int t_elapsed;
     if (METHOD == HOG_SHARED)
 	t_elapsed = hog_word_embeddings_shared();
-    if (METHOD == HOG_MOD_REP)
-	t_elapsed = hog_word_embeddings_model_replication();
+    if (METHOD == HOG_MOD_REP_PER_NODE)
+	t_elapsed = hog_word_embeddings_model_replication_per_node();
+    if (METHOD == HOG_MOD_REP_PER_CORE)
+	t_elapsed = hog_word_embeddings_model_replication_per_core();
     cout << t_elapsed << " ms " << endl;
 }
