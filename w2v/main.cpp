@@ -13,7 +13,7 @@
 #include <sys/time.h>
 #include <thread>
 #include <omp.h>
-#include <numa.h>
+//#include <numa.h>
 #include "util.h"
 #include "params.h"
 #include "hogwild.h"
@@ -23,5 +23,5 @@ using namespace std;
 
 int main(void) {
     omp_set_num_threads(NTHREAD);
-    hog_word_embeddings();
+    hog_word_embeddings_shared();
 }

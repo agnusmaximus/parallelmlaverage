@@ -25,7 +25,7 @@ void allocate_memory(vector<DataPoint> &points) {
     }
 }
 
-void hog_word_embeddings() {
+void hog_word_embeddings_shared() {
 
     //Initialization / read data block
     vector<DataPoint> points = get_word_embeddings_data(WORD_EMBEDDINGS_FILE);
