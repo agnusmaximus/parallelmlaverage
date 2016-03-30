@@ -19,6 +19,21 @@ using namespace std;
 
 typedef tuple<int, int, double> DataPoint;
 
+double compute_loss(vector<DataPoint> points, double **model, double C, int vector_length) {
+    double loss = 0;
+#pragma omp parallel for reduction(+:loss)
+    for (int i = 0; i < points.size(); i++) {
+	int u = get<0>(points[i]), v = get<1>(points[i]);
+	double w = get<2>(points[i]);
+	double sub_loss = 0;
+	for (int j = 0; j < vector_length; j++) {
+	    sub_loss += (model[u][j]+model[v][j]) *  (model[u][j]+model[v][j]);
+	}
+	loss += w * (log(w) - sub_loss - C) * (log(w) - sub_loss - C);
+    }
+    return loss / points.size();
+}
+
 void pin_to_core(size_t core) {
     //cpu_set_t cpuset;
     //CPU_ZERO(&cpuset);
