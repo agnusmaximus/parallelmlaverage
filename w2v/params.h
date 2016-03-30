@@ -6,7 +6,7 @@
 #define N_DATAPOINTS 81147
 
 #ifndef NTHREAD
-#define NTHREAD 12
+#define NTHREAD 24
 #endif
 
 #ifndef N_EPOCHS
