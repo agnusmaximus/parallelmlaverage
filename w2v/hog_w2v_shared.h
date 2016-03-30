@@ -6,7 +6,7 @@ long int hog_word_embeddings_shared() {
     double C = 0;
     double *C_sum_mult[NTHREAD];
     double *C_sum_mult2[NTHREAD];
-    double **model;
+    double *model;
 
     //Initialization / read data block
     vector<DataPoint> points = get_word_embeddings_data(WORD_EMBEDDINGS_FILE);
@@ -36,7 +36,7 @@ long int hog_word_embeddings_shared() {
 	//Hogwild
 #pragma omp parallel for
 	for (int j = 0; j < NTHREAD; j++) {
-	    hogwild(datapoints_per_thread[j], j, n_datapoints_for_thread(points, j, NTHREAD), model, C, C_sum_mult, C_sum_mult2);
+	  hogwild(datapoints_per_thread[j], j, n_datapoints_for_thread(points, j, NTHREAD), K, model, C, C_sum_mult, C_sum_mult2);
 	}
 
 	//Optimize C

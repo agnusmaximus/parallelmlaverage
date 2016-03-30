@@ -22,7 +22,7 @@ using namespace std;
 
 typedef tuple<int, int, double> DataPoint;
 
-double compute_loss(vector<DataPoint> points, double **model, double C, int vector_length) {
+double compute_loss(vector<DataPoint> points, double *model, double C, int vector_length) {
     double loss = 0;
 #pragma omp parallel for reduction(+:loss)
     for (int i = 0; i < points.size(); i++) {
@@ -30,7 +30,7 @@ double compute_loss(vector<DataPoint> points, double **model, double C, int vect
 	double w = get<2>(points[i]);
 	double sub_loss = 0;
 	for (int j = 0; j < vector_length; j++) {
-	    sub_loss += (model[u][j]+model[v][j]) *  (model[u][j]+model[v][j]);
+	    sub_loss += (model[u*vector_length+j]+model[v*vector_length+j]) *  (model[u*vector_length+j]+model[v*vector_length+j]);
 	}
 	loss += w * (log(w) - sub_loss - C) * (log(w) - sub_loss - C);
     }
@@ -86,19 +86,16 @@ int n_datapoints_for_thread(vector<DataPoint> &points, int thread, int n_total_t
 	start_datapoint_for_thread(points, thread, n_total_threads);
 }
 
-void initialize_model(double **model, int n_coords, int vector_length) {
+void initialize_model(double *model, int n_coords, int vector_length) {
     for (int i = 0; i < n_coords; i++) {
 	for (int j = 0; j < vector_length; j++) {
-	    model[i][j] = rand() / (double)RAND_MAX;
+	    model[i*vector_length+j] = rand() / (double)RAND_MAX;
 	}
     }
 }
 
-void allocate_memory(vector<DataPoint> &points, double ***model, double **C_sum_mult, double **C_sum_mult2, int n_coords, int vector_length, int nthread) {
-    *model = (double **)malloc(sizeof(double *) * n_coords);
-    for (int i = 0; i < n_coords; i++) {
-	(*model)[i] = (double *)malloc(sizeof(double) * vector_length);
-    }
+void allocate_memory(vector<DataPoint> &points, double **model, double **C_sum_mult, double **C_sum_mult2, int n_coords, int vector_length, int nthread) {
+    *model = (double *)malloc(sizeof(double *) * n_coords * vector_length);
     for (int i = 0; i < nthread; i++) {
 	int n_points = n_datapoints_for_thread(points, i, nthread);
 	C_sum_mult[i] = (double *)malloc(sizeof(double) * n_points);
@@ -108,11 +105,8 @@ void allocate_memory(vector<DataPoint> &points, double ***model, double **C_sum_
     }
 }
 
-void allocate_memory_on_node(vector<DataPoint> &points, double ***model, double **C_sum_mult, double **C_sum_mult2, int n_coords, int vector_length, int nthread, int node_to_alloc_on) {
-    *model = (double **)malloc(sizeof(double *) * n_coords);
-    for (int i = 0; i < n_coords; i++) {
-	(*model)[i] = (double *)numa_alloc_onnode(sizeof(double) * vector_length, node_to_alloc_on);
-    }
+void allocate_memory_on_node(vector<DataPoint> &points, double **model, double **C_sum_mult, double **C_sum_mult2, int n_coords, int vector_length, int nthread, int node_to_alloc_on) {
+    *model = (double *)numa_alloc_onnode(sizeof(double *) * n_coords * vector_length, node_to_alloc_on);
     for (int i = 0; i < nthread; i++) {
 	int n_points = n_datapoints_for_thread(points, i, nthread);
 	C_sum_mult[i] = (double *)numa_alloc_onnode(sizeof(double) * n_points, node_to_alloc_on);
