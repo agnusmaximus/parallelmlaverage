@@ -1,12 +1,7 @@
 #include "util.h"
 #include "params.h"
 
-static double volatile C = 0;
-static double *C_sum_mult[NTHREAD];
-static double *C_sum_mult2[NTHREAD];
-static double **model;
-
-void initialize_model() {
+void initialize_model(double **model) {
     for (int i = 0; i < N_NODES; i++) {
 	for (int j = 0; j < K; j++) {
 	    model[i][j] = rand() / (double)RAND_MAX;
@@ -14,10 +9,10 @@ void initialize_model() {
     }
 }
 
-void allocate_memory(vector<DataPoint> &points) {
-    model = (double **)malloc(sizeof(double *) * N_NODES);
+void allocate_memory(vector<DataPoint> &points, double ***model, double **C_sum_mult, double **C_sum_mult2) {
+    *model = (double **)malloc(sizeof(double *) * N_NODES);
     for (int i = 0; i < N_NODES; i++) {
-	model[i] = (double *)malloc(sizeof(double) * K_TO_CACHELINE);
+	(*model)[i] = (double *)malloc(sizeof(double) * K_TO_CACHELINE);
     }
     for (int i = 0; i < NTHREAD; i++) {
 	int n_points = n_datapoints_for_thread(points, i, NTHREAD);
@@ -30,11 +25,16 @@ void allocate_memory(vector<DataPoint> &points) {
 
 void hog_word_embeddings_shared() {
 
+    double volatile C = 0;
+    double *C_sum_mult[NTHREAD];
+    double *C_sum_mult2[NTHREAD];
+    double **model;
+
     //Initialization / read data block
     vector<DataPoint> points = get_word_embeddings_data(WORD_EMBEDDINGS_FILE);
     random_shuffle(points.begin(), points.end());
-    allocate_memory(points);
-    initialize_model();
+    allocate_memory(points, &model, C_sum_mult, C_sum_mult2);
+    initialize_model(model);
     long int start_time = get_time();
 
     //Hogwild access pattern construction
