@@ -1,18 +1,20 @@
 #include "util.h"
 #include "params.h"
 
-long int hog_word_embeddings_shared() {
+long int hog_word_embeddings_model_replication() {
 
     double volatile C = 0;
     double *C_sum_mult[NTHREAD];
     double *C_sum_mult2[NTHREAD];
-    double **model;
+    double **model[NTHREAD];
 
     //Initialization / read data block
     vector<DataPoint> points = get_word_embeddings_data(WORD_EMBEDDINGS_FILE);
     random_shuffle(points.begin(), points.end());
-    allocate_memory(points, &model, C_sum_mult, C_sum_mult2, N_DATAPOINTS, K, NTHREAD);
-    initialize_model(model, N_DATAPOINTS, K);
+    for (int i = 0; i < NTHREAD; i++) {
+	allocate_memory(points, &model[i], C_sum_mult, C_sum_mult2, N_DATAPOINTS, K, NTHREAD);
+	initialize_model(model[i], N_DATAPOINTS, K);
+    }
     long int start_time = get_time();
 
     //Hogwild access pattern construction
@@ -29,12 +31,12 @@ long int hog_word_embeddings_shared() {
     float copy_time = 0;
     for (int i = 0; i < N_EPOCHS; i++) {
 
-	//cout << compute_loss(points, model, C, K) << endl;
+	//cout << compute_loss(points, model[0], C, K) << endl;
 
 	//Hogwild
 #pragma omp parallel for
 	for (int j = 0; j < NTHREAD; j++) {
-	    hogwild(datapoints_per_thread[j], j, n_datapoints_for_thread(points, j, NTHREAD), model, C, C_sum_mult, C_sum_mult2);
+	    hogwild(datapoints_per_thread[j], j, n_datapoints_for_thread(points, j, NTHREAD), model[j], C, C_sum_mult, C_sum_mult2);
 	}
 
 	//Optimize C
