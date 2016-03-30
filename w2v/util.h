@@ -1,3 +1,6 @@
+#ifndef _UTIL_
+#define _UTIL_
+
 #include <iostream>
 #include <cstdlib>
 #include <string.h>
@@ -82,3 +85,5 @@ int n_datapoints_for_thread(vector<DataPoint> &points, int thread, int n_total_t
     return end_datapoint_for_thread(points, thread, n_total_threads) -
 	start_datapoint_for_thread(points, thread, n_total_threads);
 }
+
+#endif

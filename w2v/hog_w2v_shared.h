@@ -1,3 +1,6 @@
+#include "util.h"
+#include "params.h"
+
 static double volatile C = 0;
 static double *C_sum_mult[NTHREAD];
 static double *C_sum_mult2[NTHREAD];
