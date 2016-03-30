@@ -16,7 +16,7 @@
 #include <sys/time.h>
 #include <thread>
 #include <omp.h>
-//#include <numa.h>
+#include <numa.h>
 
 using namespace std;
 
@@ -38,10 +38,10 @@ double compute_loss(vector<DataPoint> points, double **model, double C, int vect
 }
 
 void pin_to_core(size_t core) {
-    //cpu_set_t cpuset;
-    //CPU_ZERO(&cpuset);
-    //CPU_SET(core, &cpuset);
-    //pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
+    cpu_set_t cpuset;
+    CPU_ZERO(&cpuset);
+    CPU_SET(core, &cpuset);
+    pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
 }
 
 long int get_time() {
