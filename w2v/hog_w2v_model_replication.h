@@ -32,7 +32,7 @@ long int hog_word_embeddings_model_replication() {
     for (int i = 0; i < N_EPOCHS; i++) {
 
 	if (PRINT_LOSS) {
-	    cout << compute_loss(points, model, C, K) << endl;
+	    cout << compute_loss(points, model[0], C, K) << endl;
 	}
 
 	//Hogwild
