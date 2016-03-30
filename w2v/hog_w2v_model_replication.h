@@ -31,6 +31,10 @@ long int hog_word_embeddings_model_replication() {
     float copy_time = 0;
     for (int i = 0; i < N_EPOCHS; i++) {
 
+	if (PRINT_LOSS) {
+	    cout << compute_loss(points, model, C, K) << endl;
+	}
+
 	//Hogwild
 #pragma omp parallel for
 	for (int j = 0; j < NTHREAD; j++) {

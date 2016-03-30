@@ -22,6 +22,10 @@
 #define START_GAMMA 1e-7
 #endif
 
+#ifndef PRINT_LOSS
+#define PRINT_LOSS 1
+#endif
+
 double GAMMA = START_GAMMA;
 double GAMMA_REDUCTION = 1;
 

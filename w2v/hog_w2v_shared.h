@@ -29,7 +29,9 @@ long int hog_word_embeddings_shared() {
     float copy_time = 0;
     for (int i = 0; i < N_EPOCHS; i++) {
 
-	//cout << compute_loss(points, model, C, K) << endl;
+	if (PRINT_LOSS) {
+	    cout << compute_loss(points, model, C, K) << endl;
+	}
 
 	//Hogwild
 #pragma omp parallel for
