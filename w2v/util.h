@@ -86,4 +86,26 @@ int n_datapoints_for_thread(vector<DataPoint> &points, int thread, int n_total_t
 	start_datapoint_for_thread(points, thread, n_total_threads);
 }
 
+void initialize_model(double **model, int n_coords, int vector_length) {
+    for (int i = 0; i < n_coords; i++) {
+	for (int j = 0; j < vector_length; j++) {
+	    model[i][j] = rand() / (double)RAND_MAX;
+	}
+    }
+}
+
+void allocate_memory(vector<DataPoint> &points, double ***model, double **C_sum_mult, double **C_sum_mult2, int n_coords, int vector_length, int nthread) {
+    *model = (double **)malloc(sizeof(double *) * n_coords);
+    for (int i = 0; i < n_coords; i++) {
+	(*model)[i] = (double *)malloc(sizeof(double) * vector_length);
+    }
+    for (int i = 0; i < nthread; i++) {
+	int n_points = n_datapoints_for_thread(points, i, nthread);
+	C_sum_mult[i] = (double *)malloc(sizeof(double) * n_points);
+	C_sum_mult2[i] = (double *)malloc(sizeof(double) * n_points);
+	memset(C_sum_mult[i], 0, sizeof(double) * n_points);
+	memset(C_sum_mult2[i], 0, sizeof(double) * n_points);
+    }
+}
+
 #endif
