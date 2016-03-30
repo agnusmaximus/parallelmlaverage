@@ -70,14 +70,8 @@ long int hog_word_embeddings_model_replication_per_node() {
     int core_to_node[NTHREAD];
     for (int i = 0; i < NTHREAD; i++) core_to_node[i] = -1;
     int num_cpus = numa_num_task_cpus();
-    struct bitmask *bm = numa_bitmask_alloc(num_cpus);
-    for (int i = 0; i <= numa_max_node(); i++) {
-	numa_node_to_cpus(i, bm);
-	for (int j = 0; j < min((int)bm->size, NTHREAD); j++) {
-	    if (numa_bitmask_isbitset(bm, j)) {
-		core_to_node[j] = i;
-	    }
-	}
+    for (int i = 0; i < NTHREAD; i++) {
+      core_to_node[i] = numa_node_of_cpu(i);
     }
 
     int n_numa_nodes = numa_max_node() + 1;
@@ -116,7 +110,7 @@ long int hog_word_embeddings_model_replication_per_node() {
 	//Hogwild
 #pragma omp parallel for
 	for (int j = 0; j < NTHREAD; j++) {
-	  hogwild(datapoints_per_thread[j], j, n_datapoints_for_thread(points, j, NTHREAD), K, model[j], C, C_sum_mult, C_sum_mult2);
+	    hogwild(datapoints_per_thread[j], j, n_datapoints_for_thread(points, j, NTHREAD), K, model[core_to_node[j]], C, C_sum_mult, C_sum_mult2);
 	}
 
 	//Optimize C
