@@ -3,7 +3,7 @@
 
 long int hog_word_embeddings_shared() {
 
-    double volatile C = 0;
+    double C = 0;
     double *C_sum_mult[NTHREAD];
     double *C_sum_mult2[NTHREAD];
     double **model;

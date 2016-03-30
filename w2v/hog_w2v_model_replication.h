@@ -3,7 +3,7 @@
 
 long int hog_word_embeddings_model_replication() {
 
-    double volatile C = 0;
+    double C = 0;
     double *C_sum_mult[NTHREAD];
     double *C_sum_mult2[NTHREAD];
     double **model[NTHREAD];
@@ -30,8 +30,6 @@ long int hog_word_embeddings_model_replication() {
     //Divide to threads
     float copy_time = 0;
     for (int i = 0; i < N_EPOCHS; i++) {
-
-	//cout << compute_loss(points, model[0], C, K) << endl;
 
 	//Hogwild
 #pragma omp parallel for
