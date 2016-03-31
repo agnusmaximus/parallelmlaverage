@@ -1,9 +1,9 @@
-#include "util.h"
-#include "params.h"
-#include "hogwild.h"
-#include "hog_w2v_shared.h"
-#include "hog_w2v_model_replication.h"
-#include "w2v_full_gradient.h"
+#include "src/util.h"
+#include "src/params.h"
+#include "src/hogwild.h"
+#include "src/hog_w2v_shared.h"
+#include "src/hog_w2v_model_replication.h"
+#include "src/w2v_full_gradient.h"
 
 #define FULL 0
 #define HOG_SHARED 1

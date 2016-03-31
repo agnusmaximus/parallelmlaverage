@@ -23,7 +23,7 @@
 #define K_TO_CACHELINE ((K / 8 + 1) * 8)
 
 #ifndef START_GAMMA
-#define START_GAMMA 1e-7
+#define START_GAMMA 1e-5
 #endif
 
 #ifndef PRINT_LOSS
