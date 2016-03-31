@@ -29,6 +29,10 @@ long int hog_word_embeddings_shared() {
     float copy_time = 0;
     for (int i = 0; i < N_EPOCHS; i++) {
 
+	if (PRINT_LOSS) {
+	  cout << get_time() - start_time << " " << compute_loss(points, model, C, K) << endl;
+	}
+
 	//Hogwild
 #pragma omp parallel for
 	for (int j = 0; j < NTHREAD; j++) {
@@ -45,10 +49,6 @@ long int hog_word_embeddings_shared() {
 	    }
 	}
 	C = C_A / C_B;
-
-	if (PRINT_LOSS) {
-	  cout << get_time() - start_time << " " << compute_loss(points, model, C, K) << endl;
-	}
 
 	GAMMA *= GAMMA_REDUCTION;
     }

@@ -31,6 +31,10 @@ long int hog_word_embeddings_model_replication_per_core() {
     float copy_time = 0;
     for (int i = 0; i < N_EPOCHS; i++) {
 
+	if (PRINT_LOSS) {
+	    cout << get_time() - start_time << " " << compute_loss(points, model[0], C, K) << endl;
+	}
+
 	//Hogwild
 #pragma omp parallel for
 	for (int j = 0; j < NTHREAD; j++) {
@@ -47,10 +51,6 @@ long int hog_word_embeddings_model_replication_per_core() {
 	    }
 	}
 	C = C_A / C_B;
-
-	if (PRINT_LOSS) {
-	    cout << get_time() - start_time << " " << compute_loss(points, model[0], C, K) << endl;
-	}
 
 	GAMMA *= GAMMA_REDUCTION;
     }
@@ -115,6 +115,10 @@ long int hog_word_embeddings_model_replication_per_node() {
     float copy_time = 0;
     for (int i = 0; i < N_EPOCHS; i++) {
 
+	if (PRINT_LOSS) {
+	    cout << get_time() - start_time << " " << compute_loss(points, model[0], C, K) << endl;
+	}
+
 	//Hogwild
 #pragma omp parallel for
 	for (int j = 0; j < NTHREAD; j++) {
@@ -137,10 +141,6 @@ long int hog_word_embeddings_model_replication_per_node() {
 	  int node1 = rand() % n_numa_nodes, node2 = rand() % n_numa_nodes;
 	  while (node1 == node2) node2 = rand() % n_numa_nodes;
 	  average_models(model[node1], model[node2], node1, node2, N_NODES, K, core_to_node);
-	}
-
-	if (PRINT_LOSS) {
-	    cout << get_time() - start_time << " " << compute_loss(points, model[0], C, K) << endl;
 	}
 
 	GAMMA *= GAMMA_REDUCTION;
