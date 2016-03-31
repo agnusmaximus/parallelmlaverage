@@ -1,6 +1,35 @@
 #include "util.h"
 #include "params.h"
 
+void average_n_models(int n, double **models, int n_coords, int vector_length) {
+  //Optimize later
+  #pragma omp parallel for
+  for (int i = 0; i < n_coords; i++) {
+    for (int j = 0; j < vector_length; j++) {
+      double average = 0;
+      for (int k = 0; k < n; k++) {
+	average += models[k][i*vector_length+j];
+      }
+      average /= n;
+      for (int k = 0; k < n; k++) {
+	models[k][i*vector_length+j] = average;
+      }
+    }
+  }
+}
+
+void average_two_models(double *model1, double *model2, int node1, int node2, int n_coords, int vector_length, int *core_to_node) {
+
+  //Want cores to write to their own numa nodes, optimize later?
+  #pragma omp parallel for
+  for (int i = 0; i < n_coords; i++) {
+    for (int j = 0; j < vector_length; j++) {
+      double average = (model1[i*vector_length+j] + model2[i*vector_length+j])/2;
+      model1[i*vector_length+j] = model2[i*vector_length+j] = average;
+    }
+  }
+}
+
 long int hog_word_embeddings_model_replication_per_core() {
 
     double C = 0;
@@ -53,21 +82,14 @@ long int hog_word_embeddings_model_replication_per_core() {
 	C = C_A / C_B;
 
 	GAMMA *= GAMMA_REDUCTION;
+
+	//Model averaging
+	if (i % AVERAGING_FREQ == 0) {
+	  average_n_models(NTHREAD, model, N_NODES, K);
+	}
     }
 
     return get_time() - start_time;
-}
-
-void average_models(double *model1, double *model2, int node1, int node2, int n_coords, int vector_length, int *core_to_node) {
-
-  //Want cores to write to their own numa nodes, optimize later?
-  #pragma omp parallel for
-  for (int i = 0; i < n_coords; i++) {
-    for (int j = 0; j < vector_length; j++) {
-      double average = (model1[i*vector_length+j] + model2[i*vector_length+j])/2;
-      model1[i*vector_length+j] = model2[i*vector_length+j] = average;
-    }
-  }
 }
 
 long int hog_word_embeddings_model_replication_per_node() {
@@ -140,7 +162,7 @@ long int hog_word_embeddings_model_replication_per_node() {
 	if (i % AVERAGING_FREQ == 0) {
 	  int node1 = rand() % n_numa_nodes, node2 = rand() % n_numa_nodes;
 	  while (node1 == node2) node2 = rand() % n_numa_nodes;
-	  average_models(model[node1], model[node2], node1, node2, N_NODES, K, core_to_node);
+	  average_two_models(model[node1], model[node2], node1, node2, N_NODES, K, core_to_node);
 	}
 
 	GAMMA *= GAMMA_REDUCTION;
