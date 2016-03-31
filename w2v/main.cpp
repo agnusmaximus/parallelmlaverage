@@ -1,6 +1,6 @@
 #include "src/util.h"
 #include "src/params.h"
-#include "src/hogwild.h"
+#include "src/sgd.h"
 #include "src/hog_w2v_shared.h"
 #include "src/hog_w2v_model_replication.h"
 #include "src/w2v_full_gradient.h"

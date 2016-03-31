@@ -1,4 +1,4 @@
-void hogwild(DataPoint *datapoints, int thread, int n_points, int vector_length, double *local_model, double C, double **C_sum_mult, double **C_sum_mult2) {
+void sgd(DataPoint *datapoints, int thread, int n_points, int vector_length, double *local_model, double C, double **C_sum_mult, double **C_sum_mult2) {
     pin_to_core(thread);
     for (int i = 0; i < n_points; i++) {
 

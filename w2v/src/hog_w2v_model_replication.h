@@ -67,7 +67,7 @@ long int hog_word_embeddings_model_replication_per_core() {
 	//Hogwild
 #pragma omp parallel for
 	for (int j = 0; j < NTHREAD; j++) {
-	    hogwild(datapoints_per_thread[j], j, n_datapoints_for_thread(points, j, NTHREAD), K, model[j], C, C_sum_mult, C_sum_mult2);
+	    sgd(datapoints_per_thread[j], j, n_datapoints_for_thread(points, j, NTHREAD), K, model[j], C, C_sum_mult, C_sum_mult2);
 	}
 
 	//Optimize C
@@ -144,7 +144,7 @@ long int hog_word_embeddings_model_replication_per_node() {
 	//Hogwild
 #pragma omp parallel for
 	for (int j = 0; j < NTHREAD; j++) {
-	    hogwild(datapoints_per_thread[j], j, n_datapoints_for_thread(points, j, NTHREAD), K, model[core_to_node[j]], C, C_sum_mult, C_sum_mult2);
+	    sgd(datapoints_per_thread[j], j, n_datapoints_for_thread(points, j, NTHREAD), K, model[core_to_node[j]], C, C_sum_mult, C_sum_mult2);
 	}
 
 	//Optimize C
