@@ -60,12 +60,11 @@ long int hog_word_embeddings_model_replication_per_core() {
 
 void average_models(double *model1, double *model2, int node1, int node2, int n_coords, int vector_length, int *core_to_node) {
 
-  //Want cores to write to their own numa nodes, reading from other numa node
-  #pragma omp parallel 
-  {
-    int id = omp_get_thread_num();
-    pin_to_core(id);
-    
+  //Want cores to write to their own numa nodes, optimize later?
+  #pragma omp parallel for
+  for (int i = 0; i < n_coords; i++) {
+    double average = (model1[i] + model2[i])/2;
+    model1[i] = model2[i] = average;
   }
 }
 
