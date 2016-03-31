@@ -135,7 +135,7 @@ long int hog_word_embeddings_model_replication_per_node() {
 	C = C_A / C_B;
 
 	//Model averaging
-	if (i != 0 && i % N_EPOCHS == 0) {
+	if (i != 0 && i % AVERAGING_FREQ == 0) {
 	  int node1 = rand() % n_numa_nodes, node2 = rand() % n_numa_nodes;
 	  while (node1 == node2) node2 = rand() % n_numa_nodes;
 	  average_models(model[node1], model[node2], node1, node2, N_NODES, K, core_to_node);
