@@ -63,8 +63,10 @@ void average_models(double *model1, double *model2, int node1, int node2, int n_
   //Want cores to write to their own numa nodes, optimize later?
   #pragma omp parallel for
   for (int i = 0; i < n_coords; i++) {
-    double average = (model1[i] + model2[i])/2;
-    model1[i] = model2[i] = average;
+    for (int j = 0; j < vector_length; j++) {
+      double average = (model1[i*vector_length+j] + model2[i*vector_length+j])/2;
+      model1[i*vector_length+j] = model2[i*vector_length+j] = average;
+    }
   }
 }
 
@@ -131,7 +133,7 @@ long int hog_word_embeddings_model_replication_per_node() {
 	C = C_A / C_B;
 
 	//Model averaging
-	if (i != 0 && i % AVERAGING_FREQ == 0) {
+	if (i % AVERAGING_FREQ == 0) {
 	  int node1 = rand() % n_numa_nodes, node2 = rand() % n_numa_nodes;
 	  while (node1 == node2) node2 = rand() % n_numa_nodes;
 	  average_models(model[node1], model[node2], node1, node2, N_NODES, K, core_to_node);
