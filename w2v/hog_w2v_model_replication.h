@@ -12,8 +12,8 @@ long int hog_word_embeddings_model_replication_per_core() {
     vector<DataPoint> points = get_word_embeddings_data(WORD_EMBEDDINGS_FILE);
     random_shuffle(points.begin(), points.end());
     for (int i = 0; i < NTHREAD; i++) {
-	allocate_memory(points, &model[i], C_sum_mult, C_sum_mult2, N_DATAPOINTS, K, NTHREAD);
-	initialize_model(model[i], N_DATAPOINTS, K);
+	allocate_memory(points, &model[i], C_sum_mult, C_sum_mult2, N_NODES, K, NTHREAD);
+	initialize_model(model[i], N_NODES, K);
     }
     long int start_time = get_time();
 
@@ -58,6 +58,17 @@ long int hog_word_embeddings_model_replication_per_core() {
     return get_time() - start_time;
 }
 
+void average_models(double *model1, double *model2, int node1, int node2, int n_coords, int vector_length, int *core_to_node) {
+
+  //Want cores to write to their own numa nodes, reading from other numa node
+  #pragma omp parallel 
+  {
+    int id = omp_get_thread_num();
+    pin_to_core(id);
+    
+  }
+}
+
 long int hog_word_embeddings_model_replication_per_node() {
 
     //Start numa
@@ -84,8 +95,8 @@ long int hog_word_embeddings_model_replication_per_node() {
     vector<DataPoint> points = get_word_embeddings_data(WORD_EMBEDDINGS_FILE);
     random_shuffle(points.begin(), points.end());
     for (int i = 0; i < n_numa_nodes; i++) {
-	allocate_memory_on_node(points, &model[i], C_sum_mult, C_sum_mult2, N_DATAPOINTS, K, NTHREAD, i);
-	initialize_model(model[i], N_DATAPOINTS, K);
+	allocate_memory_on_node(points, &model[i], C_sum_mult, C_sum_mult2, N_NODES, K, NTHREAD, i);
+	initialize_model(model[i], N_NODES, K);
     }
     long int start_time = get_time();
 
@@ -123,6 +134,13 @@ long int hog_word_embeddings_model_replication_per_node() {
 	    }
 	}
 	C = C_A / C_B;
+
+	//Model averaging
+	if (i != 0 && i % N_EPOCHS == 0) {
+	  int node1 = rand() % n_numa_nodes, node2 = rand() % n_numa_nodes;
+	  while (node1 == node2) node2 = rand() % n_numa_nodes;
+	  average_models(model[node1], model[node2], node1, node2, N_NODES, K, core_to_node);
+	}
 
 	GAMMA *= GAMMA_REDUCTION;
     }

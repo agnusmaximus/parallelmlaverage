@@ -11,8 +11,8 @@ long int hog_word_embeddings_shared() {
     //Initialization / read data block
     vector<DataPoint> points = get_word_embeddings_data(WORD_EMBEDDINGS_FILE);
     random_shuffle(points.begin(), points.end());
-    allocate_memory(points, &model, C_sum_mult, C_sum_mult2, N_DATAPOINTS, K, NTHREAD);
-    initialize_model(model, N_DATAPOINTS, K);
+    allocate_memory(points, &model, C_sum_mult, C_sum_mult2, N_NODES, K, NTHREAD);
+    initialize_model(model, N_NODES, K);
     long int start_time = get_time();
 
     //Hogwild access pattern construction

@@ -13,6 +13,10 @@
 #define N_EPOCHS 100
 #endif
 
+#ifndef AVERAGE_FREQ
+#define AVERAGE_FREQ 10
+#endif
+
 #ifndef K
 #define K 10
 #endif
