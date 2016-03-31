@@ -23,5 +23,5 @@ int main(void) {
 	t_elapsed = hog_word_embeddings_model_replication_per_node();
     if (METHOD == HOG_MOD_REP_PER_CORE)
 	t_elapsed = hog_word_embeddings_model_replication_per_core();
-    cout << t_elapsed << " ms " << endl;
+    //cout << t_elapsed << " ms " << endl;
 }
