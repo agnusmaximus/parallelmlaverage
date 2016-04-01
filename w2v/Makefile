@@ -14,6 +14,10 @@ hog_mod_rep_node:
 	$(CC) $(FLAGS) main.cpp $(LIBS) -DMETHOD=3 -o w2v_hog_mod_rep_node
 	#./w2v_hog_mod_rep_node
 
+cyc_shared:
+	$(CC) $(FLAGS) main.cpp $(LIBS) -DMETHOD=4 -o w2v_cyc_shared
+	#./w2v_cyc_shared
+
 full:
 	$(CC) $(FLAGS) main.cpp $(LIBS) -DMETHOD=0 -o w2v_full
 	#./w2v_full

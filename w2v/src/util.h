@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <string.h>
+#include <map>
 #include <vector>
 #include <fstream>
 #include <string>
@@ -94,8 +95,12 @@ void initialize_model(double *model, int n_coords, int vector_length) {
     }
 }
 
+void allocate_memory_model(double **model, int n_coords, int vector_length) {
+  *model = (double *)malloc(sizeof(double) * n_coords * vector_length);
+}
+
 void allocate_memory(vector<DataPoint> &points, double **model, double **C_sum_mult, double **C_sum_mult2, int n_coords, int vector_length, int nthread) {
-    *model = (double *)malloc(sizeof(double *) * n_coords * vector_length);
+    allocate_memory_model(model, n_coords, vector_length);
     for (int i = 0; i < nthread; i++) {
 	int n_points = n_datapoints_for_thread(points, i, nthread);
 	C_sum_mult[i] = (double *)malloc(sizeof(double) * n_points);

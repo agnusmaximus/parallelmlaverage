@@ -5,12 +5,16 @@
 #define N_NODES 3510
 #define N_DATAPOINTS 81147
 
+#ifndef CYC_BATCH_SIZE
+#define CYC_BATCH_SIZE 500
+#endif
+
 #ifndef NTHREAD
 #define NTHREAD 24
 #endif
 
 #ifndef N_EPOCHS
-#define N_EPOCHS 100
+#define N_EPOCHS 10
 #endif
 
 #ifndef AVERAGING_FREQ
