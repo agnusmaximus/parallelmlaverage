@@ -90,7 +90,8 @@ int n_datapoints_for_thread(vector<DataPoint> &points, int thread, int n_total_t
 void initialize_model(double *model, int n_coords, int vector_length) {
     for (int i = 0; i < n_coords; i++) {
 	for (int j = 0; j < vector_length; j++) {
-	    model[i*vector_length+j] = rand() / (double)RAND_MAX;
+	  //model[i*vector_length+j] = rand() / (double)RAND_MAX;
+	  model[i*vector_length+j] = .5;
 	}
     }
 }

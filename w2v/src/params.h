@@ -14,7 +14,7 @@
 #endif
 
 #ifndef NTHREAD
-#define NTHREAD 72
+#define NTHREAD 24
 #endif
 
 #ifndef N_EPOCHS
@@ -26,7 +26,7 @@
 #endif
 
 #ifndef K
-#define K 300
+#define K 10
 #endif
 #define K_TO_CACHELINE ((K / 8 + 1) * 8)
 
@@ -39,7 +39,7 @@
 #endif
 
 #ifndef PRINT_LOSS
-#define PRINT_LOSS 0
+#define PRINT_LOSS 1
 #endif
 
 double GAMMA = START_GAMMA;

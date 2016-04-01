@@ -10,9 +10,10 @@
 #define FULL 0
 #define HOG_SHARED 1
 #define HOG_MOD_REP_PER_CORE 2
-#define HOG_MOD_REP_PER_NODE 3
+#define HOG_MOD_REP_PER_NODE_AVG 3
 #define CYC_SHARED 4
 #define CYC_MOD_REP_PER_NODE 5
+#define HOG_MOD_REP_PER_NODE_ADD 6
 
 #ifndef METHOD
 #define METHOD HOG_SHARED
@@ -27,13 +28,15 @@ int main(void) {
       t_elapsed = full_word_embeddings();
     if (METHOD == HOG_SHARED)
 	t_elapsed = hog_word_embeddings_shared();
-    if (METHOD == HOG_MOD_REP_PER_NODE)
-	t_elapsed = hog_word_embeddings_model_replication_per_node();
+    if (METHOD == HOG_MOD_REP_PER_NODE_AVG)
+	t_elapsed = hog_word_embeddings_model_replication_per_node_avg();
+    if (METHOD == HOG_MOD_REP_PER_NODE_ADD)
+	t_elapsed = hog_word_embeddings_model_replication_per_node_add();
     if (METHOD == HOG_MOD_REP_PER_CORE)
 	t_elapsed = hog_word_embeddings_model_replication_per_core();
     if (METHOD == CYC_SHARED)
         t_elapsed = cyc_word_embeddings_shared();
     if (METHOD == CYC_MOD_REP_PER_NODE)
-	t_elapsed = cyc_word_embeddings_model_replication_per_node();
+      t_elapsed = cyc_word_embeddings_model_replication_per_node();
     //cout << t_elapsed << " ms " << endl;
 }
