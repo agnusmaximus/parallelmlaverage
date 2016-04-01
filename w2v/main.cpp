@@ -2,8 +2,8 @@
 #include "src/params.h"
 #include "src/sgd.h"
 #include "src/cyclades.h"
-#include "src/hog_w2v_shared.h"
-#include "src/hog_w2v_model_replication.h"
+#include "src/hogwild.h"
+#include "src/hogwild_model_replication.h"
 #include "src/w2v_full_gradient.h"
 
 #define FULL 0
