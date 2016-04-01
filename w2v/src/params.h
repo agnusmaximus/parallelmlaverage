@@ -18,7 +18,7 @@
 #endif
 
 #ifndef N_EPOCHS
-#define N_EPOCHS 100
+#define N_EPOCHS 300
 #endif
 
 #ifndef AVERAGING_FREQ
@@ -26,7 +26,7 @@
 #endif
 
 #ifndef K
-#define K 10
+#define K 100
 #endif
 #define K_TO_CACHELINE ((K / 8 + 1) * 8)
 

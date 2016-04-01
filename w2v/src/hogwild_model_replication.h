@@ -33,14 +33,13 @@ void average_two_models(double *model1, double *model2, int node1, int node2, in
 void add_two_models(double *model1, double *model2, double *gd1, double *gd2, 
 		    int node1, int node2, int n_coords, int vector_length, int *core_to_node) {
   //if one numa node does x_0++update_0T and the other x_0++update_1T, s have both models be equal to x_0+update_+update_0T+update_+update_1T11+01+addingafter letupdate11+update01+...
-  //optimize later so that cores write to their own nodes
   #pragma omp parallel for
-  for (int i = 0; i < n_coords; i++) {
-    for (int j = 0; j < vector_length; j++) {
-      model1[i*vector_length+j] -= GAMMA * gd2[i*vector_length+j];
-      model2[i*vector_length+j] -= GAMMA * gd1[i*vector_length+j];
+    for (int i = 0; i < n_coords; i++) {
+      for (int j = 0; j < vector_length; j++) {
+	model1[i*vector_length+j] -= GAMMA * gd2[i*vector_length+j];
+	model2[i*vector_length+j] -= GAMMA * gd1[i*vector_length+j];
+      }
     }
-  }
 }
 
 long int hog_word_embeddings_model_replication_per_core() {

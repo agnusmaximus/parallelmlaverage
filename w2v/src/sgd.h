@@ -157,8 +157,8 @@ void sgd_track_gds(DataPoint *datapoints, double *gd, int thread, int n_points, 
 	for (int j = 0; j < vector_length; j++) {
 	    double gradient =  -1 * (mult * 2 * (local_model[x*vector_length+j] + local_model[y*vector_length+j]));
 	    gd[x*vector_length+j] += gradient;
-	    gd[y*vector_length+j] += gradient;
 	    local_model[x*vector_length+j] -= GAMMA * gradient;
+	    gd[y*vector_length+j] += gradient;
 	    local_model[y*vector_length+j] -= GAMMA * gradient;
 	}
     }
