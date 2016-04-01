@@ -37,9 +37,9 @@ void distribute_ccs(map<int, vector<int> > &ccs, vector<DataPoint *> &access_pat
   }
 
   for (int i = 0; i < NTHREAD; i++) {
-    cout << total_size_needed[i] << " ";
+    //cout << total_size_needed[i] << " ";
   }
-  cout << endl;
+  //cout << endl;
 
   //Allocate memory
   int index_count[NTHREAD];

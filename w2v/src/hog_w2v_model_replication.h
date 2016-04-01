@@ -103,12 +103,13 @@ long int hog_word_embeddings_model_replication_per_node() {
     //Create a map from core/thread -> node
     int core_to_node[NTHREAD];
     for (int i = 0; i < NTHREAD; i++) core_to_node[i] = -1;
-    int num_cpus = numa_num_task_cpus();
+    int n_numa_nodes = 0;
     for (int i = 0; i < NTHREAD; i++) {
       core_to_node[i] = numa_node_of_cpu(i);
+      n_numa_nodes = max(n_numa_nodes, core_to_node[i]);
     }
+    n_numa_nodes++;
 
-    int n_numa_nodes = numa_max_node() + 1;
     double C = 0;
     double *C_sum_mult[NTHREAD];
     double *C_sum_mult2[NTHREAD];
@@ -159,7 +160,7 @@ long int hog_word_embeddings_model_replication_per_node() {
 	C = C_A / C_B;
 
 	//Model averaging
-	if (i % AVERAGING_FREQ == 0) {
+	if (i % AVERAGING_FREQ == 0 && n_numa_nodes >= 2) {
 	  int node1 = rand() % n_numa_nodes, node2 = rand() % n_numa_nodes;
 	  while (node1 == node2) node2 = rand() % n_numa_nodes;
 	  average_two_models(model[node1], model[node2], node1, node2, N_NODES, K, core_to_node);
