@@ -1,0 +1,7 @@
+set terminal png
+set output "output.png"
+set log xy
+plot "w2v_hog_shared_out" using 1:2 title "hog_shared" with lines, \
+"w2v_hog_rep_core_out" using 1:2 title "hog_rep_core_avg" with lines,\
+"w2v_hog_mod_rep_node_avg_out" using 1:2 title "hog_mod_rep_per_node_avg" with lines, \
+"w2v_hog_mod_rep_node_add_out" using 1:2 title "hog_mod_rep_per_node_add" with lines
