@@ -2,11 +2,11 @@
 #define _PARAMS_
 
 #define WORD_EMBEDDINGS_FILE "data/input_graph"
-#define N_NODES 3510
-#define N_DATAPOINTS 81147
+#define N_NODES 16775
+#define N_DATAPOINTS 622941
 
 #ifndef CYC_BATCH_SIZE
-#define CYC_BATCH_SIZE 500
+#define CYC_BATCH_SIZE 4000
 #endif
 
 #ifndef NTHREAD
@@ -14,7 +14,7 @@
 #endif
 
 #ifndef N_EPOCHS
-#define N_EPOCHS 10
+#define N_EPOCHS 200
 #endif
 
 #ifndef AVERAGING_FREQ
@@ -27,7 +27,7 @@
 #define K_TO_CACHELINE ((K / 8 + 1) * 8)
 
 #ifndef START_GAMMA
-#define START_GAMMA 1e-5
+#define START_GAMMA 1e-6
 #endif
 
 #ifndef PRINT_LOSS

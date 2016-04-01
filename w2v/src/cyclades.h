@@ -36,6 +36,11 @@ void distribute_ccs(map<int, vector<int> > &ccs, vector<DataPoint *> &access_pat
     balances.push_back(best_balance); push_heap(balances.begin(), balances.end(), Comp());
   }
 
+  for (int i = 0; i < NTHREAD; i++) {
+    cout << total_size_needed[i] << " ";
+  }
+  cout << endl;
+
   //Allocate memory
   int index_count[NTHREAD];
   int max_load = 0;
@@ -155,7 +160,6 @@ long int cyc_word_embeddings_shared() {
 
     //Cyclades access pattern construction - connected components
     int n_batches = (int)ceil((points.size() / (double)CYC_BATCH_SIZE));
-    printf("%d vs %d\n", n_batches, n_datapoints_for_thread(points, 0, NTHREAD));
     map<int, vector<int> > CCs[n_batches];
 #pragma omp parallel for
     for (int i = 0; i < n_batches; i++) {
