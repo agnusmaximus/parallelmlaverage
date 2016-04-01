@@ -1,24 +1,24 @@
 #ifndef _PARAMS_
 #define _PARAMS_
 
-//#define WORD_EMBEDDINGS_FILE "data/input_graph"
-//#define N_NODES 16775
-//#define N_DATAPOINTS 622941
+#define WORD_EMBEDDINGS_FILE "data/input_graph"
+#define N_NODES 16775
+#define N_DATAPOINTS 622941
 
-#define WORD_EMBEDDINGS_FILE "data/full_graph"
-#define N_NODES 213271
-#define N_DATAPOINTS 20207156
+//#define WORD_EMBEDDINGS_FILE "data/full_graph"
+//#define N_NODES 213271
+//#define N_DATAPOINTS 20207156
 
 #ifndef CYC_BATCH_SIZE
-#define CYC_BATCH_SIZE 4250
+#define CYC_BATCH_SIZE 800
 #endif
 
 #ifndef NTHREAD
-#define NTHREAD 72
+#define NTHREAD 8
 #endif
 
 #ifndef N_EPOCHS
-#define N_EPOCHS 20
+#define N_EPOCHS 5
 #endif
 
 #ifndef AVERAGING_FREQ
@@ -26,9 +26,13 @@
 #endif
 
 #ifndef K
-#define K 10
+#define K 100
 #endif
 #define K_TO_CACHELINE ((K / 8 + 1) * 8)
+
+#ifndef K_BLOCK
+#define K_BLOCK 10
+#endif
 
 #ifndef START_GAMMA
 #define START_GAMMA 1e-8
