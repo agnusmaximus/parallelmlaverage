@@ -14,7 +14,7 @@
 #endif
 
 #ifndef NTHREAD
-#define NTHREAD 1
+#define NTHREAD 72
 #endif
 
 #ifndef N_EPOCHS

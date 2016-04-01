@@ -2,6 +2,7 @@
 #include "src/params.h"
 #include "src/sgd.h"
 #include "src/cyclades.h"
+#include "src/cyclades_model_replication.h"
 #include "src/hogwild.h"
 #include "src/hogwild_model_replication.h"
 #include "src/w2v_full_gradient.h"
@@ -11,6 +12,7 @@
 #define HOG_MOD_REP_PER_CORE 2
 #define HOG_MOD_REP_PER_NODE 3
 #define CYC_SHARED 4
+#define CYC_MOD_REP_PER_NODE 5
 
 #ifndef METHOD
 #define METHOD HOG_SHARED
@@ -31,5 +33,7 @@ int main(void) {
 	t_elapsed = hog_word_embeddings_model_replication_per_core();
     if (METHOD == CYC_SHARED)
         t_elapsed = cyc_word_embeddings_shared();
+    if (METHOD == CYC_MOD_REP_PER_NODE)
+	t_elapsed = cyc_word_embeddings_model_replication_per_node();
     //cout << t_elapsed << " ms " << endl;
 }

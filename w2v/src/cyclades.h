@@ -1,3 +1,6 @@
+#ifndef _CYCLADES_
+#define _CYCLADES_
+
 #include "util.h"
 #include "params.h"
 
@@ -225,3 +228,5 @@ long int cyc_word_embeddings_shared() {
 
     return get_time() - start_time;
 }
+
+#endif

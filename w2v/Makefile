@@ -18,6 +18,10 @@ cyc_shared:
 	$(CC) $(FLAGS) main.cpp $(LIBS) -DMETHOD=4 -o w2v_cyc_shared
 	#./w2v_cyc_shared
 
+cyc_mod_rep_node:
+	$(CC) $(FLAGS) main.cpp $(LIBS) -DMETHOD=5 -o w2v_cyc_mod_rep_node
+	#./w2v_cyc_mod_rep_node
+
 full:
 	$(CC) $(FLAGS) main.cpp $(LIBS) -DMETHOD=0 -o w2v_full
 	#./w2v_full

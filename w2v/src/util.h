@@ -99,6 +99,10 @@ void allocate_memory_model(double **model, int n_coords, int vector_length) {
   *model = (double *)malloc(sizeof(double) * n_coords * vector_length);
 }
 
+void allocate_memory_model_on_node(double **model, int n_coords, int vector_length, int node) {
+  *model = (double *)numa_alloc_onnode(sizeof(double) * n_coords * vector_length, node);
+}
+
 void allocate_memory(vector<DataPoint> &points, double **model, double **C_sum_mult, double **C_sum_mult2, int n_coords, int vector_length, int nthread) {
     allocate_memory_model(model, n_coords, vector_length);
     for (int i = 0; i < nthread; i++) {
