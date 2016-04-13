@@ -30,14 +30,14 @@ void average_two_models(double *model1, double *model2, int node1, int node2, in
   }
 }
 
-void add_two_models(double *model1, double *model2, double *gd1, double *gd2, 
+void add_two_models(double *model1, double *model2, double *initial_model1, double *initial_model2, 
 		    int node1, int node2, int n_coords, int vector_length, int *core_to_node) {
   //if one numa node does x_0++update_0T and the other x_0++update_1T, s have both models be equal to x_0+update_+update_0T+update_+update_1T11+01+addingafter letupdate11+update01+...
   #pragma omp parallel for
     for (int i = 0; i < n_coords; i++) {
       for (int j = 0; j < vector_length; j++) {
-	model1[i*vector_length+j] -= GAMMA * gd2[i*vector_length+j];
-	model2[i*vector_length+j] -= GAMMA * gd1[i*vector_length+j];
+	model2[i*vector_length+j] += (model1[i*vector_length+j] - initial_model1[i*vector_length+j]);
+	model1[i*vector_length+j] += (model2[i*vector_length+j] - initial_model2[i*vector_length+j]);
       }
     }
 }
@@ -295,15 +295,16 @@ long int hog_word_embeddings_model_replication_per_node_add() {
     double *C_sum_mult[NTHREAD];
     double *C_sum_mult2[NTHREAD];
     double *model[n_numa_nodes];
-    double *gd[n_numa_nodes];
+    double *initial_model[n_numa_nodes];
 
     //Initialization / read data block
     vector<DataPoint> points = get_word_embeddings_data(WORD_EMBEDDINGS_FILE);
     random_shuffle(points.begin(), points.end());
     for (int i = 0; i < n_numa_nodes; i++) {
-        gd[i] = (double *)numa_alloc_onnode(N_NODES * K * sizeof(double), i);
+        initial_model[i] = (double *)numa_alloc_onnode(N_NODES * K * sizeof(double), i);
 	allocate_memory_on_node(points, &model[i], C_sum_mult, C_sum_mult2, N_NODES, K, NTHREAD, i);
 	initialize_model(model[i], N_NODES, K);
+	memcpy(initial_model[i], model[i], sizeof(double) * N_NODES * K);
     }
     long int start_time = get_time();
 
@@ -325,14 +326,11 @@ long int hog_word_embeddings_model_replication_per_node_add() {
 	    cout << get_time() - start_time << " " << compute_loss(points, model[0], C, K) << endl;
 	}
 
-	for (int j = 0; j < n_numa_nodes; j++) {
-	    memset(gd[j], 0, sizeof(double) * N_NODES * K);
-	}
 
 	//Hogwild
 #pragma omp parallel for
 	for (int j = 0; j < NTHREAD; j++) {
-	    sgd_track_gds(datapoints_per_thread[j], gd[core_to_node[j]], j, n_datapoints_for_thread(points, j, NTHREAD), K, model[core_to_node[j]], C, C_sum_mult, C_sum_mult2);
+	  sgd(datapoints_per_thread[j], j, n_datapoints_for_thread(points, j, NTHREAD), K, model[core_to_node[j]], C, C_sum_mult, C_sum_mult2);
 	}
 
 	//Optimize C
@@ -350,9 +348,14 @@ long int hog_word_embeddings_model_replication_per_node_add() {
 	if (i % AVERAGING_FREQ == 0 && n_numa_nodes >= 2) {
 	  int node1 = rand() % n_numa_nodes, node2 = rand() % n_numa_nodes;
 	  while (node1 == node2) node2 = rand() % n_numa_nodes;
-	  add_two_models(model[node1], model[node2], gd[node1], gd[node2], node1, node2, N_NODES, K, core_to_node);
-	}
+	  add_two_models(model[node1], model[node2], initial_model[node1], initial_model[node2], node1, node2, N_NODES, K, core_to_node);
 
+#pragma omp parallel for //Actually helps a bit... Figure out a better way to do this
+	  for (int j = 0; j < n_numa_nodes; j++) {
+	    memcpy(initial_model[j], model[j], sizeof(double) * N_NODES * K);
+	  }
+	}
+	
 	GAMMA *= GAMMA_REDUCTION;
     }
 

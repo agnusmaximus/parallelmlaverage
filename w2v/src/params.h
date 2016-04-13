@@ -18,7 +18,7 @@
 #endif
 
 #ifndef N_EPOCHS
-#define N_EPOCHS 300
+#define N_EPOCHS 50
 #endif
 
 #ifndef AVERAGING_FREQ
