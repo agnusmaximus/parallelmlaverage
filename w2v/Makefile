@@ -1,6 +1,6 @@
-LIBS=-lpthread -lgomp -fopenmp -lnuma
-FLAGS=-O3 -std=c++11
-CC=g++
+LIBS=-lpthread -openmp -lnuma
+FLAGS=-Ofast -std=c++11
+CC=icc
 
 all: hog_shared hog_mod_rep_core hog_mod_rep_node_avg cyc_shared cyc_mod_rep_node hog_mod_rep_node_add  hog_mod_rep_node_avg_all
 
@@ -13,7 +13,7 @@ hog_mod_rep_core:
 	#./w2v_hog_mod_rep_core
 
 hog_mod_rep_node_avg:
-	$(CC) $(FLAGS) main.cpp $(LIBS) -DMETHOD=3 -o w2v_hog_mod_rep_node_avg
+	$(CC)  $(LIBS) $(FLAGS) main.cpp -DMETHOD=3 -o w2v_hog_mod_rep_node_avg
 	#./w2v_hog_mod_rep_node_avg
 
 cyc_shared:
