@@ -43,11 +43,55 @@ def cache_partition_to_datapoints_list(partition_file_name, datapoints_file_name
         #print("Partition %d with %d points touches %d distinct model coordinates" % (partition, len(datapoints), len(distinct_model_touches)))
     avg_datapoints_per_partition /= float(len(partitions))
     avg_model_touches_per_partition /= float(len(partitions))
-    print("Partitions with average of %f points, touching average of %f distinct model coordinates" % (avg_datapoints_per_partition, avg_model_touches_per_partition))
+    print("%d Partitions with average of %f points, touching average of %f distinct model coordinates" % (len(partitions), avg_datapoints_per_partition, avg_model_touches_per_partition))
     partition_file.close()
     datapoints_file.close()
     output_file.close()
 
+def cache_partition_to_datapoints_list_multifile(partition_file_name, datapoints_file_name, output_file_name):
+    partition_file = open(partition_file_name, "r")
+    datapoints_file = open(datapoints_file_name, "r")
+    datapoints = {}
+    for line in datapoints_file:
+        values = [int(x) for x in line.split()]
+        datapoint_id = values[0]
+        coord_touches = values[1:]
+        datapoints[datapoint_id] = coord_touches
+
+    n_datapoints = len(datapoints)
+    partitions = {}
+    for datapoint_id, line in enumerate(partition_file):
+        if datapoint_id >= n_datapoints:
+            break
+        partition = int(line)
+        if partition not in partitions:
+            partitions[partition] = []
+        partitions[partition].append((datapoint_id, datapoints[datapoint_id]))
+
+    avg_datapoints_per_partition = 0
+    avg_model_touches_per_partition = 0
+    output_filenames = []
+    for partition, datapoints in partitions.items():
+        filename = output_file_name + "_part_%d" % partition
+        output_file = open(filename, "w")
+        output_filenames.append(filename)
+        distinct_model_touches = set()
+        for datapoint in datapoints:
+            datapoint_id = datapoint[0]
+            datapoint_touches = datapoint[1]
+            for model_touch in datapoint_touches:
+                distinct_model_touches.add(model_touch)
+            line = ("%d " % (datapoint_id)) + " ".join([str(x) for x in datapoint_touches])
+            print(line, file=output_file)
+        avg_datapoints_per_partition += len(datapoints)
+        avg_model_touches_per_partition += len(distinct_model_touches)
+        output_file.close()
+    avg_datapoints_per_partition /= float(len(partitions))
+    avg_model_touches_per_partition /= float(len(partitions))
+    print("%d Partitions with average of %f points, touching average of %f distinct model coordinates" % (len(partitions), avg_datapoints_per_partition, avg_model_touches_per_partition))
+    partition_file.close()
+    datapoints_file.close()
+    return output_filenames
 
 if __name__ == "__main__":
     if len(sys.argv) != 4:
