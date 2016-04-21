@@ -47,7 +47,8 @@ def remap_datapoints_model(input_filename, output_filename):
     output_file.close()
     return m_datapoint, m_model
 
-def cache_partition_rec_helper(tmp_dir, input_file_name, n_partitions, output_file_name, depth=5):
+def cache_partition_rec_helper(tmp_dir, input_file_name, partition_list, output_file_name, depth):
+    n_partitions = partition_list[depth-1]
 
     # Step 1 : Create gpmetis graph file
     gpmetis_input_file = tmp_dir + "gpmetis_graph_file_depth_%d" % depth
@@ -92,8 +93,8 @@ def cache_partition_recursive(input_file_name, n_partitions, output_file_name):
     tmp_dir = "./tmp/"
     shutil.rmtree(tmp_dir, ignore_errors=True)
     os.makedirs(tmp_dir)
-
-    cache_partition_rec_helper(tmp_dir, input_file_name, n_partitions, output_file_name)
+    partition_list = [2, 2, 2, 2, 1250]
+    cache_partition_rec_helper(tmp_dir, input_file_name, partition_list, output_file_name, len(partition_list))
 
 if __name__ == "__main__":
     if len(sys.argv) != 4:
