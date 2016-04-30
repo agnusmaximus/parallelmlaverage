@@ -13,13 +13,12 @@ int main(int argc, char **argv){
   int num_threads = read_int(argc, argv, "-threads", 1);
   int num_epochs = read_int(argc, argv, "-epochs", 10);
   double step_size = read_double(argc, argv, "-step", 0.01);
-
-
+  int read_sparse = read_int(argc, argv, "-sparse", 1);
 
   // Read Data
   char *file_name = read_string(argc, argv, "-data", "data.in");
 
-  vector<DataPoint> data = read_datapoints(file_name);
+  vector<DataPoint> data = read_datapoints(file_name, read_sparse);
 
   vector<int> offsets(2);
   offsets[0] = 0;

@@ -151,13 +151,6 @@ char *read_string( int argc, char **argv, const char *option, char *default_valu
     return default_value;
 }
 
-
-vector<DataPoint> read_datapoints(char *file_name, int is_sparse) {
-  if (is_sparse) return read_sparse_datapoints(file_name);
-  
-  return read_dense_datapoints(file_name);
-}
-
 vector<DataPoint> read_sparse_datapoints(char *file_name) {
   string line;
 
@@ -182,12 +175,12 @@ vector<DataPoint> read_sparse_datapoints(char *file_name) {
     getline(data_file, line);
     stringstream linestream(line);
 
-    linstream  >> y;
+    linestream  >> y;
     linestream >> nnz;
     
     for(int j = 0; j < nnz; j++, nnz_sofar++) {
       linestream >> indices_here[j];
-      linstream  >> x_here[j];
+      linestream  >> x_here[j];
     }
 
     data[i].setTo(indices_here, nnz, x_here, num_parameters, y);
@@ -226,6 +219,12 @@ vector<DataPoint> read_dense_datapoints(char *file_name){
   } 
 
   return data;
+}
+
+vector<DataPoint> read_datapoints(char *file_name, int is_sparse) {
+  if (is_sparse) return read_sparse_datapoints(file_name);
+  
+  return read_dense_datapoints(file_name);
 }
 
 #endif
