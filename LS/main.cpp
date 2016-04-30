@@ -33,7 +33,7 @@ int main(int argc, char **argv){
 
   long long int start_time = get_time();
   // HogWild
-  hogwild_LS_one_node(data, offsets, num_parameters, num_threads, num_epochs, step_size);
+  hogwild_LS_one_node(data, offsets, num_threads, num_epochs, step_size);
 
   long long int hogwild_time = get_time() - start_time;
 
