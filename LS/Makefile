@@ -1,8 +1,11 @@
-LIBS=-lpthread -openmp -lnuma
+LIBS=-lpthread -fopenmp
 FLAGS=-Ofast -std=c++11
-CC= g++
+CC= CC -g -Wall
 
-all: hogwild_one_node
+all: hogwild_LS_one_node
 
-hogwild_one_node:
-	$(CC) $(FLAGS) main.cpp $(LIBS) -o hogwild_one_node
+hogwild_LS_one_node:
+	$(CC) $(FLAGS) main.cpp $(LIBS) -o hogwild_LS_one_node
+
+clean: 
+	rm -f *.o hogwild_LS_one_node

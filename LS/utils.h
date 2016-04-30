@@ -7,9 +7,54 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
-
+#include <cstring>
+#include <pthread.h>
+#include <time.h>
+#include <sys/time.h>
 
 using namespace std;
+
+double get_loss(double *model, vector<DataPoint> data){
+  double loss = 0.0;
+  double dot;
+  for (int i = 0; i < data.size(); i++){
+    dot = data[i].dot(model) - data[i].label();
+    loss += dot * dot;
+  }
+
+  return loss;
+}
+
+long int get_time() {
+  struct timeval tp;
+  gettimeofday(&tp, NULL);
+  return tp.tv_sec * 1000 + tp.tv_usec / 1000;
+}
+
+
+// Pin a a thread to a core. 
+void pin_to_core(size_t core) {
+  cpu_set_t cpuset;
+  CPU_ZERO(&cpuset);
+  CPU_SET(core, &cpuset);
+  pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
+}
+
+
+void print_model(double *model, int num_parameters){
+  printf("Printing model\n");
+  for(int i = 0; i < num_parameters; i++){
+    printf("%f ", model[i]);
+  }
+  printf("\n");
+  
+  return;
+}
+
+
+
+
+
 
 double randu(){
   return ((double) rand()/(RAND_MAX));
@@ -22,7 +67,7 @@ int randi(int max){
 
 double * initialize_model(int num_parameters){
   double * model = (double *) malloc(sizeof(double)*num_parameters);
-  srand(0);
+  //srand(0);
 
   for(int i = 0; i < num_parameters; i++){
     model[i] = 2*(randu() - 0.5);
@@ -45,7 +90,7 @@ void shuffle_array(int * array, int size){
 
 
 
-void shuffle_indices(int *shuffled_indices, vector<int> offsets, int start, int end){
+void shuffle_indices(int *shuffled_indices, int num_datapoints, vector<int> offsets, int start, int end){
 
   int num_offsets = offsets.size();
   int* permutation = (int *) malloc(sizeof(int)*num_offsets);
@@ -58,10 +103,12 @@ void shuffle_indices(int *shuffled_indices, vector<int> offsets, int start, int 
   
   for(int i = 0, idx = 0; i < num_offsets; i++){
     int last_idx = idx;
-    int upper_bound = (permutation[i] < num_offsets -1) ? offsets[permutation[i] + 1] : end; 
+    int upper_bound = (permutation[i] < num_offsets -1) ? offsets[permutation[i] + 1] : num_datapoints; 
     for (int j = offsets[permutation[i]];  j < upper_bound; j++, idx++){
       shuffled_indices[idx] = j;
     }
+
+
     shuffle_array(shuffled_indices + last_idx, idx - last_idx);
   }
 
@@ -87,7 +134,7 @@ int read_int( int argc, char **argv, const char *option, int default_value )
     return default_value;
 }
 
-double read_double( int argc, char **argv, const char *option, int default_value )
+double read_double( int argc, char **argv, const char *option, double default_value )
 {
     int iplace = find_option( argc, argv, option );
     if( iplace >= 0 && iplace < argc-1 )
