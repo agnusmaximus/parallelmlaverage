@@ -21,13 +21,8 @@ double* hogwild_LS_one_node(vector<DataPoint> &data, vector<int> offsets, int nu
   //Hogwild
 #pragma omp parallel num_threads(num_threads)
   {
-
-
-
     // pin current thread to core indexed by thread id
     pin_to_core(omp_get_thread_num());
-
-    printf("I am threadX %d\n", omp_get_thread_num());
 
     int * shuffled_indices = (int*) malloc(sizeof(int)*num_datapoints);
     for(int i = 0; i < num_datapoints; i++){
@@ -40,16 +35,11 @@ double* hogwild_LS_one_node(vector<DataPoint> &data, vector<int> offsets, int nu
       #pragma omp master
       {
 	printf("Loss at epoch %d = %f\n", i, get_loss(model, data));
-	print_model(model, num_parameters);
       }
       #pragma omp barrier
       
       shuffle_indices(shuffled_indices, num_datapoints, offsets, 0, offsets.size());
-      for(int k = 0; k < num_datapoints; k++){
-	printf("%d ", shuffled_indices[k]);
-      }
-      printf("\n");
-
+      
       #pragma omp for 
       for (int t = 0; t < num_threads; t++) {
 	for(int j = 0; j < num_datapoints; j++){

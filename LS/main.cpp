@@ -37,6 +37,9 @@ int main(int argc, char **argv){
 
   long long int hogwild_time = get_time() - start_time;
 
+  printf("HOGWILD TIMING: %d threads: %d datapoints, %d dimensions, %d epochs: %f seconds\n",
+	 num_threads, data.size(), data[0].dimension(), num_epochs, hogwild_time / 1000.0);
+  fflush(stdout);
 
   return 0;
 }

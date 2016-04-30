@@ -1,6 +1,7 @@
 import numpy as np
 import random as rd
 from numpy import linalg as LA
+import sys
 
 
 def generate_problem(num_datapoints, num_parameters, sparsity, randomness, structure):
@@ -15,7 +16,7 @@ def generate_problem(num_datapoints, num_parameters, sparsity, randomness, struc
         return (A,b)
 
     
-     return (A,b)
+    return (A,b)
 
 
 def problem_tofile(A,b, file_name):
@@ -51,7 +52,6 @@ def result_tofile(A,b, file_name):
     return
 
 
-
 def uniform_sparsity(entry, sparsity, randomness):
     if rd.uniform(0,1) > sparsity:
         return randomness(entry)
@@ -61,3 +61,20 @@ def uniform_sparsity(entry, sparsity, randomness):
 def randu(entry):
     return rd.uniform(-1,1)
     
+def main(argv):
+    n = int(argv[0])
+    d = int(argv[1])
+    s = float(argv[2])
+    
+    (X, y) = generate_problem(n, d, s, randu, 'uniform')
+    
+    filestem = "test_instance_n=%d_d=%d_s=%f" % (n, d, s)
+    problem_tofile(X, y, filestem + ".prob")
+    result_tofile(X, y, filestem + ".res")
+
+    return
+    
+if __name__ == "__main__":
+    main(sys.argv[1:])
+
+

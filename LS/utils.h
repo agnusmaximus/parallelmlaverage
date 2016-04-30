@@ -178,7 +178,6 @@ vector<DataPoint> read_datapoints(char *file_name){
       linestream >> x[i * num_parameters + j];
 
     data[i].setTo(x + i * num_parameters, num_parameters, y);
-    
   } 
 
   return data;

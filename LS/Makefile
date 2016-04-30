@@ -1,6 +1,6 @@
 LIBS=-lpthread -fopenmp
 FLAGS=-Ofast -std=c++11
-CC= CC -g -Wall
+CC= g++ -g -Wall
 
 all: hogwild_LS_one_node
 
