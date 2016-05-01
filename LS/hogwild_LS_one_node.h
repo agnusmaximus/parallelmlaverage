@@ -30,14 +30,16 @@ double* hogwild_LS_one_node(vector<DataPoint> &data, vector<int> offsets, int nu
     }
 
     for (int i = 0; i < num_epochs; i++) {
-      
+  
+      /*
       #pragma omp barrier
       #pragma omp master
       {
 	printf("Loss at epoch %d = %f\n", i, get_loss(model, data));
       }
       #pragma omp barrier
-      
+      */
+
       shuffle_indices(shuffled_indices, num_datapoints, offsets, 0, offsets.size());
       
       #pragma omp for 
