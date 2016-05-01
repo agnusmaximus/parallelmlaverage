@@ -19,19 +19,28 @@ def generate_problem(num_datapoints, num_parameters, sparsity, randomness, struc
     return (A,b)
 
 
-def problem_tofile(A,b, file_name):
+def problem_tofile(A,b, file_name, format = 'dense'):
     f = open(file_name, 'w')
-    f.write(str(A.shape[0]) + ' ' + str(A.shape[1]) + '\n')
-    problem = np.concatenate((b,A), axis = 1)
+    if format == 'dense': 
+        f.write(str(A.shape[0]) + ' ' + str(A.shape[1]) + '\n')
+        problem = np.concatenate((b,A), axis = 1)
+        
+        for i in range(0, A.shape[0]):
+            problem[i,:].tofile(f, " ", "%f")
+            f.write('\n')
 
-    for i in range(0, A.shape[0]):
-        problem[i,:].tofile(f, " ", "%f")
-        f.write('\n')
+    elif format == 'sparse':
+        nnz = np.sum(abs(A) > 1e-10)
+        f.write(str(A.shape[0]) + ' ' + str(A.shape[1]) + ' ' + str(nnz) +  '\n')
+        for i in range(0, A.shape[0]):
+            nnz_online = np.sum(abs(A[i,:]) > 1e-10)
+            f.write('%f %d' % (b[i],nnz_online))
+            for j in range(0, nnz_online):
+                f.write(' ' + str(j) + ' ' + str(A[i,j]))
+            f.write('\n')
 
     f.close()
-
     return
-
 
 
 def result_tofile(A,b, file_name):
@@ -65,11 +74,12 @@ def main(argv):
     n = int(argv[0])
     d = int(argv[1])
     s = float(argv[2])
-    
+    format = argv[3]
+
     (X, y) = generate_problem(n, d, s, randu, 'uniform')
     
     filestem = "test_instance_n=%d_d=%d_s=%f" % (n, d, s)
-    problem_tofile(X, y, filestem + ".prob")
+    problem_tofile(X, y, filestem + ".prob", format)
     result_tofile(X, y, filestem + ".res")
 
     return
