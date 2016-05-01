@@ -33,9 +33,11 @@ def problem_tofile(A,b, file_name, format = 'dense'):
         nnz = np.sum(abs(A) > 1e-10)
         f.write(str(A.shape[0]) + ' ' + str(A.shape[1]) + ' ' + str(nnz) +  '\n')
         for i in range(0, A.shape[0]):
-            nnz_online = np.sum(abs(A[i,:]) > 1e-10)
+            nnz_indices = filter(lambda j : np.abs(A[i,j]) > 1e-10, range(A.shape[1]))
+            nnz_online = len(nnz_indices)
+
             f.write('%f %d' % (b[i],nnz_online))
-            for j in range(0, nnz_online):
+            for j in nnz_indices:
                 f.write(' ' + str(j) + ' ' + str(A[i,j]))
             f.write('\n')
 
@@ -62,7 +64,7 @@ def result_tofile(A,b, file_name):
 
 
 def uniform_sparsity(entry, sparsity, randomness):
-    if rd.uniform(0,1) > sparsity:
+    if rd.uniform(0,1) < sparsity:
         return randomness(entry)
     return 0.0
 
