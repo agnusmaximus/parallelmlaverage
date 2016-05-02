@@ -141,15 +141,12 @@ def gen_huge_regular(num_datapoints, num_parameters, sparsity):
     return 
 
 def make_sparse_stringII(nnz_indices, row):
-    def make_pair(i,j):
-        return '%d %f' % (i, j)
+    def make_pair(i):
+        return '%d %f' % (nnz_indices[i], row[i])
 
     f = np.vectorize(make_pair)
 
-    return ' '.join(f(nnz_indices, row))
-
-
-
+    return ' '.join(f(np.arange(len(nnz_indices))))
 
 def main(argv):
     n = int(argv[0])
