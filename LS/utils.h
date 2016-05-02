@@ -52,11 +52,8 @@ void print_model(double *model, int num_parameters){
 }
 
 
-
-
-
-
 double randu(){
+  //  unsigned int seed = omp_get_thread_num();
   return ((double) rand()/(RAND_MAX));
 }
 
@@ -87,7 +84,6 @@ void shuffle_array(int * array, int size){
 
   return;
 }
-
 
 
 void shuffle_indices(int *shuffled_indices, int num_datapoints, vector<int> offsets, int start, int end){
@@ -168,6 +164,8 @@ vector<DataPoint> read_sparse_datapoints(char *file_name) {
   int nnz;
   double y;
 
+  int max = -1;
+
   for(int i = 0, nnz_sofar = 0; i < num_datapoints; i++){
     int *indices_here = indices + nnz_sofar;
     double *x_here = x + nnz_sofar;
@@ -178,6 +176,10 @@ vector<DataPoint> read_sparse_datapoints(char *file_name) {
     linestream  >> y;
     linestream >> nnz;
     
+    if(nnz > max){
+      max = nnz;
+    }
+    
     for(int j = 0; j < nnz; j++, nnz_sofar++) {
       linestream >> indices_here[j];
       linestream  >> x_here[j];
@@ -185,6 +187,8 @@ vector<DataPoint> read_sparse_datapoints(char *file_name) {
 
     data[i].setTo(indices_here, nnz, x_here, num_parameters, y);
   } 
+  
+  printf("Maximum degree of data point is %d\n", max);
 
   return data;
 }

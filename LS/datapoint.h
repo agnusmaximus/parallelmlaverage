@@ -84,6 +84,7 @@ void DataPoint::addMultTo(double scale, double *dst){
   return;
 }
 
+
 double DataPoint::dot(double *vec){
   double res = 0.0;
   

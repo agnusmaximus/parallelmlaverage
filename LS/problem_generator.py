@@ -15,7 +15,33 @@ def generate_problem(num_datapoints, num_parameters, sparsity, randomness, struc
         b = f(b)
         return (A,b)
 
-    
+    if structure == 'regular':
+        degree = int(sparsity * num_parameters)
+        f = np.vectorize(randomness)
+
+        for i in range(num_datapoints):
+            if (i + 1) % 1000 == 0:
+                print 'Generated %d data points' % (i+1) 
+  
+            indices = np.random.permutation(num_parameters)[0:degree]           
+            A[i,indices] = f(A[i,indices])
+
+        b = f(b)
+        return (A,b)
+
+    if structure == 'super-regular':
+        degree = int(sparsity * num_parameters)
+        f = np.vectorize(randomness)
+        for i in range(num_datapoints):
+            if (i + 1) % 1000 == 0:
+                print 'Generated %d data points' % (i+1) 
+  
+            indices = (np.arange(degree) + int(i / degree)*degree) % num_parameters
+            A[i,indices] = f(A[i,indices])
+
+        b = f(b)
+        return (A,b)
+        
     return (A,b)
 
 
@@ -33,16 +59,34 @@ def problem_tofile(A,b, file_name, format = 'dense'):
         nnz = np.sum(abs(A) > 1e-10)
         f.write(str(A.shape[0]) + ' ' + str(A.shape[1]) + ' ' + str(nnz) +  '\n')
         for i in range(0, A.shape[0]):
-            nnz_indices = filter(lambda j : np.abs(A[i,j]) > 1e-10, range(A.shape[1]))
+            nnz_indices = A[i,:].nonzero()[0]
+            # nnz_indices = filter(lambda j : np.abs(A[i,j]) > 1e-10, range(A.shape[1]))
             nnz_online = len(nnz_indices)
 
-            f.write('%f %d' % (b[i],nnz_online))
-            for j in nnz_indices:
-                f.write(' ' + str(j) + ' ' + str(A[i,j]))
+            f.write('%f %d ' % (b[i],nnz_online))
+            f.write(make_sparse_string(nnz_indices, A[i,:]))
+
             f.write('\n')
+            
+            if (i + 1) % 1000 == 0:
+                print 'Wrote to file %d data points' % (i + 1)
 
     f.close()
     return
+
+
+def make_sparse_string(nnz_indices, row):
+    def make_pair(j):
+        return '%d %f' % (j, row[j])
+
+    f = np.vectorize(make_pair)
+
+    return ' '.join(f(nnz_indices))
+
+    
+        
+
+
 
 
 def result_tofile(A,b, file_name):
@@ -78,11 +122,12 @@ def main(argv):
     s = float(argv[2])
     format = argv[3]
 
-    (X, y) = generate_problem(n, d, s, randu, 'uniform')
+    (X, y) = generate_problem(n, d, s, randu, 'super-regular')
     
-    filestem = "test_instance_n=%d_d=%d_s=%f" % (n, d, s)
+    filestem = "test_instance_superregular_n=%d_d=%d_s=%f" % (n, d, s)
     problem_tofile(X, y, filestem + ".prob", format)
-    result_tofile(X, y, filestem + ".res")
+
+#    result_tofile(X, y, filestem + ".res")
 
     return
     

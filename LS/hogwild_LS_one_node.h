@@ -9,16 +9,15 @@
 #include "gradient_updates.h"
 
 
-double* hogwild_LS_one_node(vector<DataPoint> &data, vector<int> offsets, int num_threads, int num_epochs, double step_size) {
+double* hogwild_LS_one_node(vector<DataPoint> &data, vector<int> &offsets, int num_threads, int num_epochs, double step_size) {
 
   int num_datapoints = data.size();
   int num_parameters = data[0].dimension();
- 
-  
+   
   double *model = initialize_model(num_parameters); 
 
 
-  //Hogwild
+//Hogwild
 #pragma omp parallel num_threads(num_threads)
   {
     // pin current thread to core indexed by thread id
@@ -29,6 +28,8 @@ double* hogwild_LS_one_node(vector<DataPoint> &data, vector<int> offsets, int nu
       shuffled_indices[i] = i;
     }
 
+    shuffle_array(shuffled_indices, num_datapoints);
+ 
     for (int i = 0; i < num_epochs; i++) {
   
       /*
@@ -40,20 +41,15 @@ double* hogwild_LS_one_node(vector<DataPoint> &data, vector<int> offsets, int nu
       #pragma omp barrier
       */
 
-      shuffle_indices(shuffled_indices, num_datapoints, offsets, 0, offsets.size());
-      
-      #pragma omp for 
-      for (int t = 0; t < num_threads; t++) {
-	for(int j = 0; j < num_datapoints; j++){
+      for(int j = 0; j < num_datapoints; j++){
 	  update_step(model, data[shuffled_indices[j]], step_size);
 	}
-      }     
     }
+
+    free(shuffled_indices);
   }
   
   return model;
 }
-
-
   
 #endif
