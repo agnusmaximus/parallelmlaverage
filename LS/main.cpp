@@ -6,6 +6,9 @@
 #include "datapoint.h"
 #include "hogwild_LS_one_node.h"
 #include "utils.h"
+#include "bipartite.h"
+#include "graph_algorithms.h"
+
 
 int main(int argc, char **argv){
 
@@ -19,16 +22,27 @@ int main(int argc, char **argv){
   char *file_name = read_string(argc, argv, "-data", "data.in");
 
   vector<DataPoint> data = read_datapoints(file_name, read_sparse);
-
+  
   vector<int> offsets(2);
   offsets[0] = 0;
   offsets[1] = 2;
 
   // Cache friendly shuffle
 
+  BipartiteGraph graph = parse_bipartiteGraph(data);
 
-  /////////////////
+  printf("Graph parsed\n");
+  fflush(stdout);
 
+  GraphBlocker blocker(data.size());
+  blocker.execute(graph, SIMPLE_BFS);
+  
+  for(int i = 0; i < data.size(); i++){
+    printf("%d %d\n", i, blocker.datapoints_blocks[i]);
+  }
+
+  return 0;
+  ////////////////
 
   long long int start_time = get_time();
   // HogWild

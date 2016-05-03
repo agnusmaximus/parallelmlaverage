@@ -12,6 +12,8 @@
 #include <time.h>
 #include <sys/time.h>
 
+#include "bipartite.h"
+
 using namespace std;
 
 double get_loss(double *model, vector<DataPoint> data){
@@ -231,4 +233,35 @@ vector<DataPoint> read_datapoints(char *file_name, int is_sparse) {
   return read_dense_datapoints(file_name);
 }
 
+
+BipartiteGraph parse_bipartiteGraph(vector<DataPoint>& data){
+  int num_datapoints = data.size();
+  int num_parameters = data[0].dimension();
+
+  adj_list_t left(num_datapoints);
+  adj_list_t right(num_parameters);
+
+  for(int i = 0; i < num_datapoints; i++){
+
+    int * p_first_idx = data[i].p_first_idx();
+    
+    left[i] = vector<int>(data[i].numnz());
+
+    for(int j = 0; j < data[i].numnz(); j++){
+      left[i][j] = p_first_idx[j];
+      
+      right[p_first_idx[j]].push_back(i);
+    }
+  }
+
+  return BipartiteGraph(left, right);
+}
+
+
+
+
+
+
+
 #endif
+
