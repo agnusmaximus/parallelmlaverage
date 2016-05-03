@@ -38,6 +38,7 @@ BipartiteGraph::BipartiteGraph(adj_list_t& left, adj_list_t& right){
   this->right = right;
 }
 
+
 int BipartiteGraph::num_nodes(Side side){
   if(side == LEFT)
     return left.size();

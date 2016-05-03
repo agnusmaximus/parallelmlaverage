@@ -1,5 +1,5 @@
 LIBS=-lpthread -fopenmp
-FLAGS= -std=c++11
+FLAGS= -O3 -std=c++11
 CC= CC -g -Wall -I../graphs
 
 all: hogwild_LS_one_node

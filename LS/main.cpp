@@ -22,21 +22,35 @@ int main(int argc, char **argv){
   // Read Data
   char *file_name = read_string(argc, argv, "-data", "data.in");
 
+  long long int read_start_time = get_time();
   vector<DataPoint> data = read_datapoints(file_name, read_sparse);
-  
+  long long int read_end_time = get_time() - read_start_time;
+
   vector<int> offsets(2);
   offsets[0] = 0;
   offsets[1] = 2;
 
   // Cache friendly shuffle
-
+  long long int parse_start_time = get_time();
   BipartiteGraph graph = parse_bipartiteGraph(data);
+  long long int parse_end_time = get_time() - parse_start_time;
 
-  printf("Graph parsed\n");
+  printf("Graph parsed in %f seconds\n", parse_end_time / 1000.0);
   fflush(stdout);
 
+  long long int construct_blocker_start_time = get_time();
   GraphBlocker blocker(data.size());
+  long long int construct_blocker_end_time = get_time() - construct_blocker_start_time;
+
+  printf("Blocker constructed in %f seconds\n", construct_blocker_end_time / 1000.0);
+  fflush(stdout);
+
+  long long int execute_blocker_start_time = get_time();
   blocker.execute(graph, SIMPLE_BFS, threshold);
+  long long int execute_blocker_end_time = get_time() - execute_blocker_start_time;
+
+  printf("BFS executed in %f seconds\n", execute_blocker_end_time /1000.0);
+  fflush(stdout);
   
   int num_blocks = (int)blocker.offsets.size();
   printf("Number of blocks = %d\n", num_blocks);
@@ -45,6 +59,11 @@ int main(int argc, char **argv){
     printf("%d %d\n", i, blocker.offsets[i]);
   }
 
+  printf("Block assignment\n");
+
+  for(int i = 0; i < data.size(); i++){
+    printf("%d %d\n", i, blocker.datapoints_blocks[i]);
+  }
 
   return 0;
 

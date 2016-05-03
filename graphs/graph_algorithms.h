@@ -58,10 +58,10 @@ void GraphBlocker::execute(BipartiteGraph &graph, Algorithm alg, int threshold){
 void GraphBlocker::simple_bfs(BipartiteGraph &graph, int threshold){
   int num_left_nodes = graph.num_nodes(LEFT);
   int num_right_nodes = graph.num_nodes(RIGHT);
-  int num_assigned = 0, current_block_size = 0, smallness_flag = 0;
+  int num_assigned = 0, current_block_size = 0, smallness_flag = 0, current_block = 0;
 
   
-  for(int i = 0, current_block = 0; i < num_left_nodes; i ++){
+  for(int i = 0; i < num_left_nodes; i ++){
     if(datapoints_blocks[i] != -1){
       continue;
     }
@@ -73,11 +73,12 @@ void GraphBlocker::simple_bfs(BipartiteGraph &graph, int threshold){
     }
 
 
-
     queue<int> current_block_queue;
-    int current_block_size = 0;
+    int current_block_size = 1;
     
     current_block_queue.push(i);
+    datapoints_blocks[i] = current_block;
+    num_assigned++;
 
     while(!current_block_queue.empty() && 
 	  current_block_size < threshold && 
@@ -85,41 +86,34 @@ void GraphBlocker::simple_bfs(BipartiteGraph &graph, int threshold){
 
       int current_node = current_block_queue.front();
       current_block_queue.pop();
-
-      if(datapoints_blocks[current_node] != -1)
-	continue;
-    
-      datapoints_blocks[current_node] = current_block;
-      current_block_size++;
-      num_assigned++;
       
       vector<int>* neighbors_current_node = graph.neighbors(current_node, LEFT);
       
-      for(int j = 0; j < neighbors_current_node->size(); j++){
+      for(int j = 0; j < neighbors_current_node->size() && current_block_size < threshold; j++){
 	int current_rightNode = neighbors_current_node->at(j);
 	vector<int>* neighbors_current_rightNodes = graph.neighbors(current_rightNode, RIGHT);
 
-	for(int k = 0; k < neighbors_current_rightNodes->size(); k ++){
+	for(int k = 0; k < neighbors_current_rightNodes->size() && current_block_size < threshold; k ++){
 	  int current_leftNode = neighbors_current_rightNodes->at(k);
 	  if(datapoints_blocks[current_leftNode] != -1)
 	    continue;
+
+	  datapoints_blocks[current_node] = current_block;
+	  current_block_size++;
+	  num_assigned++;
 
 	  current_block_queue.push(current_leftNode);
 	}
       }
     }
     
-    if(current_block_size < threshold/2){
-      continue;
-    }
-    
-    if(smallness_flag == 0){
+    if(smallness_flag == 0 && current_block_size >= threshold/2){
       offsets.push_back(current_block_size + offsets.back());
       current_block_size = 0;
       current_block++;
     }
 
-    if(num_left_nodes - num_assigned < threshold){
+    if(num_left_nodes - num_assigned <= threshold){
       smallness_flag = 1;
     }
 
