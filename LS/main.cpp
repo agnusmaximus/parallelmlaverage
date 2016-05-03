@@ -15,6 +15,7 @@ int main(int argc, char **argv){
   // Read HyperParameters
   int num_threads = read_int(argc, argv, "-threads", 1);
   int num_epochs = read_int(argc, argv, "-epochs", 10);
+  int threshold = read_int(argc, argv, "-max-block", 100);
   double step_size = read_double(argc, argv, "-step", 0.01);
   int read_sparse = read_int(argc, argv, "-sparse", 1);
 
@@ -35,13 +36,21 @@ int main(int argc, char **argv){
   fflush(stdout);
 
   GraphBlocker blocker(data.size());
-  blocker.execute(graph, SIMPLE_BFS);
+  blocker.execute(graph, SIMPLE_BFS, threshold);
   
-  for(int i = 0; i < data.size(); i++){
-    printf("%d %d\n", i, blocker.datapoints_blocks[i]);
+  int num_blocks = (int)blocker.offsets.size();
+  printf("Number of blocks = %d\n", num_blocks);
+
+  for(int i = 0; i < num_blocks; i++){
+    printf("%d %d\n", i, blocker.offsets[i]);
   }
 
+
   return 0;
+
+
+
+
   ////////////////
 
   long long int start_time = get_time();

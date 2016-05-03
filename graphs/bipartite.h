@@ -21,7 +21,7 @@ class BipartiteGraph{
 
  public:
   BipartiteGraph();
-  BipartiteGraph(adj_list_t left, adj_list_t right);
+  BipartiteGraph(adj_list_t& left, adj_list_t& right);
   
   vector<int>* neighbors(int node, Side side);  
   int num_nodes(Side side);
@@ -33,7 +33,7 @@ BipartiteGraph::BipartiteGraph(){
   right = adj_list_t();
 }
 
-BipartiteGraph::BipartiteGraph(adj_list_t left, adj_list_t right){
+BipartiteGraph::BipartiteGraph(adj_list_t& left, adj_list_t& right){
   this->left = left;
   this->right = right;
 }
@@ -54,10 +54,6 @@ vector<int>* BipartiteGraph::neighbors(int node, Side side){
     return &right[node];
   return NULL;
 }
-
-
-
-
 
 
 #endif

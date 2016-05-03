@@ -238,23 +238,23 @@ BipartiteGraph parse_bipartiteGraph(vector<DataPoint>& data){
   int num_datapoints = data.size();
   int num_parameters = data[0].dimension();
 
-  adj_list_t left(num_datapoints);
-  adj_list_t right(num_parameters);
+  adj_list_t* left = new adj_list_t(num_datapoints);
+  adj_list_t* right = new adj_list_t(num_parameters);
 
   for(int i = 0; i < num_datapoints; i++){
 
     int * p_first_idx = data[i].p_first_idx();
     
-    left[i] = vector<int>(data[i].numnz());
+    left->at(i) = vector<int>(data[i].numnz());
 
     for(int j = 0; j < data[i].numnz(); j++){
-      left[i][j] = p_first_idx[j];
+      left->at(i)[j] = p_first_idx[j];
       
-      right[p_first_idx[j]].push_back(i);
+      right->at(p_first_idx[j]).push_back(i);
     }
   }
 
-  return BipartiteGraph(left, right);
+  return BipartiteGraph(*left, *right);
 }
 
 
