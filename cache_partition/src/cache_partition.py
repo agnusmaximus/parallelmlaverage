@@ -21,7 +21,7 @@ def cache_partition(input_file_name, n_partitions, output_file_name):
     create_gpmetis_graph_file(input_file_name, gpmetis_input_file)
 
     # Step 2 : Create gpmetis partition file
-    os.system("gpmetis %s %d" % (gpmetis_input_file, n_partitions))
+    os.system("./gpmetis %s %d" % (gpmetis_input_file, n_partitions))
 
     # Step 3 : Convert partition file back to a file with permutation of datapoints
     cache_partition_to_datapoints_list(gpmetis_output_file, input_file_name, output_file_name)
