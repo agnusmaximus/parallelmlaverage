@@ -46,41 +46,47 @@ int main(int argc, char **argv){
   fflush(stdout);
 
   long long int execute_blocker_start_time = get_time();
-  blocker.execute(graph, SIMPLE_BFS, threshold);
+  blocker.execute(graph, GREEDY, threshold);
   long long int execute_blocker_end_time = get_time() - execute_blocker_start_time;
 
   printf("BFS executed in %f seconds\n", execute_blocker_end_time /1000.0);
   fflush(stdout);
   
   int num_blocks = (int)blocker.offsets.size();
-  printf("Number of blocks = %d\n", num_blocks);
 
-  for(int i = 0; i < num_blocks; i++){
-    printf("%d %d\n", i, blocker.offsets[i]);
+  /* 
+     printf("Number of blocks = %d\n", num_blocks);
+     
+     for(int i = 0; i < num_blocks; i++){
+     printf("%d %d\n", i, blocker.offsets[i]);
+     }*/
+  
+  /*  printf("Block assignment\n");
+      
+      for(int i = 0; i < data.size(); i++){
+      printf("%d %d\n", i, blocker.datapoints_blocks[i]);
+      }*/
+  
+  long long int block_order_start_time = get_time();
+  vector<DataPoint> blocked_data = block_order_data(data, blocker.datapoints_blocks, blocker.offsets);
+  long long int block_order_end_time = get_time() - block_order_start_time;
+
+  printf("Block ordering executed in %f seconds\n", block_order_end_time /1000.0);
+  fflush(stdout);
+
+  vector<int> num_parameters_per_block = num_params_per_block(data, blocker.datapoints_blocks, num_blocks);
+
+  printf("Num params per block\n");
+  for(int i = 0; i < num_blocks; i ++){
+    printf("%d %d\n", i, num_parameters_per_block[i]);
   }
 
-  printf("Block assignment\n");
-
-  for(int i = 0; i < data.size(); i++){
-    printf("%d %d\n", i, blocker.datapoints_blocks[i]);
-  }
-
-  return 0;
-
-
-
-
-  ////////////////
-
-  long long int start_time = get_time();
+ ////////////////
+  
   // HogWild
   hogwild_LS_one_node(data, offsets, num_threads, num_epochs, step_size);
 
-  long long int hogwild_time = get_time() - start_time;
-
-  printf("HOGWILD TIMING: %d threads: %d datapoints, %d dimensions, %d epochs: %f seconds\n",
-	 num_threads, data.size(), data[0].dimension(), num_epochs, hogwild_time / 1000.0);
-  fflush(stdout);
+  hogwild_LS_one_node(blocked_data, blocker.offsets, num_threads, num_epochs, step_size);
 
   return 0;
 }
