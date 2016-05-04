@@ -1,0 +1,14 @@
+#!/bin/bash -l
+#SBATCH -p debug
+#SBATCH --vtune
+#SBATCH -t 00:10:00
+#SBATCH -A mp309
+#SBATCH -N 1
+
+module load vtune
+srun -n 1 -c 12 amplxe-cl -r $SCRATCH/vtune_regular -collect memory-access -knob analyze-mem-objects=true -trace-mpi -- ./w2v_hog_mod_rep_node_avg
+#srun -n 1 -c 12 amplxe-cl -r $SCRATCH/vtune_stuff -collect general-exploration -trace-mpi -- ./w2v_hog_mod_rep_node_avg
+#srun -n 1 -c 12 amplxe-cl -r $SCRATCH/vtune_stuff -collect hotspots -trace-mpi -- ./w2v_hog_mod_rep_node_avg
+#srun -n 1 -c 12 amplxe-cl -r vtune_cache_partitioned -collect memory-access -no-auto-finalize -trace-mpi -- ./w2v_hog_mod_rep_node_avg 
+#srun -n 1 -c 12 sde -ivb -d -iform 1 -omix my_mix.out -i -global_region -- ./w2v_hog_mod_rep_node_avg
+
