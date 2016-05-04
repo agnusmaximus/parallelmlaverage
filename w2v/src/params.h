@@ -3,12 +3,12 @@
 
 #ifndef LS_FILE
 //#define WORD_EMBEDDINGS_FILE "data/25_graph"
-#define LS_FILE "data/test"
-#define N_NODES 98942
-#define N_DATAPOINTS 7005679
+#define LS_FILE "data/ls_data_file"
+#define N_NODES 300
+#define N_DATAPOINTS 20000
 #endif
 
-//#define WORD_EMBEDDINGS_FILE "data/input_graph"
+#define WORD_EMBEDDINGS_FILE "data/input_graph"
 //#define WORD_EMBEDDINGS_FILE "data/input_graph_cache_partitioned"
 //#define WORD_EMBEDDINGS_FILE "data/input_graph_cache_partitioned_rec"
 //#define N_NODES 16774
@@ -34,12 +34,12 @@
 //#define N_NODES 60603
 //#define N_DATAPOINTS 3357895
 
-#ifndef WORD_EMBEDDINGS_FILE
+//#ifndef WORD_EMBEDDINGS_FILE
 //#define WORD_EMBEDDINGS_FILE "data/25_graph"
-#define WORD_EMBEDDINGS_FILE "data/25_graph_cache_partitioned"
-#define N_NODES 98942
-#define N_DATAPOINTS 7005679
-#endif
+//#define WORD_EMBEDDINGS_FILE "data/25_graph_cache_partitioned"
+//#define N_NODES 98942
+//#define N_DATAPOINTS 7005679
+//#endif
 
 #ifndef CYC_BATCH_SIZE
 #define CYC_BATCH_SIZE 800
@@ -50,7 +50,7 @@
 #endif
 
 #ifndef N_EPOCHS
-#define N_EPOCHS 50
+#define N_EPOCHS 500
 #endif
 
 #ifndef AVERAGING_FREQ
@@ -67,7 +67,7 @@
 #endif
 
 #ifndef START_GAMMA
-#define START_GAMMA 1e-9
+#define START_GAMMA 1e-11
 #endif
 
 #ifndef PRINT_LOSS

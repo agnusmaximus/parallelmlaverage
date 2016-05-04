@@ -27,7 +27,6 @@ long int hog_LS_model_replication_per_node_avg() {
     vector<DataPointLS> points = get_LS_data(LS_FILE);
     for (int i = 0; i < n_numa_nodes; i++) {
         model[i] = (double *)numa_alloc_onnode(sizeof(double) * N_NODES, i);
-	memset(model[i], 0, sizeof(double) * N_NODES);
     }
     long int start_time = get_time();
 

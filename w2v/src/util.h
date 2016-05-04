@@ -42,7 +42,8 @@ double compute_loss_LS(vector<DataPointLS> points, double *model) {
     for (int j = 0; j < n_values; j++) {
       loss += model[indices[j]] * values[j];
     }
-    loss_total += loss;
+    loss -= label;
+    loss_total += loss*loss;
   }
   return loss_total / points.size();
 }
@@ -80,7 +81,7 @@ vector<DataPointLS> get_LS_data(string fname) {
   vector<DataPointLS> result;
   ifstream f_A(fname.c_str());
   string line;
-  while (f_A >> line) {
+  while (getline(f_A, line)) {
     stringstream strstream(line);
     DataPointLS dp;
     double label, value;

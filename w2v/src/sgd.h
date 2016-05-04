@@ -13,7 +13,7 @@ void sgd_ls(DataPointLS *datapoints, int thread, int n_points, double * __restri
     loss -= label;
     for (int j = 0; j < n_values; j++) {
       double gradient = loss * 2 * values[j];
-      model[indices[j]] -= gradient;
+      model[indices[j]] -= GAMMA * gradient;
     }
   }
 }
