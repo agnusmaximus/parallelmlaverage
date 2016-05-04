@@ -2,11 +2,18 @@ from __future__ import print_function
 import sys
 from random import shuffle
 
+if len(sys.argv) != 4:
+    print("Usage: ./create_graph_from_corpus.py corpus output percentage")
+    exit(0)
+
+percentage = float(sys.argv[3])
+
 DISTANCE = 10
 
 with open(sys.argv[1], 'r') as corpus:
     text = corpus.read()
-    #text = text[:100000]
+    text_length = len(text)
+    text = text[:int(percentage*text_length)]
 
     words_list = list(set(text.split()))
     word_to_id = {}
@@ -35,7 +42,7 @@ with open(sys.argv[1], 'r') as corpus:
             g[(a, b)] += 1
 
     # Output graph to file
-    f = open("input_graph", "w")
+    f = open(sys.argv[2], "w")
     for word_pair, occ in g.items():
         print("%d %d %d" % (word_to_id[word_pair[0]], word_to_id[word_pair[1]], occ), file=f)
 

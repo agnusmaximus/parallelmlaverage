@@ -83,12 +83,6 @@ def make_sparse_string(nnz_indices, row):
 
     return ' '.join(f(nnz_indices))
 
-    
-        
-
-
-
-
 def result_tofile(A,b, file_name):
     f = open(file_name, 'w')
 
@@ -116,13 +110,60 @@ def uniform_sparsity(entry, sparsity, randomness):
 def randu(entry):
     return rd.uniform(-1,1)
     
+
+def gen_huge_regular(num_datapoints, num_parameters, sparsity):
+    degree = int(sparsity * num_parameters)
+    nnz = degree * num_datapoints
+
+    print str(degree)
+
+    
+    filestem = "test_instance_huge-regular_n=%d_d=%d_s=%f.prob" % (num_datapoints, num_parameters, sparsity)
+
+    f = open(filestem, 'w')
+
+    f.write(str(num_datapoints) + ' ' + str(num_parameters) + ' ' + str(nnz) +  '\n')
+
+    for i in range(num_datapoints):
+
+        f.write('%f %d ' % (rd.uniform(-1,1), degree))
+    
+        A = np.random.uniform(-1, 1, degree)
+        nnz_indices = np.random.randint(0, num_parameters, degree)
+
+        f.write(make_sparse_stringII(nnz_indices, A))
+        f.write('\n')
+    
+        if (i + 1) % 1000 == 0:
+            print 'Wrote to file %d data points' % (i + 1)
+
+    f.close()
+    return 
+
+def make_sparse_stringII(nnz_indices, row):
+    def make_pair(i):
+        return '%d %f' % (nnz_indices[i], row[i])
+
+    f = np.vectorize(make_pair)
+
+    return ' '.join(f(np.arange(len(nnz_indices))))
+
 def main(argv):
     n = int(argv[0])
     d = int(argv[1])
     s = float(argv[2])
-    format = argv[3]
+    structure = argv[3]
+    format = argv[4]
 
-    (X, y) = generate_problem(n, d, s, randu, 'super-regular')
+
+    if structure == 'huge-regular':
+        return gen_huge_regular(n, d, s)
+
+
+    (X, y) = generate_problem(n, d, s, randu, structure)
+
+
+
     
     filestem = "test_instance_superregular_n=%d_d=%d_s=%f" % (n, d, s)
     problem_tofile(X, y, filestem + ".prob", format)

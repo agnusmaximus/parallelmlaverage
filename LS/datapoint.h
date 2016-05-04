@@ -14,11 +14,16 @@ class DataPoint{
   DataPoint(int*, int, double*, int, double);
   void addMultTo(double, double *);
   int dimension();
+  int numnz();
+  int* p_first_idx();
+  int* p_last_idx();
+
   double label();
   double dot(double *);
   void setTo(double*, int, double);
   void setTo(int*, int, double*, int, double);
 };
+
 
 DataPoint::DataPoint(){
   this->indices=NULL;
@@ -66,8 +71,22 @@ int DataPoint::dimension(){
   return dim;
 }
 
+int DataPoint::numnz(){
+  return nnz;
+}
+
 double DataPoint::label(){
   return y;
+}
+
+
+int* DataPoint::p_first_idx(){
+  return indices;
+}
+
+
+int* DataPoint::p_last_idx(){
+  return indices + nnz;
 }
 
 void DataPoint::addMultTo(double scale, double *dst){

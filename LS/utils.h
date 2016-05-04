@@ -3,6 +3,7 @@
 
 
 #include <vector>
+#include <set>
 #include <cstdlib>
 #include <iostream>
 #include <fstream>
@@ -11,6 +12,8 @@
 #include <pthread.h>
 #include <time.h>
 #include <sys/time.h>
+
+#include "bipartite.h"
 
 using namespace std;
 
@@ -86,7 +89,8 @@ void shuffle_array(int * array, int size){
 }
 
 
-void shuffle_indices(int *shuffled_indices, int num_datapoints, vector<int> offsets, int start, int end){
+void shuffle_indices(int *shuffled_indices, int num_datapoints, 
+		     vector<int> &offsets, int start, int end){
 
   int num_offsets = offsets.size();
   int* permutation = (int *) malloc(sizeof(int)*num_offsets);
@@ -231,4 +235,74 @@ vector<DataPoint> read_datapoints(char *file_name, int is_sparse) {
   return read_dense_datapoints(file_name);
 }
 
+
+BipartiteGraph parse_bipartiteGraph(vector<DataPoint>& data){
+  int num_datapoints = data.size();
+  int num_parameters = data[0].dimension();
+
+  adj_list_t* left = new adj_list_t(num_datapoints);
+  adj_list_t* right = new adj_list_t(num_parameters);
+
+  for(int i = 0; i < num_datapoints; i++){
+
+    int * p_first_idx = data[i].p_first_idx();
+    
+    left->at(i) = vector<int>(data[i].numnz());
+
+    for(int j = 0; j < data[i].numnz(); j++){
+      left->at(i)[j] = p_first_idx[j];
+      
+      right->at(p_first_idx[j]).push_back(i);
+    }
+  }
+
+  return BipartiteGraph(*left, *right);
+}
+
+
+
+vector<DataPoint> block_order_data(vector<DataPoint> &data, vector<int> &datapoints_blocks, vector<int> &offsets){
+
+  int num_datapoints = (int) data.size();
+  int num_blocks = (int) offsets.size();
+  vector<DataPoint> blocked_data(num_datapoints);
+  vector<int> counters(num_blocks, 0);
+
+  for(int i = 0; i < num_datapoints; i++){
+    int current_block = datapoints_blocks[i];
+    int new_position = counters[current_block] + offsets[current_block];
+    blocked_data[new_position] = data[i];
+    counters[current_block] ++;
+  }
+
+  return blocked_data;
+}
+
+
+
+
+vector<int> num_params_per_block(vector<DataPoint> &data, vector<int> &datapoints_blocks, int num_blocks){
+  
+  vector< set<int> > parameters_of_block(num_blocks);
+  int num_datapoints = (int) data.size();
+  
+  for(int i = 0; i < num_datapoints; i++){
+    int current_block = datapoints_blocks[i];
+    int num_nz = data[i].numnz();
+    int* current_indices = data[i].p_first_idx();
+    for(int j = 0; j < num_nz; j++)
+      parameters_of_block[current_block].insert(current_indices[j]);
+  }
+
+  vector<int> counts(num_blocks);
+  for(int i = 0; i < num_blocks; i++){
+    counts[i] = parameters_of_block[i].size();
+  }
+  
+  return counts;
+}
+
+
+
 #endif
+
