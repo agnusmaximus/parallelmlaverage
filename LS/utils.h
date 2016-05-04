@@ -54,16 +54,22 @@ void print_model(double *model, int num_parameters){
   return;
 }
 
-
 double randu(){
   //  unsigned int seed = omp_get_thread_num();
   return ((double) rand()/(RAND_MAX));
+}
+
+double randu_r(unsigned int* seed) {
+  return (((double) rand_r(seed)) / RAND_MAX);
 }
 
 int randi(int max){
   return ((int)(randu()*max));
 }
 
+int randi_r(int max, unsigned int *seed) {
+  return ((int) (randu_r(seed) * max));
+}
 
 double * initialize_model(int num_parameters){
   double * model = (double *) malloc(sizeof(double)*num_parameters);
@@ -77,7 +83,7 @@ double * initialize_model(int num_parameters){
 }
 
 
-void shuffle_array(int * array, int size){
+void shuffle_array(int * array, int size) {
   for(int i = 0; i < size - 1; i++){
     int j = randi(size - i);
     int aux = array[i];
@@ -88,6 +94,16 @@ void shuffle_array(int * array, int size){
   return;
 }
 
+void shuffle_array_threadsafe(int * array, int size, unsigned int *seed) {
+  for(int i = 0; i < size - 1; i++){
+    int j = randi_r(size - i, seed);
+    int aux = array[i];
+    array[i] = array[i + j];
+    array[i + j] = aux;
+  }
+
+  return;
+}
 
 void shuffle_indices(int *shuffled_indices, int num_datapoints, 
 		     vector<int> &offsets, int start, int end){
@@ -116,6 +132,34 @@ void shuffle_indices(int *shuffled_indices, int num_datapoints,
   return;
 }
 
+void shuffle_indices_threadsafe(int *shuffled_indices,
+				int *shuffled_offsets, 
+				int num_datapoints, 
+		     		vector<int> &offsets, 
+				int start, int end,
+				unsigned int *seed){
+
+  int num_offsets = offsets.size();
+  int* permutation = shuffled_offsets;
+
+  for(int i = 0; i < num_offsets; i++){
+    permutation[i] = i;
+  }
+  
+  shuffle_array(permutation, num_offsets);
+  
+  for(int i = 0, idx = 0; i < num_offsets; i++){
+    int last_idx = idx;
+    int upper_bound = (permutation[i] < num_offsets -1) ? offsets[permutation[i] + 1] : num_datapoints; 
+    for (int j = offsets[permutation[i]];  j < upper_bound; j++, idx++){
+      shuffled_indices[idx] = j;
+    }
+
+    shuffle_array_threadsafe(shuffled_indices + last_idx, idx - last_idx, seed);
+  }
+
+  return;
+}
 
 int find_option( int argc, char **argv, const char *option )
 {

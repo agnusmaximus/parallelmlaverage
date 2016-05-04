@@ -111,25 +111,30 @@ def randu(entry):
     return rd.uniform(-1,1)
     
 
-def gen_huge_regular(num_datapoints, num_parameters, sparsity):
+def gen_huge_regular(num_datapoints, num_parameters, sparsity, structure='superregular'):
     degree = int(sparsity * num_parameters)
     nnz = degree * num_datapoints
 
     print str(degree)
 
-    
     filestem = "test_instance_huge-regular_n=%d_d=%d_s=%f.prob" % (num_datapoints, num_parameters, sparsity)
 
     f = open(filestem, 'w')
 
     f.write(str(num_datapoints) + ' ' + str(num_parameters) + ' ' + str(nnz) +  '\n')
 
-    for i in range(num_datapoints):
+    index_permutation = np.random.permutation(num_datapoints)
+    dimension_permutation = np.random.permutation(num_parameters)
+    for i in index_permutation:
 
         f.write('%f %d ' % (rd.uniform(-1,1), degree))
     
         A = np.random.uniform(-1, 1, degree)
-        nnz_indices = np.random.randint(0, num_parameters, degree)
+        
+	if structure == 'superregular':
+	     nnz_indices = dimension_permutation[(np.arange(degree) + int(i / degree)*degree) % num_parameters]
+	else:
+	     nnz_indices = np.random.randint(0, num_parameters, degree)
 
         f.write(make_sparse_stringII(nnz_indices, A))
         f.write('\n')
@@ -142,7 +147,7 @@ def gen_huge_regular(num_datapoints, num_parameters, sparsity):
 
 def make_sparse_stringII(nnz_indices, row):
     def make_pair(i):
-        return '%d %f' % (nnz_indices[i], row[i])
+        return '%d %g' % (nnz_indices[i], row[i])
 
     f = np.vectorize(make_pair)
 

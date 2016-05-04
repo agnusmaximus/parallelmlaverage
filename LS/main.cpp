@@ -26,9 +26,7 @@ int main(int argc, char **argv){
   vector<DataPoint> data = read_datapoints(file_name, read_sparse);
   long long int read_end_time = get_time() - read_start_time;
 
-  vector<int> offsets(2);
-  offsets[0] = 0;
-  offsets[1] = 2;
+
 
   // Cache friendly shuffle
   long long int parse_start_time = get_time();
@@ -85,20 +83,11 @@ int main(int argc, char **argv){
  ////////////////
   
   // HogWild
-
-  num_threads = 1;  
-  num_epochs = 20;
-
-  hogwild_LS_one_node(data, offsets, num_threads, num_epochs/num_threads, step_size);
-  hogwild_LS_one_node(blocked_data, blocker.offsets, num_threads, num_epochs/num_threads, step_size);
-
-  num_threads = 2;
-  hogwild_LS_one_node(data, offsets, num_threads, num_epochs/num_threads, step_size);
-  hogwild_LS_one_node(blocked_data, blocker.offsets, num_threads, num_epochs/num_threads, step_size);
-
-  num_threads = 4;
-  hogwild_LS_one_node(data, offsets, num_threads, num_epochs/num_threads, step_size);
-  hogwild_LS_one_node(blocked_data, blocker.offsets, num_threads, num_epochs/num_threads, step_size);
+  vector<int> trivial_offsets(1);
+  trivial_offsets[0] = 0;
+  
+  hogwild_LS_one_node(data, trivial_offsets, num_threads, num_epochs, step_size);
+  hogwild_LS_one_node(blocked_data, blocker.offsets, num_threads, num_epochs, step_size);
 
   return 0;
 }
