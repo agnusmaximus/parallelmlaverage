@@ -78,15 +78,27 @@ int main(int argc, char **argv){
 
   printf("Num params per block\n");
   for(int i = 0; i < num_blocks; i ++){
-    printf("%d %d\n", i, num_parameters_per_block[i]);
+    int current_block_size = (i != num_blocks - 1) ? (blocker.offsets[i + 1] - blocker.offsets[i]) : (data.size() - blocker.offsets[i]);
+    printf("%d\t%d\t%d\n", i, current_block_size , num_parameters_per_block[i]);
   }
 
  ////////////////
   
   // HogWild
-  hogwild_LS_one_node(data, offsets, num_threads, num_epochs, step_size);
 
-  hogwild_LS_one_node(blocked_data, blocker.offsets, num_threads, num_epochs, step_size);
+  num_threads = 1;  
+  num_epochs = 20;
+
+  hogwild_LS_one_node(data, offsets, num_threads, num_epochs/num_threads, step_size);
+  hogwild_LS_one_node(blocked_data, blocker.offsets, num_threads, num_epochs/num_threads, step_size);
+
+  num_threads = 2;
+  hogwild_LS_one_node(data, offsets, num_threads, num_epochs/num_threads, step_size);
+  hogwild_LS_one_node(blocked_data, blocker.offsets, num_threads, num_epochs/num_threads, step_size);
+
+  num_threads = 4;
+  hogwild_LS_one_node(data, offsets, num_threads, num_epochs/num_threads, step_size);
+  hogwild_LS_one_node(blocked_data, blocker.offsets, num_threads, num_epochs/num_threads, step_size);
 
   return 0;
 }
