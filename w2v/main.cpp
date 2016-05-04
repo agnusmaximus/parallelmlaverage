@@ -15,6 +15,7 @@
 #define CYC_MOD_REP_PER_NODE 5
 #define HOG_MOD_REP_PER_NODE_ADD 6
 #define HOG_MOD_REP_PER_NODE_AVG_ALL 7
+#define LS_MOD_REP_PER_NODE 8
 
 #ifndef METHOD
 #define METHOD HOG_SHARED
@@ -41,5 +42,7 @@ int main(void) {
       t_elapsed = cyc_word_embeddings_model_replication_per_node();
     if (METHOD == HOG_MOD_REP_PER_NODE_AVG_ALL)
       t_elapsed = hog_word_embeddings_model_replication_per_node_avg_all();
+    if (METHOD == LS_MOD_REP_PER_NODE)
+      t_elapsed = hog_LS_model_replication_per_node_avg();
     //cout << t_elapsed << " ms " << endl;
 }

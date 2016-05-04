@@ -1,6 +1,7 @@
 #ifndef _UTIL_
 #define _UTIL_
 
+#include <tuple>
 #include <iostream>
 #include <cstdlib>
 #include <string.h>
@@ -15,13 +16,36 @@
 #include <sstream>
 #include <set>
 #include <sys/time.h>
-#include <thread>
 #include <omp.h>
 #include <numa.h>
 
 using namespace std;
 
+struct DataPointLS {
+  vector<int> indices;
+  vector<double> values;
+  double label;
+};
+typedef struct DataPointLS DataPointLS;
+
 typedef tuple<int, int, double> DataPoint;
+
+double compute_loss_LS(vector<DataPointLS> points, double *model) {
+  double loss_total = 0;
+  for (int i = 0; i < points.size(); i++) {
+    DataPointLS p = points[i];
+    vector<int> indices = p.indices;
+    vector<double> values = p.values;
+    int n_values = indices.size();
+    double label = p.label;
+    double loss = 0;
+    for (int j = 0; j < n_values; j++) {
+      loss += model[indices[j]] * values[j];
+    }
+    loss_total += loss;
+  }
+  return loss_total / points.size();
+}
 
 double compute_loss(vector<DataPoint> points, double *model, double C, int vector_length) {
     double loss = 0;
@@ -51,9 +75,32 @@ long int get_time() {
     return tp.tv_sec * 1000 + tp.tv_usec / 1000;
 }
 
+vector<DataPointLS> get_LS_data(string fname) {
+  //Format: label index value index2 value2 ... indexn valuen
+  vector<DataPointLS> result;
+  ifstream f_A(fname.c_str());
+  string line;
+  while (f_A >> line) {
+    stringstream strstream(line);
+    DataPointLS dp;
+    double label, value;
+    int index;
+    strstream >> label;
+    dp.label = label;
+    while (strstream >> index >> value) {
+      dp.indices.push_back(index);
+      dp.values.push_back(value);
+    }
+    result.push_back(dp);
+  }
+  return result;
+}
+
 vector<DataPoint> get_word_embeddings_data(string fname) {
     vector<DataPoint> datapoints;
-    ifstream in(fname);
+    //ifstream in(fname);
+    ifstream in;
+    in.open(fname.c_str());
     string s;
     if (!in) {
 	cout << "Error reading file: " << fname << endl;
@@ -70,19 +117,24 @@ vector<DataPoint> get_word_embeddings_data(string fname) {
     return datapoints;
 }
 
-int start_datapoint_for_thread(vector<DataPoint> &points, int thread, int n_total_threads) {
+template<class T>
+int start_datapoint_for_thread(vector<T> &points, int thread, int n_total_threads) {
+  //  return 0;
     int n_points_per_thread = points.size() / n_total_threads;
     return thread * n_points_per_thread;
 }
 
-int end_datapoint_for_thread(vector<DataPoint> &points, int thread, int n_total_threads) {
+template<class T>
+int end_datapoint_for_thread(vector<T> &points, int thread, int n_total_threads) {
+  //  return points.size();
     int n_points_per_thread = points.size() / n_total_threads;
     int end = (thread+1) * n_points_per_thread;
     if (thread == n_total_threads) end = n_points_per_thread;
     return end;
 }
 
-int n_datapoints_for_thread(vector<DataPoint> &points, int thread, int n_total_threads) {
+template<class T>
+int n_datapoints_for_thread(vector<T> &points, int thread, int n_total_threads) {
     return end_datapoint_for_thread(points, thread, n_total_threads) -
 	start_datapoint_for_thread(points, thread, n_total_threads);
 }
@@ -123,6 +175,22 @@ void allocate_memory_on_node(vector<DataPoint> &points, double **model, double *
 	C_sum_mult2[i] = (double *)numa_alloc_onnode(sizeof(double) * n_points, node_to_alloc_on);
 	memset(C_sum_mult[i], 0, sizeof(double) * n_points);
 	memset(C_sum_mult2[i], 0, sizeof(double) * n_points);
+    }
+}
+
+void random_shuffle_c_array(void *array, size_t n, size_t elem_size) {
+  if (n > 1) {
+      size_t i;
+      char dummy[elem_size];
+      for (i = 0; i < n - 1; i++) {
+          size_t j = i + rand() / (RAND_MAX / (n - i) + 1);
+          //int t = array[j];
+	  memcpy(dummy, (char *)array + elem_size * j, elem_size);
+          //array[j] = array[i];
+	  memcpy((char *)array + elem_size * j, (char *)array + elem_size * i, elem_size);
+          //array[i] = t;
+	  memcpy((char *)array + elem_size * i, dummy, elem_size);
+        }
     }
 }
 #endif

@@ -1,6 +1,67 @@
 #include "util.h"
 #include "params.h"
 
+long int hog_LS_model_replication_per_node_avg() {
+
+  srand(time(NULL));
+
+    //Start numa
+    if (numa_available() == -1) {
+	cout << "NUMA NOT AVAILABLE" << endl;
+	exit(0);
+    }
+
+    //Create a map from core/thread -> node
+    int core_to_node[NTHREAD];
+    for (int i = 0; i < NTHREAD; i++) core_to_node[i] = -1;
+    int n_numa_nodes = 0;
+    for (int i = 0; i < NTHREAD; i++) {
+      core_to_node[i] = numa_node_of_cpu(i);
+      n_numa_nodes = max(n_numa_nodes, core_to_node[i]);
+    }
+    n_numa_nodes++;
+
+    double *model[n_numa_nodes];
+
+    //Initialization / read data block
+    vector<DataPointLS> points = get_LS_data(LS_FILE);
+    for (int i = 0; i < n_numa_nodes; i++) {
+        model[i] = (double *)numa_alloc_onnode(sizeof(double) * N_NODES, i);
+	memset(model[i], 0, sizeof(double) * N_NODES);
+    }
+    long int start_time = get_time();
+
+    //Hogwild access pattern construction
+    vector<DataPointLS *> datapoints_per_thread(NTHREAD);
+    for (int i = 0; i < NTHREAD; i++) {
+	int start = start_datapoint_for_thread(points, i, NTHREAD);
+	int end = end_datapoint_for_thread(points, i, NTHREAD);
+	datapoints_per_thread[i] = (DataPointLS *)numa_alloc_onnode(sizeof(DataPointLS) * (end-start), core_to_node[i]);
+	for (int j = start; j < end; j++)
+	    datapoints_per_thread[i][j-start] = points[j];
+    }
+
+    //Divide to threads
+    float copy_time = 0;
+    double current_loss = 0;
+    for (int i = 0; i < N_EPOCHS; i++) {
+
+	if (PRINT_LOSS) {
+	  cout << get_time() - start_time << " " << compute_loss_LS(points, model[0]) << endl;
+	}
+
+	//Hogwild
+#pragma omp parallel for
+	for (int j = 0; j < NTHREAD; j++) {
+	  sgd_ls(datapoints_per_thread[j], j, n_datapoints_for_thread(points, j, NTHREAD), model[core_to_node[j]]);
+	}
+
+	GAMMA *= GAMMA_REDUCTION;
+    }
+
+    return get_time() - start_time;
+}
+
 void average_n_models(int n, double **models, int n_coords, int vector_length) {
   //Optimize later
   #pragma omp parallel for
@@ -117,6 +178,8 @@ long int hog_word_embeddings_model_replication_per_core() {
 
 long int hog_word_embeddings_model_replication_per_node_avg() {
 
+  srand(time(NULL));
+
     //Start numa
     if (numa_available() == -1) {
 	cout << "NUMA NOT AVAILABLE" << endl;
@@ -140,7 +203,7 @@ long int hog_word_embeddings_model_replication_per_node_avg() {
 
     //Initialization / read data block
     vector<DataPoint> points = get_word_embeddings_data(WORD_EMBEDDINGS_FILE);
-    random_shuffle(points.begin(), points.end());
+    //random_shuffle(points.begin(), points.end());
     for (int i = 0; i < n_numa_nodes; i++) {
 	allocate_memory_on_node(points, &model[i], C_sum_mult, C_sum_mult2, N_NODES, K, NTHREAD, i);
 	initialize_model(model[i], N_NODES, K);
@@ -159,10 +222,12 @@ long int hog_word_embeddings_model_replication_per_node_avg() {
 
     //Divide to threads
     float copy_time = 0;
+    double current_loss = 0;
+    //for (int i = 0; i < N_EPOCHS / NTHREAD; i++) {
     for (int i = 0; i < N_EPOCHS; i++) {
 
 	if (PRINT_LOSS) {
-	    cout << get_time() - start_time << " " << compute_loss(points, model[0], C, K) << endl;
+	  cout << get_time() - start_time << " " << compute_loss(points, model[0], C, K) << endl;
 	}
 
 	//Hogwild
@@ -172,7 +237,7 @@ long int hog_word_embeddings_model_replication_per_node_avg() {
 	}
 
 	//Optimize C
-	double C_A = 0, C_B = 0;
+	/*double C_A = 0, C_B = 0;
 #pragma omp parallel for reduction(+:C_A,C_B)
 	for (int t = 0; t < NTHREAD; t++) {
 	    for (int d = 0; d < n_datapoints_for_thread(points, t, NTHREAD); d++) {
@@ -180,15 +245,19 @@ long int hog_word_embeddings_model_replication_per_node_avg() {
 		C_B += C_sum_mult2[t][d];
 	    }
 	}
-	C = C_A / C_B;
+	C = C_A / C_B;*/
 
 	//Model averaging
-	if (i % AVERAGING_FREQ == 0 && n_numa_nodes >= 2) {
+	/*if (i % AVERAGING_FREQ == 0 && n_numa_nodes >= 2) {
 	  int node1 = rand() % n_numa_nodes, node2 = rand() % n_numa_nodes;
 	  while (node1 == node2) node2 = rand() % n_numa_nodes;
 	  average_two_models(model[node1], model[node2], node1, node2, N_NODES, K, core_to_node);
-	}
+	  }*/
 
+	/*#pragma omp parallel for
+	for (int j = 0; j < NTHREAD; j++) {
+	  random_shuffle_c_array(datapoints_per_thread[j], n_datapoints_for_thread(points, j, NTHREAD), sizeof(DataPoint));
+	  }*/
 	GAMMA *= GAMMA_REDUCTION;
     }
 

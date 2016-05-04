@@ -1,20 +1,52 @@
 #ifndef _PARAMS_
 #define _PARAMS_
 
-#define WORD_EMBEDDINGS_FILE "data/input_graph"
-#define N_NODES 16775
-#define N_DATAPOINTS 622941
+#ifndef LS_FILE
+//#define WORD_EMBEDDINGS_FILE "data/25_graph"
+#define LS_FILE "data/test"
+#define N_NODES 98942
+#define N_DATAPOINTS 7005679
+#endif
+
+//#define WORD_EMBEDDINGS_FILE "data/input_graph"
+//#define WORD_EMBEDDINGS_FILE "data/input_graph_cache_partitioned"
+//#define WORD_EMBEDDINGS_FILE "data/input_graph_cache_partitioned_rec"
+//#define N_NODES 16774
+//#define N_DATAPOINTS 622941
 
 //#define WORD_EMBEDDINGS_FILE "data/full_graph"
+//#define WORD_EMBEDDINGS_FILE "data/input_graph_cache_partitioned_full"
 //#define N_NODES 213271
 //#define N_DATAPOINTS 20207156
+
+//#define WORD_EMBEDDINGS_FILE "data/75_graph"
+//#define WORD_EMBEDDINGS_FILE "data/75_graph_cache_partitioned"
+//#define N_NODES 183650
+//#define N_DATAPOINTS 16373907
+
+//#define WORD_EMBEDDINGS_FILE "data/50_graph"
+//#define WORD_EMBEDDINGS_FILE "data/50_graph_cache_partitioned"
+//#define N_NODES 142790
+//#define N_DATAPOINTS 11982369
+
+//#define WORD_EMBEDDINGS_FILE "data/10_graph"
+//#define WORD_EMBEDDINGS_FILE "data/10_graph_cache_partitioned"
+//#define N_NODES 60603
+//#define N_DATAPOINTS 3357895
+
+#ifndef WORD_EMBEDDINGS_FILE
+//#define WORD_EMBEDDINGS_FILE "data/25_graph"
+#define WORD_EMBEDDINGS_FILE "data/25_graph_cache_partitioned"
+#define N_NODES 98942
+#define N_DATAPOINTS 7005679
+#endif
 
 #ifndef CYC_BATCH_SIZE
 #define CYC_BATCH_SIZE 800
 #endif
 
 #ifndef NTHREAD
-#define NTHREAD 24
+#define NTHREAD 1
 #endif
 
 #ifndef N_EPOCHS
@@ -35,7 +67,7 @@
 #endif
 
 #ifndef START_GAMMA
-#define START_GAMMA 1e-8
+#define START_GAMMA 1e-9
 #endif
 
 #ifndef PRINT_LOSS
