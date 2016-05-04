@@ -1,4 +1,4 @@
-LIBS=-lpthread -fopenmp
+LIBS=-lpthread -fopenmp -lnuma
 FLAGS= -O3 -std=c++11
 CC= CC -g -Wall -I../graphs
 
