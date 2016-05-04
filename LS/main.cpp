@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <omp.h>
-
+#include <numa.h>
 
 #include "datapoint.h"
 #include "hogwild_LS_one_node.h"
