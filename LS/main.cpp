@@ -25,9 +25,9 @@ int main(int argc, char **argv){
   int *core_to_node_map = (int*) malloc(sizeof(int) * num_threads);
   for (int t = 0; t < num_threads; t++) {
      core_to_node_map[t] = numa_node_of_cpu(t);
-     printf("Core %d maps to NUMA node %d.\n", t, core_to_node_map[t]);   
+     //printf("Core %d maps to NUMA node %d.\n", t, core_to_node_map[t]);   
   } 
-  fflush(stdout);
+  //fflush(stdout);
 
   long long int read_start_time = get_time();
   vector<DataPoint> data = read_datapoints(file_name, read_sparse);

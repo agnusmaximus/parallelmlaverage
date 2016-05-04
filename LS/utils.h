@@ -37,11 +37,12 @@ long int get_time() {
 
 
 // Pin a a thread to a core. 
-void pin_to_core(size_t core) {
+int pin_to_core(size_t core) {
   cpu_set_t cpuset;
   CPU_ZERO(&cpuset);
   CPU_SET(core, &cpuset);
-  pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
+  
+  return pthread_setaffinity_np(pthread_self(), sizeof(cpu_set_t), &cpuset);
 }
 
 

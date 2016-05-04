@@ -23,7 +23,11 @@ double* hogwild_LS_one_node(vector<DataPoint> &data, vector<int> &offsets, int n
 #pragma omp parallel num_threads(num_threads)
   {
     // pin current thread to core indexed by thread id
-    pin_to_core(omp_get_thread_num());
+    int pin_retval = pin_to_core(omp_get_thread_num());
+    if (pin_retval != 0) {
+        printf("ERROR: pin_to_core failed with error %d.\n", pin_retval);
+        fflush(stdout);
+    }
 
     unsigned int thread_rseed = ((unsigned int) get_time()) + omp_get_thread_num();    
 
