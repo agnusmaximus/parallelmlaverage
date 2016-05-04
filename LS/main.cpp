@@ -22,11 +22,16 @@ int main(int argc, char **argv){
   // Read Data
   char *file_name = read_string(argc, argv, "-data", "data.in");
 
+  int *core_to_node_map = (int*) malloc(sizeof(int) * num_threads);
+  for (int t = 0; t < num_threads; t++) {
+     core_to_node_map[t] = numa_node_of_cpu(t);
+     printf("Core %d maps to NUMA node %d.\n", t, core_to_node_map[t]);   
+  } 
+  fflush(stdout);
+
   long long int read_start_time = get_time();
   vector<DataPoint> data = read_datapoints(file_name, read_sparse);
   long long int read_end_time = get_time() - read_start_time;
-
-
 
   // Cache friendly shuffle
   long long int parse_start_time = get_time();

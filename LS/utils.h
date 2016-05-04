@@ -12,6 +12,7 @@
 #include <pthread.h>
 #include <time.h>
 #include <sys/time.h>
+#include <numa.h>
 
 #include "bipartite.h"
 
