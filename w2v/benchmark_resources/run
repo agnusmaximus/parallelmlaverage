@@ -1,0 +1,67 @@
+#!/bin/bash -l
+#SBATCH -p regular
+#SBATCH -t 05:00:00
+#SBATCH -A mp309
+#SBATCH -N 1
+#SBATCH -o benchmark_output
+
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_one_thread_regular_10 | tail -n +3 > w2v_hog_mod_rep_node_avg_one_thread_regular_10.o
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_two_thread_regular_10 | tail -n +3 > w2v_hog_mod_rep_node_avg_two_thread_regular_10.o
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_four_thread_regular_10 | tail -n +3 > w2v_hog_mod_rep_node_avg_four_thread_regular_10.o
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_eight_thread_regular_10 | tail -n +3 > w2v_hog_mod_rep_node_avg_eight_thread_regular_10.o
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_twelve_thread_regular_10 | tail -n +3 > w2v_hog_mod_rep_node_avg_twelve_thread_regular_10.o
+
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_one_thread_regular_25 | tail -n +3 > w2v_hog_mod_rep_node_avg_one_thread_regular_25.o
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_two_thread_regular_25 | tail -n +3 > w2v_hog_mod_rep_node_avg_two_thread_regular_25.o
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_four_thread_regular_25 | tail -n +3 > w2v_hog_mod_rep_node_avg_four_thread_regular_25.o
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_eight_thread_regular_25 | tail -n +3 > w2v_hog_mod_rep_node_avg_eight_thread_regular_25.o
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_twelve_thread_regular_25 | tail -n +3 > w2v_hog_mod_rep_node_avg_twelve_thread_regular_25.o
+
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_one_thread_regular_50 | tail -n +3 > w2v_hog_mod_rep_node_avg_one_thread_regular_50.o
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_two_thread_regular_50 | tail -n +3 > w2v_hog_mod_rep_node_avg_two_thread_regular_50.o
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_four_thread_regular_50 | tail -n +3 > w2v_hog_mod_rep_node_avg_four_thread_regular_50.o
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_eight_thread_regular_50 | tail -n +3 > w2v_hog_mod_rep_node_avg_eight_thread_regular_50.o
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_twelve_thread_regular_50 | tail -n +3 > w2v_hog_mod_rep_node_avg_twelve_thread_regular_50.o
+
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_one_thread_regular_75 | tail -n +3 > w2v_hog_mod_rep_node_avg_one_thread_regular_75.o
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_two_thread_regular_75 | tail -n +3 > w2v_hog_mod_rep_node_avg_two_thread_regular_75.o
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_four_thread_regular_75 | tail -n +3 > w2v_hog_mod_rep_node_avg_four_thread_regular_75.o
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_eight_thread_regular_75 | tail -n +3 > w2v_hog_mod_rep_node_avg_eight_thread_regular_75.o
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_twelve_thread_regular_75 | tail -n +3 > w2v_hog_mod_rep_node_avg_twelve_thread_regular_75.o
+
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_one_thread_regular_100 | tail -n +3 > w2v_hog_mod_rep_node_avg_one_thread_regular_100.o
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_two_thread_regular_100 | tail -n +3 > w2v_hog_mod_rep_node_avg_two_thread_regular_100.o
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_four_thread_regular_100 | tail -n +3 > w2v_hog_mod_rep_node_avg_four_thread_regular_100.o
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_eight_thread_regular_100 | tail -n +3 > w2v_hog_mod_rep_node_avg_eight_thread_regular_100.o
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_twelve_thread_regular_100 | tail -n +3 > w2v_hog_mod_rep_node_avg_twelve_thread_regular_100.o
+
+
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_one_thread_cache_10 | tail -n +3 > w2v_hog_mod_rep_node_avg_one_thread_cache_10.o
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_two_thread_cache_10 | tail -n +3 > w2v_hog_mod_rep_node_avg_two_thread_cache_10.o
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_four_thread_cache_10 | tail -n +3 > w2v_hog_mod_rep_node_avg_four_thread_cache_10.o
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_eight_thread_cache_10 | tail -n +3 > w2v_hog_mod_rep_node_avg_eight_thread_cache_10.o
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_twelve_thread_cache_10 | tail -n +3 > w2v_hog_mod_rep_node_avg_twelve_thread_cache_10.o
+
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_one_thread_cache_25 | tail -n +3 > w2v_hog_mod_rep_node_avg_one_thread_cache_25.o
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_two_thread_cache_25 | tail -n +3 > w2v_hog_mod_rep_node_avg_two_thread_cache_25.o
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_four_thread_cache_25 | tail -n +3 > w2v_hog_mod_rep_node_avg_four_thread_cache_25.o
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_eight_thread_cache_25 | tail -n +3 > w2v_hog_mod_rep_node_avg_eight_thread_cache_25.o
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_twelve_thread_cache_25 | tail -n +3 > w2v_hog_mod_rep_node_avg_twelve_thread_cache_25.o
+
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_one_thread_cache_50 | tail -n +3 > w2v_hog_mod_rep_node_avg_one_thread_cache_50.o
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_two_thread_cache_50 | tail -n +3 > w2v_hog_mod_rep_node_avg_two_thread_cache_50.o
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_four_thread_cache_50 | tail -n +3 > w2v_hog_mod_rep_node_avg_four_thread_cache_50.o
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_eight_thread_cache_50 | tail -n +3 > w2v_hog_mod_rep_node_avg_eight_thread_cache_50.o
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_twelve_thread_cache_50 | tail -n +3 > w2v_hog_mod_rep_node_avg_twelve_thread_cache_50.o
+
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_one_thread_cache_75 | tail -n +3 > w2v_hog_mod_rep_node_avg_one_thread_cache_75.o
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_two_thread_cache_75 | tail -n +3 > w2v_hog_mod_rep_node_avg_two_thread_cache_75.o
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_four_thread_cache_75 | tail -n +3 > w2v_hog_mod_rep_node_avg_four_thread_cache_75.o
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_eight_thread_cache_75 | tail -n +3 > w2v_hog_mod_rep_node_avg_eight_thread_cache_75.o
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_twelve_thread_cache_75 | tail -n +3 > w2v_hog_mod_rep_node_avg_twelve_thread_cache_75.o
+
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_one_thread_cache_100 | tail -n +3 > w2v_hog_mod_rep_node_avg_one_thread_cache_100.o
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_two_thread_cache_100 | tail -n +3 > w2v_hog_mod_rep_node_avg_two_thread_cache_100.o
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_four_thread_cache_100 | tail -n +3 > w2v_hog_mod_rep_node_avg_four_thread_cache_100.o
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_eight_thread_cache_100 | tail -n +3 > w2v_hog_mod_rep_node_avg_eight_thread_cache_100.o
+srun -n 1 -c 1 ./w2v_hog_mod_rep_node_avg_twelve_thread_cache_100 | tail -n +3 > w2v_hog_mod_rep_node_avg_twelve_thread_cache_100.o
