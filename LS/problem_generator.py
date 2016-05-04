@@ -117,7 +117,7 @@ def gen_huge_regular(num_datapoints, num_parameters, sparsity, structure='superr
 
     print str(degree)
 
-    filestem = "test_instance_huge-regular_n=%d_d=%d_s=%f.prob" % (num_datapoints, num_parameters, sparsity)
+    filestem = "test_instance_huge-superregular_n=%d_d=%d_s=%f.prob" % (num_datapoints, num_parameters, sparsity)
 
     f = open(filestem, 'w')
 
