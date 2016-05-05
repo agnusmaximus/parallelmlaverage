@@ -113,7 +113,8 @@ def randu(entry):
 
 def gen_huge_regular(num_datapoints, num_parameters, sparsity, 
                      structure='superregular', p_cross = 0.1,
-                     shuffle_data=False, shuffle_params=False):
+                     shuffle_data=False, shuffle_params=False,
+                     outdir = "."):
     degree = int(sparsity * num_parameters)
     degree_cross = int(p_cross * sparsity * num_parameters)
     nnz = degree * num_datapoints
@@ -121,9 +122,9 @@ def gen_huge_regular(num_datapoints, num_parameters, sparsity,
     print str(degree)
 
     filestem = "test_instance_structure=%s_n=%d_d=%d_s=%f" % (structure, num_datapoints, num_parameters, sparsity)
-    if structure == 'blockmodel': filestem = filestem + ("_pcross=%f" % p_cross)
+    if structure == 'blockmodel': filestem = "%s_pcross=%f" % (filestem, p_cross)
     
-    f = open(filestem + ".prob", 'w')
+    f = open(outdir + "/" + filestem + ".prob", 'w')
     f.write(str(num_datapoints) + ' ' + str(num_parameters) + ' ' + str(nnz) +  '\n')
 
     index_permutation = (
@@ -148,7 +149,9 @@ def gen_huge_regular(num_datapoints, num_parameters, sparsity,
             nnz_indices = np.random.choice(np.arange(0, num_parameters), size=rand_degree,replace=False)
         elif structure == 'blockmodel':
             offset = int(i / degree)*degree
-            block_params = (np.arange(degree) + offset) % num_parameters
+	    if offset >= num_parameters: offset = 0
+
+            block_params = (np.arange(min(degree, num_parameters - offset)) + offset)
             outside_block_params = range(0, offset)
             if (offset + degree < num_parameters): outside_block_params.extend(range(offset + degree, num_parameters))
             outside_block_params = np.array(outside_block_params, dtype = int)

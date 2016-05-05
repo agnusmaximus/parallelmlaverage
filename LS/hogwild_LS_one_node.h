@@ -18,7 +18,10 @@ double* hogwild_LS_one_node(vector<DataPoint> &data, vector<int> &offsets, int n
   long long int shuffle_start_time, shuffle_end_time;
 
   long long int start_time = get_time();
-  
+  long long int loss_time;  
+
+  double loss = 0.0;
+
   //Hogwild
 #pragma omp parallel num_threads(num_threads)
   {
@@ -51,20 +54,33 @@ double* hogwild_LS_one_node(vector<DataPoint> &data, vector<int> &offsets, int n
     shuffle_end_time = get_time() - shuffle_start_time;
     }
     
-    for (int i = 0; i < num_epochs; i++) {
-  
-      /*
+    for (int i = 0; i < num_epochs; i++) { 
+    
       #pragma omp barrier
       #pragma omp master
       {
-	printf("Loss at epoch %d = %f\n", i, get_loss(model, data));
+	loss_time -= get_time();
+	loss = 0.0;
       }
-      #pragma omp barrier
-      */
 
-      for(int j = 0; j < num_datapoints; j++){
+      #pragma omp barrier
+      #pragma omp for reduction(+:loss)
+      for (int i = 0; i < data.size(); i++){
+          double dot = data[i].dot(model) - data[i].label();
+          loss += dot * dot;
+      }
+
+      #pragma omp barrier
+      #pragma omp master
+      {	
+	printf("LOSS AT EPOCH: %d %f\n", i, loss);
+	fflush(stdout);
+	loss_time += get_time();
+      }
+ 
+      for(int j = 0; j < num_datapoints; j++) {
 	  update_step(model, data[shuffled_indices[j]], step_size);
-	}
+      }
     }
 
     free(shuffled_indices);
@@ -72,6 +88,7 @@ double* hogwild_LS_one_node(vector<DataPoint> &data, vector<int> &offsets, int n
 
 
   long long int hogwild_time = get_time() - start_time;
+  hogwild_time -= loss_time;
 
   printf("HOGWILD TIMING: %d threads: %d datapoints, %d dimensions, %d epochs: %f seconds: %f shuffle time\n",
 	 num_threads, data.size(), data[0].dimension(), num_epochs, hogwild_time / 1000.0, shuffle_end_time / 1000.0);
