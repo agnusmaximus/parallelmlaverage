@@ -1,5 +1,5 @@
 \documentclass[paper=a4, fontsize=11pt]{scrartcl}
-\usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}
+\usepackage[top=1cm, bottom=1cm, left=2.5cm, right=2.5cm]{geometry}
 \usepackage[T1]{fontenc}
 \usepackage{fourier}
 \usepackage{float}
@@ -95,16 +95,21 @@ datapoints.
 We achieve between $\%40-\%50$ speedup over regular hogwild (non-cache-friendly hogwild),
 measuring runtime to a fixed number of epochs.
 \begin{figure}[H]
+\begin{center}
 \includegraphics[width=11cm,height=11cm,keepaspectratio]{w2v_speedup_plot.pdf}
+\end{center}
 \end{figure}
 Furthermore, the speedup is maintained on different subsets and sizes of the data.
 \begin{figure}[H]
+\begin{center}
 \includegraphics[width=11cm,height=11cm,keepaspectratio]{w2v_problem_size_time_plot.pdf}
+\end{center}
 \end{figure}
-
 Additionally, convergence of loss is not adversely affected.
 \begin{figure}[H]
+\begin{center}
 \includegraphics[width=11cm,height=11cm,keepaspectratio]{w2v_time_loss_plot.pdf}
+\end{center}
 \end{figure}
 \subsection{Analysis}
 
@@ -117,7 +122,7 @@ datapoint. After running min-k-cut on the parameter dependence graph,
 we found that each block of k datapoints references around k distinct
 vectors. Thus, in a cache-friendly permutation, one of the vectors
 referenced by a datapoint is already in the L1-cache from the previous
-stochast gradient call. So a cache-friendly permutation incurs only
+stochastic gradient call. So a cache-friendly permutation incurs only
 one vectors worth of cache misses per datapoint, naturally leading to
 a $\%40-\%50$ reduction in runtime.
 \newpage
