@@ -1,13 +1,13 @@
 \documentclass[paper=a4, fontsize=11pt]{scrartcl}
 \usepackage[T1]{fontenc}
 \usepackage{fourier}
+\usepackage{float}
 
 \usepackage[english]{babel}															% English language/hyphenation
 \usepackage[protrusion=true,expansion=true]{microtype}
 \usepackage{amsmath,amsfonts,amsthm} % Math packages
 \usepackage[pdftex]{graphicx}
 \usepackage{url}
-
 
 %%% Custom sectioning
 \usepackage{sectsty}
@@ -25,12 +25,12 @@
 \renewcommand{\footrulewidth}{0pt}				% Remove footer underlines
 \setlength{\headheight}{13.6pt}
 
-
 %%% Equation and float numbering
 \numberwithin{equation}{section}		% Equationnumbering: section.eq#
 \numberwithin{figure}{section}			% Figurenumbering: section.fig#
 \numberwithin{table}{section}				% Tablenumbering: section.tab#
 
+\graphicspath{ {./images/} }
 
 %%% Maketitle metadata
 \newcommand{\horrule}[1]{\rule{\linewidth}{#1}} 	% Horizontal rule
@@ -90,17 +90,22 @@ We also ran the experiments on subsets of the corpus, repeating the
 procedure on the first $\%10$, $\%25$, $\%50$ and $\%75$ of the corpus data.
 In the full corpus data, there were $~200,000$ word vectors, and $~30,000,000$
 datapoints.
+\newpage
 \subsection{Results}
 We achieve between $\%40-\%50$ speedup over regular hogwild (non-cache-friendly hogwild),
 measuring runtime to a fixed number of epochs.
-(Image for speedup with full 80 mb)
-\\\\
+\begin{figure}[H]
+\includegraphics[width=11cm,height=11cm,keepaspectratio]{w2v_speedup_plot.pdf}
+\end{figure}
 Furthermore, the speedup is maintained on different subsets and sizes of the data.
-(Image for time with different portions of data)
-\\\\
-Additionally, convergence of loss is not adversely affected.
-(Image time loss graph)
+\begin{figure}[H]
+\includegraphics[width=11cm,height=11cm,keepaspectratio]{w2v_problem_size_time_plot.pdf}
+\end{figure}
 
+Additionally, convergence of loss is not adversely affected.
+\begin{figure}[H]
+\includegraphics[width=11cm,height=11cm,keepaspectratio]{w2v_time_loss_plot.pdf}
+\end{figure}
 \subsection{Analysis}
 
 A $\%40-\%50$ runtime gain over regular hogwild is a result of keeping
