@@ -91,7 +91,8 @@ procedure on the first $\%10$, $\%25$, $\%50$ and $\%75$ of the corpus data.
 In the full corpus data, there were $~200,000$ word vectors, and $~30,000,000$
 datapoints.
 \subsection{Results}
-We achieve between $\%40-\%50$ speedup over cache-unfriendly hogwild, measuring runtime to a fixed number of epochs.
+We achieve between $\%40-\%50$ speedup over regular hogwild (non-cache-friendly hogwild),
+measuring runtime to a fixed number of epochs.
 (Image for speedup with full 80 mb)
 \\\\
 Furthermore, the speedup is maintained on different subsets and sizes of the data.
