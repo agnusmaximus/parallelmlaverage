@@ -87,11 +87,34 @@ both data sharding and no-data sharding, only results from data sharding are pre
 To test hogwild without a cache-friendly shuffle, we randomly shuffled the datapoints before execution.
 \\\\
 We also ran the experiments on subsets of the corpus, repeating the
-procedure on the first $10\%$, $25\%$, $50\%$ and $75\%$ of the corpus data.
+procedure on the first $\%10$, $\%25$, $\%50$ and $\%75$ of the corpus data.
 In the full corpus data, there were $~200,000$ word vectors, and $~30,000,000$
 datapoints.
+\subsection{Results}
+We achieve between $\%40-\%50$ speedup over hogwild without a cache
+friendly permutation, measuring runtime to a fixed number of epochs.
+(Image for speedup with full 80 mb)
 \\\\
+Furthermore, the speedup is maintained on different subsets and sizes of the data.
+(Image for time with different portions of data)
+\\\\
+Additionally, convergence of loss is not adversely affected.
+(Image time loss graph)
 
+\subsection{Analysis}
+
+A $\%40-\%50$ runtime gain over regular hogwild is a result of keeping
+at least one length 100 double array in the L1-cache between
+stochastic gradient calls. In a non-cache-friendly permutation, each
+of the two vectors visited by a datapoint is typically not in the
+cache, incurring two vectors worth of cache misses per
+datapoint. After running min-k-cut on the parameter dependence graph,
+we found that each block of k datapoints references around k distinct
+vectors. Thus, in a cache-friendly permutation, one of the vectors
+referenced by a datapoint is already in the L1-cache from the previous
+stochast gradient call. So a cache-friendly permutation incurs only
+one vectors worth of cache misses per datapoint, naturally leading to
+a $\%40-\%50$ reduction in runtime.
 \newpage
 \section{Conclusion}
 \newpage
