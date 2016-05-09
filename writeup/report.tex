@@ -11,9 +11,8 @@
 \usepackage{url}
 
 %%% Custom sectioning
-\usepackage{sectsty}
-\allsectionsfont{\centering \normalfont\scshape}
-
+%\usepackage{sectsty}
+%\allsectionsfont{\centering \normalfont\scshape}
 
 %%% Custom headers/footers (fancyhdr package)
 \usepackage{fancyhdr}
@@ -40,7 +39,7 @@
   %\vspace{-1in}
   \usefont{OT1}{bch}{b}{n}
   \horrule{0.5pt} \\[0.4cm]
-  \huge Cache Friendly Shuffles for Machine Learning
+  \huge Cache-Friendly Shuffles for Asynchronous Stochastic Optimization
   \horrule{2pt} \\[0.5cm]
 }
 \author{
@@ -56,18 +55,28 @@
 \begin{document}
 
 \maketitle
-\section{Overview}
-\newpage
+\section{Introduction}
+
+
+
+
 \section{Least Squares}
-\newpage
+
+
+
 \section{Word Embeddings}
-\subsection{Introduction}
+
+
+\subsection{Problem statement}
 In the word embeddings problem, given context counts $X_{w,w'}$ we want to find word vectors
 $v_{w} \in \mathbb{R}^{k}$ that minimizes the loss:
-$$
-min_{v,C}\sum_{w,w'}X_{w,w'}(log(X_{w,w'}) - \|v_w+v_{w'}\|^2 - C)^2
-$$
-\subsection{Experiment Details}
+\begin{align*}
+\min_{v,C}\sum_{w,w'}X_{w,w'}(log(X_{w,w'}) - \|v_w+v_{w'}\|^2 - C)^2
+\end{align*}
+
+\subsection{Experimental evaluation}
+\subsubsection{Methodology}
+
 We ran our experiments on the Edison compute nodes which feature two
 twelve core 2.4 GHz processors. However, we used only up to twelve
 cores/threads to avoid effects of NUMA. Word vectors were length 100
@@ -91,7 +100,8 @@ We also ran the experiments on subsets of the corpus, repeating the
 procedure on the first $\%10$, $\%25$, $\%50$ and $\%75$ of the corpus data.
 In the full corpus data, there were $~200,000$ word vectors, and $~30,000,000$
 datapoints.
-\subsection{Results}
+
+\subsubsection{Results}
 We achieve between $\%40-\%50$ speedup over regular hogwild (non-cache-friendly hogwild),
 measuring runtime to a fixed number of epochs.
 \begin{figure}[H]
@@ -111,7 +121,8 @@ Additionally, convergence of loss is not adversely affected.
 \includegraphics[width=11cm,height=11cm,keepaspectratio]{w2v_time_loss_plot.pdf}
 \end{center}
 \end{figure}
-\subsection{Analysis}
+
+\subsection{Discussion}
 
 A $\%40-\%50$ runtime gain over regular hogwild is a result of keeping
 at least one length 100 double array in the L1-cache between
