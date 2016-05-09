@@ -48,25 +48,42 @@ we might hope to achieve ideal speedups and thereby solve even the largest optim
 Unfortunately, the simple story fails for a number of reasons, many of them systems-related. As the number of threads becomes large, the architecture of the machine
 imposes limitations and tradeoffs that must be taken into account. For instance, many machines with sufficiently many cores to support parallelism beyond approximately $16$
 threads organize their cores in a non-uniform memory access (NUMA) architecture, meaning that implementations of Hogwild must either cope with potentially long cross-NUMA node
-accesses to the memory storing the model or alter the algorithm so that cores on a given node usually only access memory on that node.
+accesses to the memory storing the model or alter the algorithm so that cores on a given node usually only access memory on that node. And when moving to multiple machines,
+alterations to the algorithm become not only desirable but absolutely necessary.
 
-Even on a single node, issues of memory access create pitfalls that must be taken into account. In particular, cache locality and false sharing hamper performance,
-and prevent the attainment of ideal speedups with multiple threads.
+% Discuss related work (e.g. DimmWitted, Downpour) on multi-node/multi-machine setting
+A great deal of work has gone into understanding the statistical and computational properties of multi-node and multi-machine versions of the algorithm~\citep{}. The recent DimmWitted system
+explored the design space of Hogwild-type algorithms in significant detail, tuning several knobs like: how much of the data each thread used; whether independent copies of the model were stored by each thread,
+or only on each node, or whether only a single global version of the model was maintained at all times; and how often threads received updated versions of other threads' models in the case of model replication. They
+found substantial differences in performance across these settings, and identified important computational-statistical tradeoffs to guide further work. In prior work,~\citet{} had undertaken a similar study in the
+rather different multi-machine setting.
 
-% Discuss related work (e.g. DimmWitted, Buckwild, Jellyfish)
+% Pivot to single-node case (ref Jellyfish, Buckwild).
+Comparatively little attention has been paid to the simpler setting of a single node, despite the fact that, even there, failing to take the memory access pattern into account can limit the speedup from parallelization
+both on the individual node in isolation and in the context of larger multi-node or multi-machine systems. A notable exception to this general trend is the Jellyfish system for large-scale matrix factorization, which employs a 
+blocking scheme to ensure that no two threads access the same parameters in any given epoch---a design choice that also ensures a high degree of cache locality within each thread's memory accesses, since each thread's 
+assigned block depends only on a fraction of the total model parameters~\citep{}. And more recently, further support for the idea that memory access optimizations can greatly increase the efficiency of optimization algorithms
+has come from work showing that low-precision arithmetic variants of the Hogwild algorithm can achieve substantially better speedups than their high-precision predecessors~\citep{}.
 
 % Introduce our approach
+In this report, we investigate a general-purpose methodology for optimizing the memory access efficiency of Hogwild-style algorithms. Building on the Jellyfish results, we propose to group datapoints into blocks that each access only a 
+limited subset of the parameters and to use these blocks constrain the order in which threads access datapoints. We hypothesize that, if the blocking is done well, this strategy will have the effect of increasing cache hits on model parameters within a single thread.
+Further, if different threads are further required to iterate through the blocks in different orders, we expect it to have the additional beneficial effect of reducing conflicting model accesses across threads, thereby also decreasing false sharing due to cache coherence
+effects.
 
-% Give overview of the report
+The remainder of this report elaborates on our approach and provides evidence for these hypotheses. In Section~\ref{sec:memory-model}, we provide a simple fast-slow memory model analysis of the Hogwild algorithm and frame the problem of optimally blocking datapoints as a 
+graph partitioning problem in the bipartite datapoint-parameter dependence graph. In Section~\ref{sec:ls}, we investigate how the structure of the datapoint-parameter graph affects the potential gains from effective blocking. In Section~\ref{sec:w2v}, we go on to show that a particular blocking strategy
+based on iterated min-cut can achieve substantial gains, both in runtime and speedup, on a real machine learning problem, namely the learning task for the popular Word2Vec model for word embeddings~\citep{}. Finally, in Section~\ref{sec:conc}, we reflect on our analysis and propose several avenues
+for further work.
 
-\subsection{Overview of the report}
+\section{A Simplified Memory Model Analysis}\label{sec:memory-model}
 
-\section{A Simplified Memory Model Analysis}
+Simplified memory models can provide a 
 
-\section{Least Squares}
 
-\section{Word Embeddings}
+\section{Least Squares}\label{sec:ls}
 
+\section{Word Embeddings}\label{sec:w2v}
 
 \subsection{Problem statement}
 In the word embeddings problem, given context counts $X_{w,w'}$ we want to find word vectors
@@ -136,7 +153,8 @@ stochastic gradient call. So a cache-friendly permutation incurs only
 one vectors worth of cache misses per datapoint, naturally leading to
 a $\%40-\%50$ reduction in runtime.
 \newpage
-\section{Conclusion}
+
+\section{Conclusion and future directions}\label{sec:conc}
 By ordering datapoints so that model parameters are accessed in a cache friendly manner, we achieve substantial runtime reductions.
 
 % Conclusion for LS
@@ -147,8 +165,7 @@ For word embeddings, we achieve a $\%40-\%50$ runtime gain over regular hogwild 
 % Overall Conclusion
 From these results we believe that using a cache friendly shuffling of datapoints is a promising approach to reducing the runtime of stochastic optimization methods.
 
-\newpage
-\section{Future}
+% Future directions
 The runtime gains achieved by using a cache-friendly shuffle is highly
 contingent on the structure of the parameter depedence graph and on
 the method used to permute the datapoints. Thus, one possible
