@@ -189,7 +189,7 @@ double read_double( int argc, char **argv, const char *option, double default_va
 }
 
 
-char *read_string( int argc, char **argv, const char *option, char *default_value )
+const char *read_string( int argc, char **argv, const char *option, char *default_value )
 {
     int iplace = find_option( argc, argv, option );
     if( iplace >= 0 && iplace < argc-1 )
@@ -197,7 +197,7 @@ char *read_string( int argc, char **argv, const char *option, char *default_valu
     return default_value;
 }
 
-vector<DataPoint> read_sparse_datapoints(char *file_name) {
+vector<DataPoint> read_sparse_datapoints(const char *file_name) {
   string line;
 
   ifstream  data_file (file_name);
@@ -243,7 +243,7 @@ vector<DataPoint> read_sparse_datapoints(char *file_name) {
   return data;
 }
 
-vector<DataPoint> read_dense_datapoints(char *file_name){
+vector<DataPoint> read_dense_datapoints(const char *file_name){
 
   string line;
 
@@ -275,7 +275,7 @@ vector<DataPoint> read_dense_datapoints(char *file_name){
   return data;
 }
 
-vector<DataPoint> read_datapoints(char *file_name, int is_sparse) {
+vector<DataPoint> read_datapoints(const char *file_name, int is_sparse) {
   if (is_sparse) return read_sparse_datapoints(file_name);
   
   return read_dense_datapoints(file_name);
