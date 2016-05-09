@@ -103,18 +103,18 @@ In the full corpus data, there were $~200,000$ word vectors, and $~30,000,000$
 datapoints.
 
 \subsubsection{Results}
-We achieve between $\%40-\%50$ speedup over regular hogwild (non-cache-friendly hogwild),
+\noindent We achieve between $\%40-\%50$ speedup over regular hogwild (non-cache-friendly hogwild),
 measuring runtime to a fixed number of epochs.
 \begin{figure}[H]
 \includegraphics[width=11cm,height=11cm,keepaspectratio]{w2v_speedup_plot.pdf}
 \end{figure}
-Furthermore, the speedup is maintained on different subsets and sizes of the data.
+\noindent Furthermore, the speedup is maintained on different subsets and sizes of the data.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=11cm,height=11cm,keepaspectratio]{w2v_problem_size_time_plot.pdf}
 \end{center}
 \end{figure}
-Additionally, convergence of loss is not adversely affected.
+\noindent Additionally, convergence of loss is not adversely affected.
 \begin{figure}[H]
 \begin{center}
 \includegraphics[width=11cm,height=11cm,keepaspectratio]{w2v_time_loss_plot.pdf}
