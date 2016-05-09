@@ -22,6 +22,8 @@ class GraphBlocker{
 
   GraphBlocker();
   GraphBlocker(int);
+  GraphBlocker(const char *);
+
   void execute(BipartiteGraph&, Algorithm, int);
  private:
   void simple_bfs(BipartiteGraph&, int);
@@ -38,6 +40,33 @@ GraphBlocker::GraphBlocker(int num_left_nodes){
   datapoints_blocks = vector<int>(num_left_nodes);
   offsets = vector<int>(1,0);
   parameters_shuffle = vector<int>();
+}
+
+GraphBlocker::GraphBlocker(const char *file_name){
+  string line;  
+  ifstream data_file(file_name);
+  getline(data_file, line);
+  stringstream first_linestream(line);
+
+  int num_left_nodes, num_blocks;
+  first_linestream >> num_left_nodes >> num_blocks;
+
+  vector<int> block_sizes(num_blocks, 0);
+  datapoints_blocks = vector<int>(num_left_nodes);
+  offsets = vector<int>(1,0);
+  parameters_shuffle = vector<int>();
+
+  for(int i = 0; i < num_left_nodes; i++){
+    getline(data_file, line);
+    stringstream linestream(line);
+
+    linestream >> datapoints_blocks[i];
+    block_sizes[datapoints_blocks[i]]++;
+  }
+
+  for(int i = 0; i < num_blocks - 1; i++){
+    offsets.push_back(offsets.back() + block_sizes[i]);
+  }
 }
 
 
