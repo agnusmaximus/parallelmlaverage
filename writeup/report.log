@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.2.20)  8 MAY 2016 18:38
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.2.20)  8 MAY 2016 19:01
 entering extended mode
 **C:/Users/mrabinovich/workspace/code/parallelmlaverage/writeup/report.tex
 (C:/Users/mrabinovich/workspace/code/parallelmlaverage/writeup/report.tex
@@ -13,91 +13,30 @@ german-x-2013-05-26, nynorsk, oriya, panjabi, pinyin, polish, portuguese, roman
 ian, russian, sanskrit, serbian, slovak, slovenian, spanish, swedish, swissgerm
 an, tamil, telugu, turkish, turkmen, ukenglish, ukrainian, uppersorbian, usengl
 ishmax, welsh, loaded.
-("C:\Program Files (x86)\MiKTeX\tex\latex\koma-script\scrartcl.cls"
-Document Class: scrartcl 2013/12/19 v3.12 KOMA-Script document class (article)
-("C:\Program Files (x86)\MiKTeX\tex\latex\koma-script\scrkbase.sty"
-Package: scrkbase 2013/12/19 v3.12 KOMA-Script package (KOMA-Script-dependent b
-asics and keyval usage)
-
-("C:\Program Files (x86)\MiKTeX\tex\latex\koma-script\scrbase.sty"
-Package: scrbase 2013/12/19 v3.12 KOMA-Script package (KOMA-Script-independent 
-basics and keyval usage)
+("C:\Program Files (x86)\MiKTeX\tex\latex\base\article.cls"
+Document Class: article 2007/10/19 v1.4h Standard LaTeX document class
+("C:\Program Files (x86)\MiKTeX\tex\latex\base\size11.clo"
+File: size11.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
+)
+\c@part=\count79
+\c@section=\count80
+\c@subsection=\count81
+\c@subsubsection=\count82
+\c@paragraph=\count83
+\c@subparagraph=\count84
+\c@figure=\count85
+\c@table=\count86
+\abovecaptionskip=\skip41
+\belowcaptionskip=\skip42
+\bibindent=\dimen102
+)
+("C:\Program Files (x86)\MiKTeX\tex\latex\geometry\geometry.sty"
+Package: geometry 2010/09/12 v5.6 Page Geometry
 
 ("C:\Program Files (x86)\MiKTeX\tex\latex\graphics\keyval.sty"
 Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
 \KV@toks@=\toks14
 )
-("C:\Program Files (x86)\MiKTeX\tex\latex\koma-script\scrlfile.sty"
-Package: scrlfile 2013/12/19 v3.12 KOMA-Script package (loading files)
-
-Package scrlfile, 2013/12/19 v3.12 KOMA-Script package (loading files)
-                  Copyright (C) Markus Kohm
-
-))) ("C:\Program Files (x86)\MiKTeX\tex\latex\koma-script\tocbasic.sty"
-Package: tocbasic 2013/12/19 v3.12 KOMA-Script package (handling toc-files)
-)
-Package tocbasic Info: omitting babel extension for `toc'
-(tocbasic)             because of feature `nobabel' available
-(tocbasic)             for `toc' on input line 115.
-Package tocbasic Info: omitting babel extension for `lof'
-(tocbasic)             because of feature `nobabel' available
-(tocbasic)             for `lof' on input line 116.
-Package tocbasic Info: omitting babel extension for `lot'
-(tocbasic)             because of feature `nobabel' available
-(tocbasic)             for `lot' on input line 117.
-Class scrartcl Info: File `scrsize11pt.clo' used to setup font sizes on input l
-ine 1531.
-
-("C:\Program Files (x86)\MiKTeX\tex\latex\koma-script\scrsize11pt.clo"
-File: scrsize11pt.clo 2013/12/19 v3.12 KOMA-Script font size class option (11pt
-)
-)
-("C:\Program Files (x86)\MiKTeX\tex\latex\koma-script\typearea.sty"
-Package: typearea 2013/12/19 v3.12 KOMA-Script package (type area)
-
-Package typearea, 2013/12/19 v3.12 KOMA-Script package (type area)
-                  Copyright (C) Frank Neukam, 1992-1994
-                  Copyright (C) Markus Kohm, 1994-
-
-\ta@bcor=\skip41
-\ta@div=\count79
-\ta@hblk=\skip42
-\ta@vblk=\skip43
-\ta@temp=\skip44
-\footheight=\skip45
-Package typearea Info: These are the values describing the layout:
-(typearea)             DIV  = 10
-(typearea)             BCOR = 0.0pt
-(typearea)             \paperwidth      = 597.50793pt
-(typearea)              \textwidth      = 418.25555pt
-(typearea)              DIV departure   = -6%
-(typearea)              \evensidemargin = 17.3562pt
-(typearea)              \oddsidemargin  = 17.3562pt
-(typearea)             \paperheight     = 845.04694pt
-(typearea)              \textheight     = 595.80026pt
-(typearea)              \topmargin      = -25.16531pt
-(typearea)              \headheight     = 17.0pt
-(typearea)              \headsep        = 20.40001pt
-(typearea)              \topskip        = 11.0pt
-(typearea)              \footskip       = 47.6pt
-(typearea)              \baselineskip   = 13.6pt
-(typearea)              on input line 1330.
-)
-\c@part=\count80
-\c@section=\count81
-\c@subsection=\count82
-\c@subsubsection=\count83
-\c@paragraph=\count84
-\c@subparagraph=\count85
-\abovecaptionskip=\skip46
-\belowcaptionskip=\skip47
-\c@pti@nb@sid@b@x=\box26
-\c@figure=\count86
-\c@table=\count87
-\bibindent=\dimen102
-) ("C:\Program Files (x86)\MiKTeX\tex\latex\geometry\geometry.sty"
-Package: geometry 2010/09/12 v5.6 Page Geometry
-
 ("C:\Program Files (x86)\MiKTeX\tex\generic\oberdiek\ifpdf.sty"
 Package: ifpdf 2011/01/30 v2.3 Provides the ifpdf switch (HO)
 Package ifpdf Info: pdfTeX in PDF mode is detected.
@@ -109,9 +48,9 @@ Package ifvtex Info: VTeX not detected.
 ("C:\Program Files (x86)\MiKTeX\tex\generic\ifxetex\ifxetex.sty"
 Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
 )
-\Gm@cnth=\count88
-\Gm@cntv=\count89
-\c@Gm@tempcnt=\count90
+\Gm@cnth=\count87
+\Gm@cntv=\count88
+\c@Gm@tempcnt=\count89
 \Gm@bindingoffset=\dimen103
 \Gm@wd@mp=\dimen104
 \Gm@odd@mp=\dimen105
@@ -123,13 +62,6 @@ Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
 \Gm@dimlist=\toks15
 
 ("C:\Program Files (x86)\MiKTeX\tex\latex\geometry\geometry.cfg"))
-("C:\Program Files (x86)\MiKTeX\tex\latex\base\fontenc.sty"
-Package: fontenc 2005/09/27 v1.99g Standard LaTeX package
-
-("C:\Program Files (x86)\MiKTeX\tex\latex\base\t1enc.def"
-File: t1enc.def 2005/09/27 v1.99g Standard LaTeX file
-LaTeX Font Info:    Redeclaring font encoding T1 on input line 43.
-))
 ("C:\Program Files (x86)\MiKTeX\tex\latex\fourier\fourier.sty"
 Package: fourier 2005/01/01 1.4 fourier-GUTenberg package
 
@@ -322,11 +254,11 @@ LaTeX Font Info:    Redeclaring math accent \mathring on input line 256.
 )
 ("C:\Program Files (x86)\MiKTeX\tex\latex\float\float.sty"
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
-\c@float@type=\count91
+\c@float@type=\count90
 \float@exts=\toks16
-\float@box=\box27
+\float@box=\box26
 \@float@everytoks=\toks17
-\@floatcapt=\box28
+\@floatcapt=\box27
 )
 ("C:\Program Files (x86)\MiKTeX\tex\generic\babel\babel.sty"
 Package: babel 2008/07/08 v3.8m The Babel package
@@ -342,37 +274,16 @@ Language: english 2005/03/30 v3.3o English support from the babel system
 
 ("C:\Program Files (x86)\MiKTeX\tex\generic\babel\babel.def"
 File: babel.def 2008/07/08 v3.8m Babel common definitions
-\babel@savecnt=\count92
+\babel@savecnt=\count91
 \U@D=\dimen111
 )
 \l@canadian = a dialect from \language\l@american 
 \l@australian = a dialect from \language\l@british 
 \l@newzealand = a dialect from \language\l@british 
 ))
-("C:\Program Files (x86)\MiKTeX\tex\latex\microtype\microtype.sty"
-Package: microtype 2013/05/23 v2.5a Micro-typographical refinements (RS)
-\MT@toks=\toks18
-\MT@count=\count93
-LaTeX Info: Redefining \textls on input line 766.
-\MT@outer@kern=\dimen112
-LaTeX Info: Redefining \textmicrotypecontext on input line 1285.
-\MT@listname@count=\count94
-
-("C:\Program Files (x86)\MiKTeX\tex\latex\microtype\microtype-pdftex.def"
-File: microtype-pdftex.def 2013/05/23 v2.5a Definitions specific to pdftex (RS)
-
-LaTeX Info: Redefining \lsstyle on input line 915.
-LaTeX Info: Redefining \lslig on input line 915.
-\MT@outer@space=\skip48
-)
-Package microtype Info: Loading configuration file microtype.cfg.
-
-("C:\Program Files (x86)\MiKTeX\tex\latex\microtype\microtype.cfg"
-File: microtype.cfg 2013/05/23 v2.5a microtype main configuration file (RS)
-))
 ("C:\Program Files (x86)\MiKTeX\tex\latex\amsmath\amsmath.sty"
 Package: amsmath 2013/01/14 v2.14 AMS math features
-\@mathmargin=\skip49
+\@mathmargin=\skip43
 
 For additional information on amsmath, use the `?' option.
 ("C:\Program Files (x86)\MiKTeX\tex\latex\amsmath\amstext.sty"
@@ -380,51 +291,51 @@ Package: amstext 2000/06/29 v2.01
 
 ("C:\Program Files (x86)\MiKTeX\tex\latex\amsmath\amsgen.sty"
 File: amsgen.sty 1999/11/30 v2.0
-\@emptytoks=\toks19
-\ex@=\dimen113
+\@emptytoks=\toks18
+\ex@=\dimen112
 ))
 ("C:\Program Files (x86)\MiKTeX\tex\latex\amsmath\amsbsy.sty"
 Package: amsbsy 1999/11/29 v1.2d
-\pmbraise@=\dimen114
+\pmbraise@=\dimen113
 )
 ("C:\Program Files (x86)\MiKTeX\tex\latex\amsmath\amsopn.sty"
 Package: amsopn 1999/12/14 v2.01 operator names
 )
-\inf@bad=\count95
+\inf@bad=\count92
 LaTeX Info: Redefining \frac on input line 210.
-\uproot@=\count96
-\leftroot@=\count97
+\uproot@=\count93
+\leftroot@=\count94
 LaTeX Info: Redefining \overline on input line 306.
-\classnum@=\count98
-\DOTSCASE@=\count99
+\classnum@=\count95
+\DOTSCASE@=\count96
 LaTeX Info: Redefining \ldots on input line 378.
 LaTeX Info: Redefining \dots on input line 381.
 LaTeX Info: Redefining \cdots on input line 466.
-\Mathstrutbox@=\box29
-\strutbox@=\box30
-\big@size=\dimen115
+\Mathstrutbox@=\box28
+\strutbox@=\box29
+\big@size=\dimen114
 LaTeX Font Info:    Redeclaring font encoding OML on input line 566.
 LaTeX Font Info:    Redeclaring font encoding OMS on input line 567.
-\macc@depth=\count100
-\c@MaxMatrixCols=\count101
+\macc@depth=\count97
+\c@MaxMatrixCols=\count98
 \dotsspace@=\muskip10
-\c@parentequation=\count102
-\dspbrk@lvl=\count103
-\tag@help=\toks20
-\row@=\count104
-\column@=\count105
-\maxfields@=\count106
-\andhelp@=\toks21
-\eqnshift@=\dimen116
-\alignsep@=\dimen117
-\tagshift@=\dimen118
-\tagwidth@=\dimen119
-\totwidth@=\dimen120
-\lineht@=\dimen121
-\@envbody=\toks22
-\multlinegap=\skip50
-\multlinetaggap=\skip51
-\mathdisplay@stack=\toks23
+\c@parentequation=\count99
+\dspbrk@lvl=\count100
+\tag@help=\toks19
+\row@=\count101
+\column@=\count102
+\maxfields@=\count103
+\andhelp@=\toks20
+\eqnshift@=\dimen115
+\alignsep@=\dimen116
+\tagshift@=\dimen117
+\tagwidth@=\dimen118
+\totwidth@=\dimen119
+\lineht@=\dimen120
+\@envbody=\toks21
+\multlinegap=\skip44
+\multlinetaggap=\skip45
+\mathdisplay@stack=\toks22
 LaTeX Info: Redefining \[ on input line 2665.
 LaTeX Info: Redefining \] on input line 2666.
 )
@@ -438,15 +349,15 @@ LaTeX Font Info:    Redeclaring math symbol \square on input line 141.
 )
 ("C:\Program Files (x86)\MiKTeX\tex\latex\amscls\amsthm.sty"
 Package: amsthm 2004/08/06 v2.20
-\thm@style=\toks24
-\thm@bodyfont=\toks25
-\thm@headfont=\toks26
-\thm@notefont=\toks27
-\thm@headpunct=\toks28
-\thm@preskip=\skip52
-\thm@postskip=\skip53
-\thm@headsep=\skip54
-\dth@everypar=\toks29
+\thm@style=\toks23
+\thm@bodyfont=\toks24
+\thm@headfont=\toks25
+\thm@notefont=\toks26
+\thm@headpunct=\toks27
+\thm@preskip=\skip46
+\thm@postskip=\skip47
+\thm@headsep=\skip48
+\dth@everypar=\toks28
 )
 ("C:\Program Files (x86)\MiKTeX\tex\latex\graphics\graphicx.sty"
 Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
@@ -471,79 +382,60 @@ Package: infwarerr 2010/04/08 v1.3 Providing info/warning/error messages (HO)
 ("C:\Program Files (x86)\MiKTeX\tex\generic\oberdiek\ltxcmds.sty"
 Package: ltxcmds 2011/11/09 v1.22 LaTeX kernel commands for general use (HO)
 )
-\Gread@gobject=\count107
+\Gread@gobject=\count104
 ))
-\Gin@req@height=\dimen122
-\Gin@req@width=\dimen123
+\Gin@req@height=\dimen121
+\Gin@req@width=\dimen122
 )
 ("C:\Program Files (x86)\MiKTeX\tex\latex\url\url.sty"
 \Urlmuskip=\muskip11
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
-
-Class scrartcl Warning: Usage of package `fancyhdr' together
-(scrartcl)              with a KOMA-Script class is not recommended.
-(scrartcl)              I'd suggest to use 
-(scrartcl)              package `scrpage2' or `scrlayer-scrpage'.
-(scrartcl)              Nevertheless, using requested
-(scrartcl)              package `fancyhdr' on input line 19.
-
-("C:\Program Files (x86)\MiKTeX\tex\latex\fancyhdr\fancyhdr.sty"
-\fancy@headwidth=\skip55
-\f@ncyO@elh=\skip56
-\f@ncyO@erh=\skip57
-\f@ncyO@olh=\skip58
-\f@ncyO@orh=\skip59
-\f@ncyO@elf=\skip60
-\f@ncyO@erf=\skip61
-\f@ncyO@olf=\skip62
-\f@ncyO@orf=\skip63
-)
 (C:\Users\mrabinovich\workspace\code\parallelmlaverage\writeup\report.aux)
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 55.
-LaTeX Font Info:    ... okay on input line 55.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 55.
-LaTeX Font Info:    ... okay on input line 55.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 55.
-LaTeX Font Info:    ... okay on input line 55.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 55.
-LaTeX Font Info:    ... okay on input line 55.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 55.
-LaTeX Font Info:    ... okay on input line 55.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 55.
-LaTeX Font Info:    ... okay on input line 55.
-LaTeX Font Info:    Checking defaults for FML/futm/m/it on input line 55.
-LaTeX Font Info:    Try loading font information for FML+futm on input line 55.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 58.
+LaTeX Font Info:    ... okay on input line 58.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 58.
+LaTeX Font Info:    ... okay on input line 58.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 58.
+LaTeX Font Info:    ... okay on input line 58.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 58.
+LaTeX Font Info:    ... okay on input line 58.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 58.
+LaTeX Font Info:    ... okay on input line 58.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 58.
+LaTeX Font Info:    ... okay on input line 58.
+LaTeX Font Info:    Checking defaults for FML/futm/m/it on input line 58.
+LaTeX Font Info:    Try loading font information for FML+futm on input line 58.
 
 
 ("C:\Program Files (x86)\MiKTeX\tex\latex\fourier\fmlfutm.fd"
 File: fmlfutm.fd 2004/10/30 Fontinst v1.926 font definitions for FML/futm.
 )
-LaTeX Font Info:    ... okay on input line 55.
-LaTeX Font Info:    Checking defaults for FMS/futm/m/n on input line 55.
-LaTeX Font Info:    Try loading font information for FMS+futm on input line 55.
+LaTeX Font Info:    ... okay on input line 58.
+LaTeX Font Info:    Checking defaults for FMS/futm/m/n on input line 58.
+LaTeX Font Info:    Try loading font information for FMS+futm on input line 58.
 
 
 ("C:\Program Files (x86)\MiKTeX\tex\latex\fourier\fmsfutm.fd"
 File: fmsfutm.fd 2004/10/30 Fontinst v1.926 font definitions for FMS/futm.
 )
-LaTeX Font Info:    ... okay on input line 55.
-LaTeX Font Info:    Checking defaults for FMX/futm/m/n on input line 55.
-LaTeX Font Info:    Try loading font information for FMX+futm on input line 55.
+LaTeX Font Info:    ... okay on input line 58.
+LaTeX Font Info:    Checking defaults for FMX/futm/m/n on input line 58.
+LaTeX Font Info:    Try loading font information for FMX+futm on input line 58.
 
 
 ("C:\Program Files (x86)\MiKTeX\tex\latex\fourier\fmxfutm.fd"
 File: fmxfutm.fd futm-extension
 )
-LaTeX Font Info:    ... okay on input line 55.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 55.
-LaTeX Font Info:    Try loading font information for TS1+cmr on input line 55.
+LaTeX Font Info:    ... okay on input line 58.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 58.
+LaTeX Font Info:    Try loading font information for TS1+cmr on input line 58.
 
 ("C:\Program Files (x86)\MiKTeX\tex\latex\base\ts1cmr.fd"
 File: ts1cmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
-LaTeX Font Info:    ... okay on input line 55.
-LaTeX Font Info:    Try loading font information for T1+futs on input line 55.
+LaTeX Font Info:    ... okay on input line 58.
+LaTeX Font Info:    Try loading font information for T1+futs on input line 58.
 
 ("C:\Program Files (x86)\MiKTeX\tex\latex\fourier\t1futs.fd"
 File: t1futs.fd 2004/03/02 Fontinst v1.926 font definitions for T1/futs.
@@ -556,21 +448,21 @@ File: t1futs.fd 2004/03/02 Fontinst v1.926 font definitions for T1/futs.
 * layout: <same size as paper>
 * layoutoffset:(h,v)=(0.0pt,0.0pt)
 * modes: 
-* h-part:(L,W,R)=(71.13188pt, 455.24417pt, 71.13188pt)
-* v-part:(T,H,B)=(28.45274pt, 788.14145pt, 28.45274pt)
-* \paperwidth=597.50793pt
-* \paperheight=845.04694pt
-* \textwidth=455.24417pt
-* \textheight=788.14145pt
+* h-part:(L,W,R)=(71.13188pt, 472.03123pt, 71.13188pt)
+* v-part:(T,H,B)=(28.45274pt, 738.0645pt, 28.45274pt)
+* \paperwidth=614.295pt
+* \paperheight=794.96999pt
+* \textwidth=472.03123pt
+* \textheight=738.0645pt
 * \oddsidemargin=-1.1381pt
 * \evensidemargin=-1.1381pt
-* \topmargin=-81.21725pt
-* \headheight=13.6pt
-* \headsep=20.40001pt
+* \topmargin=-80.81725pt
+* \headheight=12.0pt
+* \headsep=25.0pt
 * \topskip=11.0pt
-* \footskip=47.6pt
-* \marginparwidth=59.7508pt
-* \marginparsep=12.8401pt
+* \footskip=30.0pt
+* \marginparwidth=59.0pt
+* \marginparsep=10.0pt
 * \columnsep=10.0pt
 * \skip\footins=10.0pt plus 4.0pt minus 2.0pt
 * \hoffset=0.0pt
@@ -582,109 +474,80 @@ File: t1futs.fd 2004/03/02 Fontinst v1.926 font definitions for T1/futs.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-LaTeX Info: Redefining \microtypecontext on input line 55.
-Package microtype Info: Generating PDF output.
-Package microtype Info: Character protrusion enabled (level 2).
-Package microtype Info: Using default protrusion set `alltext'.
-Package microtype Info: Automatic font expansion enabled (level 2),
-(microtype)             stretch: 20, shrink: 20, step: 1, non-selected.
-Package microtype Info: Using default expansion set `basictext'.
-Package microtype Info: No adjustment of tracking.
-Package microtype Info: No adjustment of interword spacing.
-Package microtype Info: No adjustment of character kerning.
-Package microtype Info: Loading generic settings for font family
-(microtype)             `futs' (encoding: T1).
-(microtype)             For optimal results, create family-specific settings.
-(microtype)             See the microtype manual for details.
 ("C:\Program Files (x86)\MiKTeX\tex\context\base\supp-pdf.mkii"
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count108
-\scratchdimen=\dimen124
-\scratchbox=\box31
-\nofMPsegments=\count109
-\nofMParguments=\count110
-\everyMPshowfont=\toks30
-\MPscratchCnt=\count111
-\MPscratchDim=\dimen125
-\MPnumerator=\count112
-\makeMPintoPDFobject=\count113
-\everyMPtoPDFconversion=\toks31
+\scratchcounter=\count105
+\scratchdimen=\dimen123
+\scratchbox=\box30
+\nofMPsegments=\count106
+\nofMParguments=\count107
+\everyMPshowfont=\toks29
+\MPscratchCnt=\count108
+\MPscratchDim=\dimen124
+\MPnumerator=\count109
+\makeMPintoPDFobject=\count110
+\everyMPtoPDFconversion=\toks30
 )
-LaTeX Font Info:    Try loading font information for T1+cmss on input line 58.
- ("C:\Program Files (x86)\MiKTeX\tex\latex\base\t1cmss.fd"
-File: t1cmss.fd 1999/05/25 v2.5h Standard LaTeX font definitions
-)
-Package microtype Info: Loading generic settings for font family
-(microtype)             `cmss' (encoding: T1).
-(microtype)             For optimal results, create family-specific settings.
-(microtype)             See the microtype manual for details.
-LaTeX Font Info:    Try loading font information for OT1+bch on input line 58.
-
-("C:\Program Files (x86)\MiKTeX\tex\latex\psnfss\ot1bch.fd"
-File: ot1bch.fd 2004/10/18 font definitions for OT1/bch.
-)
-("C:\Program Files (x86)\MiKTeX\tex\latex\microtype\mt-bch.cfg"
-File: mt-bch.cfg 2007/03/03 v1.5 microtype config. file: Bitstream Charter (RS)
-
-)
-LaTeX Font Info:    Try loading font information for FML+futmi on input line 58
+LaTeX Font Info:    Try loading font information for FML+futmi on input line 60
 .
-
-("C:\Program Files (x86)\MiKTeX\tex\latex\fourier\fmlfutmi.fd"
+ ("C:\Program Files (x86)\MiKTeX\tex\latex\fourier\fmlfutmi.fd"
 File: fmlfutmi.fd 2004/10/30 Fontinst v1.926 font definitions for FML/futmi.
 )
 LaTeX Font Info:    Font shape `FMX/futm/m/n' will be
-(Font)              scaled to size 13.24796pt on input line 58.
+(Font)              scaled to size 11.03998pt on input line 60.
 LaTeX Font Info:    Font shape `FMX/futm/m/n' will be
-(Font)              scaled to size 9.19998pt on input line 58.
+(Font)              scaled to size 8.27998pt on input line 60.
 LaTeX Font Info:    Font shape `FMX/futm/m/n' will be
-(Font)              scaled to size 7.35999pt on input line 58.
+(Font)              scaled to size 6.43999pt on input line 60.
 LaTeX Font Info:    Font shape `U/futm/m/n' will be
-(Font)              scaled to size 13.24796pt on input line 58.
+(Font)              scaled to size 11.03998pt on input line 60.
 LaTeX Font Info:    Font shape `U/futm/m/n' will be
-(Font)              scaled to size 9.19998pt on input line 58.
+(Font)              scaled to size 8.27998pt on input line 60.
 LaTeX Font Info:    Font shape `U/futm/m/n' will be
-(Font)              scaled to size 7.35999pt on input line 58.
-LaTeX Font Info:    Try loading font information for U+msa on input line 58.
+(Font)              scaled to size 6.43999pt on input line 60.
+LaTeX Font Info:    Try loading font information for U+msa on input line 60.
 
 ("C:\Program Files (x86)\MiKTeX\tex\latex\amsfonts\umsa.fd"
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-("C:\Program Files (x86)\MiKTeX\tex\latex\microtype\mt-msa.cfg"
-File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
-)
-LaTeX Font Info:    Try loading font information for U+msb on input line 58.
+LaTeX Font Info:    Try loading font information for U+msb on input line 60.
 
 ("C:\Program Files (x86)\MiKTeX\tex\latex\amsfonts\umsb.fd"
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-("C:\Program Files (x86)\MiKTeX\tex\latex\microtype\mt-msb.cfg"
-File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
-)
-LaTeX Font Info:    Font shape `FMX/futm/m/n' will be
-(Font)              scaled to size 10.07397pt on input line 71.
-LaTeX Font Info:    Font shape `FMX/futm/m/n' will be
-(Font)              scaled to size 7.63599pt on input line 71.
-LaTeX Font Info:    Font shape `FMX/futm/m/n' will be
-(Font)              scaled to size 5.51999pt on input line 71.
-LaTeX Font Info:    Font shape `U/futm/m/n' will be
-(Font)              scaled to size 10.07397pt on input line 71.
-LaTeX Font Info:    Font shape `U/futm/m/n' will be
-(Font)              scaled to size 7.63599pt on input line 71.
-LaTeX Font Info:    Font shape `U/futm/m/n' will be
-(Font)              scaled to size 5.51999pt on input line 71.
 
-Underfull \hbox (badness 10000) in paragraph at lines 80--103
+LaTeX Warning: No \author given.
+
+LaTeX Font Info:    Font shape `T1/futs/bx/n' in size <14.4> not available
+(Font)              Font shape `T1/futs/b/n' tried instead on input line 61.
+LaTeX Font Info:    Font shape `T1/futs/bx/n' in size <12> not available
+(Font)              Font shape `T1/futs/b/n' tried instead on input line 78.
+LaTeX Font Info:    Font shape `FMX/futm/m/n' will be
+(Font)              scaled to size 10.07397pt on input line 79.
+LaTeX Font Info:    Font shape `FMX/futm/m/n' will be
+(Font)              scaled to size 7.63599pt on input line 79.
+LaTeX Font Info:    Font shape `FMX/futm/m/n' will be
+(Font)              scaled to size 5.51999pt on input line 79.
+LaTeX Font Info:    Font shape `U/futm/m/n' will be
+(Font)              scaled to size 10.07397pt on input line 79.
+LaTeX Font Info:    Font shape `U/futm/m/n' will be
+(Font)              scaled to size 7.63599pt on input line 79.
+LaTeX Font Info:    Font shape `U/futm/m/n' will be
+(Font)              scaled to size 5.51999pt on input line 79.
+LaTeX Font Info:    Font shape `T1/futs/bx/n' in size <10.95> not available
+(Font)              Font shape `T1/futs/b/n' tried instead on input line 86.
+
+Underfull \hbox (badness 10000) in paragraph at lines 88--111
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 80--103
+Underfull \hbox (badness 10000) in paragraph at lines 88--111
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 80--103
+Underfull \hbox (badness 10000) in paragraph at lines 88--111
 
  []
 
@@ -692,27 +555,24 @@ Underfull \hbox (badness 10000) in paragraph at lines 80--103
 File: ./images/w2v_speedup_plot.pdf Graphic file (type pdf)
 
 <use ./images/w2v_speedup_plot.pdf>
-Package pdftex.def Info: ./images/w2v_speedup_plot.pdf used on input line 109.
+Package pdftex.def Info: ./images/w2v_speedup_plot.pdf used on input line 117.
 (pdftex.def)             Requested size: 312.97809pt x 234.73357pt.
  [1
 
-
-
-
 {C:/Users/mrabinovich/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
-<./images/w2v_problem_size_time_plot.pdf, id=15, 578.16pt x 433.62pt>
+<./images/w2v_problem_size_time_plot.pdf, id=12, 578.16pt x 433.62pt>
 File: ./images/w2v_problem_size_time_plot.pdf Graphic file (type pdf)
 
 <use ./images/w2v_problem_size_time_plot.pdf>
 Package pdftex.def Info: ./images/w2v_problem_size_time_plot.pdf used on input 
-line 115.
+line 123.
 (pdftex.def)             Requested size: 312.97809pt x 234.73357pt.
 
-<./images/w2v_time_loss_plot.pdf, id=16, 578.16pt x 433.62pt>
+<./images/w2v_time_loss_plot.pdf, id=13, 578.16pt x 433.62pt>
 File: ./images/w2v_time_loss_plot.pdf Graphic file (type pdf)
 
 <use ./images/w2v_time_loss_plot.pdf>
-Package pdftex.def Info: ./images/w2v_time_loss_plot.pdf used on input line 121
+Package pdftex.def Info: ./images/w2v_time_loss_plot.pdf used on input line 129
 .
 (pdftex.def)             Requested size: 312.97809pt x 234.73357pt.
  [2 <C:/Users/mrabinovich/workspace/code/parallelmlaverage/writeup/images/w2v_s
@@ -726,27 +586,24 @@ le pdfs with page group included in a single page
 _time_loss_plot.pdf>] [4] [5]
 (C:\Users\mrabinovich\workspace\code\parallelmlaverage\writeup\report.aux) ) 
 Here is how much of TeX's memory you used:
- 6789 strings out of 493921
- 103019 string characters out of 3146462
- 229488 words of memory out of 3000000
- 9876 multiletter control sequences out of 15000+200000
- 64369 words of font info for 133 fonts, out of 3000000 for 9000
+ 3798 strings out of 493921
+ 49846 string characters out of 3146462
+ 107291 words of memory out of 3000000
+ 7004 multiletter control sequences out of 15000+200000
+ 76817 words of font info for 92 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
- 39i,11n,47p,349b,278s stack positions out of 5000i,500n,10000p,200000b,50000s
- <C
-:\Users\mrabinovich\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600
-\ecsx1095.pk>{C:/Program Files (x86)/MiKTeX/fonts/enc/dvips/fontname/8r.enc} <C
-:\Users\mrabinovich\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jknappen\ec\dpi600
-\ecsx1200.pk> <C:\Users\mrabinovich\AppData\Local\MiKTeX\2.9\fonts\pk\ljfour\jk
-nappen\ec\dpi600\ecsx1440.pk><C:/Program Files (x86)/MiKTeX/fonts/type1/bitstre
-a/charter/bchb8a.pfb><C:/Program Files (x86)/MiKTeX/fonts/type1/public/fourier/
-fourier-bb.pfb><C:/Program Files (x86)/MiKTeX/fonts/type1/public/fourier/fourie
-r-mex.pfb><C:/Program Files (x86)/MiKTeX/fonts/type1/public/fourier/fourier-ms.
-pfb><C:/Program Files (x86)/MiKTeX/fonts/type1/adobe/utopia/putr8a.pfb><C:/Prog
-ram Files (x86)/MiKTeX/fonts/type1/adobe/utopia/putri8a.pfb>
-Output written on report.pdf (5 pages, 127745 bytes).
+ 28i,9n,24p,296b,276s stack positions out of 5000i,500n,10000p,200000b,50000s
+{C:
+/Program Files (x86)/MiKTeX/fonts/enc/dvips/fontname/8r.enc}<C:/Program Files (
+x86)/MiKTeX/fonts/type1/public/fourier/fourier-bb.pfb><C:/Program Files (x86)/M
+iKTeX/fonts/type1/public/fourier/fourier-mex.pfb><C:/Program Files (x86)/MiKTeX
+/fonts/type1/public/fourier/fourier-ms.pfb><C:/Program Files (x86)/MiKTeX/fonts
+/type1/adobe/utopia/putb8a.pfb><C:/Program Files (x86)/MiKTeX/fonts/type1/adobe
+/utopia/putr8a.pfb><C:/Program Files (x86)/MiKTeX/fonts/type1/adobe/utopia/putr
+i8a.pfb>
+Output written on report.pdf (5 pages, 110123 bytes).
 PDF statistics:
- 263 PDF objects out of 1000 (max. 8388607)
+ 184 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 14864 words of extra memory for PDF output out of 17280 (max. 10000000)
+ 16 words of extra memory for PDF output out of 10000 (max. 10000000)
 

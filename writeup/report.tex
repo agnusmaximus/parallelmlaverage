@@ -1,11 +1,12 @@
-\documentclass[paper=a4, fontsize=11pt]{scrartcl}
+%\documentclass[paper=a4, fontsize=11pt]{scrartcl}
+\documentclass[11pt]{article}
 \usepackage[top=1cm, bottom=1cm, left=2.5cm, right=2.5cm]{geometry}
-\usepackage[T1]{fontenc}
+%\usepackage[T1]{fontenc}
 \usepackage{fourier}
 \usepackage{float}
 
 \usepackage[english]{babel}															% English language/hyphenation
-\usepackage[protrusion=true,expansion=true]{microtype}
+%\usepackage[protrusion=true,expansion=true]{microtype}
 \usepackage{amsmath,amsfonts,amsthm} % Math packages
 \usepackage[pdftex]{graphicx}
 \usepackage{url}
@@ -15,15 +16,15 @@
 %\allsectionsfont{\centering \normalfont\scshape}
 
 %%% Custom headers/footers (fancyhdr package)
-\usepackage{fancyhdr}
-\pagestyle{fancyplain}
-\fancyhead{}											% No page header
-\fancyfoot[L]{}											% Empty
-\fancyfoot[C]{}											% Empty
-\fancyfoot[R]{\thepage}									% Pagenumbering
-\renewcommand{\headrulewidth}{0pt}			% Remove header underlines
-\renewcommand{\footrulewidth}{0pt}				% Remove footer underlines
-\setlength{\headheight}{13.6pt}
+%\usepackage{fancyhdr}
+%\pagestyle{fancyplain}
+%\fancyhead{}											% No page header
+%\fancyfoot[L]{}											% Empty
+%\fancyfoot[C]{}											% Empty
+%\fancyfoot[R]{\thepage}									% Pagenumbering
+%\renewcommand{\headrulewidth}{0pt}			% Remove header underlines
+%\renewcommand{\footrulewidth}{0pt}				% Remove footer underlines
+%\setlength{\headheight}{13.6pt}
 
 %%% Equation and float numbering
 \numberwithin{equation}{section}		% Equationnumbering: section.eq#
@@ -33,21 +34,23 @@
 \graphicspath{ {./images/} }
 
 %%% Maketitle metadata
-\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} 	% Horizontal rule
+%\newcommand{\horrule}[1]{\rule{\linewidth}{#1}} 	% Horizontal rule
 
-\title{
+\title{Cache-Friendly Shuffles for Asynchronous Stochastic Optimization}
+
+%\title{
   %\vspace{-1in}
-  \usefont{OT1}{bch}{b}{n}
-  \horrule{0.5pt} \\[0.4cm]
-  \huge Cache-Friendly Shuffles for Asynchronous Stochastic Optimization
-  \horrule{2pt} \\[0.5cm]
-}
-\author{
-  \normalfont 								\normalsize
-  \\[-3pt]
-  \normalsize
-  \today
-}
+%  \usefont{OT1}{bch}{b}{n}
+%  \horrule{0.5pt} \\[0.4cm]
+%  \huge Cache-Friendly Shuffles for Asynchronous Stochastic Optimization
+%  \horrule{2pt} \\[0.5cm]
+%}
+%\author{
+%  \normalfont 								\normalsize
+%  \\[-3pt]
+%  \normalsize
+%  \today
+%}
 \date{}
 
 
@@ -56,6 +59,11 @@
 
 \maketitle
 \section{Introduction}
+
+In modern machine learning, many problems can be cast as instances of optimization, where the goal is to minimize some loss 
+function encoding the system's errors on training data. The ubiquity of such problems has led to substantial interest in making large-scale 
+optimization as efficient as possible, and a substantial portion of this work has focused on developing asynchronous algorithms that achieve 
+near-ideal speedups in shared-memory systems.
 
 
 
