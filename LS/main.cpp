@@ -29,6 +29,9 @@ int main(int argc, char **argv){
   vector<DataPoint> data = read_datapoints(problem_filename.c_str(), read_sparse);
   long long int read_end_time = get_time() - read_start_time;
 
+  printf("Data read from file in %f seconds\n", read_end_time / 1000.0);
+  fflush(stdout);
+
   long long int construct_blocker_start_time = get_time();
   GraphBlocker blocker(blocks_filename.c_str());
   long long int construct_blocker_end_time = get_time() - construct_blocker_start_time;
