@@ -124,24 +124,6 @@ def gen_huge_regular(num_datapoints, num_parameters, sparsity,
     f = open(outdir + "/" + filestem + ".prob", 'w')
     f.write(str(num_datapoints) + ' ' + str(num_parameters) + ' ' + str(nnz) +  '\n')
     
-    if structure == 'blockmodel':
-        num_blocks = (num_parameters + degree - 1) / degree
-        num_data_per_block = num_datapoints / num_blocks
-    
-        f_block = open(outdir + "/" + filestem + ".blocks", 'w')
-        
-        f_block.write("%d %d\n" % (num_datapoints, num_blocks))
-        
-        for i in range(num_datapoints):
-            block_id = i / num_data_per_block
-            if block_id == num_blocks: 
-                block_id = num_blocks - 1
-            block_start = block_id * degree
-        
-            f_block.write("%d %d\n" % (i, block_id))
-        
-        f_block.close()
-        
     index_permutation = (
         np.random.permutation(num_datapoints) if shuffle_data else np.arange(num_datapoints)
     )
@@ -150,6 +132,24 @@ def gen_huge_regular(num_datapoints, num_parameters, sparsity,
         np.random.permutation(num_parameters) if shuffle_params else np.arange(num_parameters)
     )
     
+    if structure == 'blockmodel':
+        num_blocks = (num_parameters + degree - 1) / degree
+        num_data_per_block = num_datapoints / num_blocks
+    
+        f_block = open(outdir + "/" + filestem + ".blocks", 'w')
+        
+        f_block.write("%d %d\n" % (num_datapoints, num_blocks))
+        
+        for i in index_permutation:
+            block_id = i / num_data_per_block
+            if block_id == num_blocks: 
+                block_id = num_blocks - 1
+            block_start = block_id * degree
+        
+            f_block.write("%d\n" % block_id)
+        
+        f_block.close()
+            
     param_counts = np.ones(num_parameters, dtype = int)
     
     for num_done, i in enumerate(index_permutation):        
