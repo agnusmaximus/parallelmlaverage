@@ -110,23 +110,38 @@ def uniform_sparsity(entry, sparsity, randomness):
 def randu(entry):
     return rd.uniform(-1,1)
     
-
 def gen_huge_regular(num_datapoints, num_parameters, sparsity, 
                      structure='superregular', p_cross = 0.1,
                      shuffle_data=False, shuffle_params=False,
                      outdir = "."):
     degree = int(sparsity * num_parameters)
-    degree_cross = int(p_cross * sparsity * num_parameters)
-    nnz = degree * num_datapoints
-
-    print str(degree)
+    degree_cross = int(p_cross * sparsity * num_parameters) if structure == 'blockmodel' else 0
+    nnz = (degree + degree_cross) * num_datapoints
 
     filestem = "test_instance_faster_structure=%s_n=%d_d=%d_s=%f" % (structure, num_datapoints, num_parameters, sparsity)
     if structure == 'blockmodel': filestem = "%s_pcross=%f" % (filestem, p_cross)
     
     f = open(outdir + "/" + filestem + ".prob", 'w')
     f.write(str(num_datapoints) + ' ' + str(num_parameters) + ' ' + str(nnz) +  '\n')
-
+    
+    if structure == 'blockmodel':
+        num_blocks = (num_parameters + degree - 1) / degree
+        num_data_per_block = num_datapoints / num_blocks
+    
+        f_block = open(outdir + "/" + filestem + ".blocks", 'w')
+        
+        f_block.write("%d %d\n" % (num_datapoints, num_blocks))
+        
+        for i in range(num_datapoints):
+            block_id = i / num_data_per_block
+            if block_id == num_blocks: 
+                block_id = num_blocks - 1
+            block_start = block_id * degree
+        
+            f_block.write("%d %d\n" % (i, block_id))
+        
+        f_block.close()
+        
     index_permutation = (
         np.random.permutation(num_datapoints) if shuffle_data else np.arange(num_datapoints)
     )
@@ -150,10 +165,11 @@ def gen_huge_regular(num_datapoints, num_parameters, sparsity,
             #nnz_indices = np.random.choice(np.arange(0, num_parameters), size=rand_degree,replace=False)
             np.random.randint(num_parameters, size=rand_degree)
         elif structure == 'blockmodel':
-            offset = int(i / degree)*degree
-	    if offset >= num_parameters: offset = 0
-
-            block_params = (np.arange(degree) + offset) % num_parameters
+            block_id = i / num_data_per_block
+            if block_id == num_blocks: 
+                block_id = num_blocks - 1
+            block_start = block_id * degree
+            block_params = np.minimum(np.array(range(block_start, block_start + degree), dtype = int), num_parameters - 1)
             #outside_block_params = range(0, offset)
             #if (offset + degree < num_parameters): outside_block_params.extend(range(offset + degree, num_parameters))
             #outside_block_params = np.array(outside_block_params, dtype = int)
@@ -161,7 +177,7 @@ def gen_huge_regular(num_datapoints, num_parameters, sparsity,
             #cross_params = np.random.choice(outside_block_params, size=degree_cross,replace=False)
             
             # Faster way
-            cross_params = np.random.randint(num_parameters, size = degree_cross)            
+            cross_params = np.random.randint(num_parameters, size = degree_cross)
             nnz_indices = dimension_permutation[np.concatenate([block_params, cross_params])]
         elif structure == 'pref-attach':
             nnz_indices = sample_preferential_attachment(degree, param_counts)
