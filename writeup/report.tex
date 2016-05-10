@@ -249,7 +249,6 @@ To show that the gains are additive in Figure~\ref{fig:crossratio} we plot the r
   \caption{The ratio of the gain and the running time of standard serial \HW{} as a function of cross degree.}
 \end{figure}
 
-
 \section{Word Embeddings}\label{sec:w2v}
 
 \subsection{Problem statement}
@@ -319,42 +318,58 @@ referenced by a datapoint is already in the L1-cache from the previous
 stochastic gradient call. So a cache-friendly permutation incurs only
 one vectors worth of cache misses per datapoint, naturally leading to
 a $\%40-\%50$ reduction in runtime.
-\newpage
 
 \section{Conclusion and future directions}\label{sec:conc}
-By ordering datapoints so that model parameters are accessed in a cache friendly manner, we achieve substantial runtime reductions.
+%By ordering datapoints so that model parameters are accessed in a cache friendly manner, we achieve substantial runtime reductions.
 
 % Conclusion for LS
 
 % Conclusion for W2V
-For word embeddings, we achieve a $\%40-\%50$ runtime gain over regular hogwild by ordering the datapoints via min-k-cut.
+%For word embeddings, we achieve a $\%40-\%50$ runtime gain over regular hogwild by ordering the datapoints via min-k-cut.
 
 % Overall Conclusion
-From these results we believe that using a cache friendly shuffling of datapoints is a promising approach to reducing the runtime of stochastic optimization methods.
+%From these results we believe that using a cache friendly shuffling of datapoints is a promising approach to reducing the runtime of stochastic optimization methods.
 
 % Future directions
-The runtime gains achieved by using a cache-friendly shuffle is highly
-contingent on the structure of the parameter depedence graph and on
-the method used to permute the datapoints. Thus, one possible
-direction to explore is the behavior of cache-friendly shuffles on
-different graph structures and problem types. We may find that graph
-properties such as sparsity, etc, have a nontrivial effect on the
-efficacy of cache-friendly shuffles.
-\\\\
-Different shuffling methods may be another topic of exploration, particularly
-the tradeoff between computational efficiency and shuffle
-quality. Investigating different greedy methods and heuristics for
-greedy shuffles may reveal computationally efficient methods for
-generating a quality cache shuffe. On the other hand, it may also be
-interesting to see how effective optimal shuffles are, perhaps by
-generating them through some sort of integer linear programming
-routine.
-\\\\
-Finally, a shuffling that takes advantage of all levels of cache may yield further runtime gains.
-Thus, a cache-oblivious shuffling method may be yet another area to explore.
+%The runtime gains achieved by using a cache-friendly shuffle is highly
+%contingent on the structure of the parameter depedence graph and on
+%the method used to permute the datapoints. Thus, one possible
+%direction to explore is the behavior of cache-friendly shuffles on
+%different graph structures and problem types. We may find that graph
+%properties such as sparsity, etc, have a nontrivial effect on the
+%efficacy of cache-friendly shuffles.
+%\\\\
+%Different shuffling methods may be another topic of exploration, particularly
+%the tradeoff between computational efficiency and shuffle
+%quality. Investigating different greedy methods and heuristics for
+%greedy shuffles may reveal computationally efficient methods for
+%generating a quality cache shuffe. On the other hand, it may also be
+%interesting to see how effective optimal shuffles are, perhaps by
+%generating them through some sort of integer linear programming
+%routine.
+%\\\\
+%Finally, a shuffling that takes advantage of all levels of cache may yield further runtime gains.
+%Thus, a cache-oblivious shuffling method may be yet another area to explore.
 
+In this report, we have demonstrated the potential for substantial performance gains from cache awareness in asynchronous optimization algorithms. We proposed
+to achieve cache awareness by constraining the order in which the algorithms process datapoints. Based on a simple two-level memory model, we argued that the constraint
+should come from a blocking obtained by solving a certain graph partitioning problem in the bipartite datapoint-parameter graph. We then showed that on synthetic sparse least-squares
+datasets, good performance gains could be achieved if the true underlying blocking was known. Finally, we showed that an iterated min-cut heuristic for solving the graph partitioning problem
+produced blockings that gave significant performance gains on the popular Word2Vec benchmark task.
 
+Our work raises a variety of further questions. On one hand, we have questions about the fundamental limitations of cache-awareness for improving the efficiency of these algorithms.
+How much of the deviation from ideality can be explained by cache non-locality and how much comes from other sources? And even when cache non-locality is the primary inefficiency,
+it is far from clear what degree of locality we can expect to achieve; some graphs simply exhibit a high degree of interconnection that makes blocking impossible. It would therefore be of interest
+to investigate in greater depth the preferential attachment and uniformly random graph structures we briefly analyzed in Section~\ref{sec:ls} in order to see what sorts of gains might be achieved for
+those topologies.
 
+On the other hand, we have algorithmic questions essential to developing practical implementations of our approach. Although iterated min-cut worked well for Word2Vec, it imposed a heavy computational burden, and we would like
+to find more efficient ways to achieve the same result. The other heuristics we tried, on the other hand, were either inefficient or ineffective or both. It would therefore be of significant research interest to 
+investigate the use of alternate large-scale graph partitioning algorithms for these problems and see if they can do well---for this, both classical spectral approaches and more modern methods based on submodular optimization
+might come in useful.
+
+Finally, we have only touched on a couple of the myriad tasks machine learning practitioners use asynchronous stochastic optimization algorithms to solve. To fully understand the reach of our method, we hope in future work to 
+benchmark it on other problems that exhibit different graph structures and thus perhaps different computational properties.
 
 \bibliographystyle{unsrt}
 \bibliography{report}
