@@ -59,7 +59,6 @@ GraphBlocker::GraphBlocker(const char *file_name){
   for(int i = 0; i < num_left_nodes; i++){
     getline(data_file, line);
     stringstream linestream(line);
-
     linestream >> datapoints_blocks[i];
     block_sizes[datapoints_blocks[i]]++;
   }
@@ -72,7 +71,6 @@ GraphBlocker::GraphBlocker(const char *file_name){
 
 void simple_bfs(BipartiteGraph&, int);
 void greedy(BipartiteGraph&, int);
-
 
 void GraphBlocker::execute(BipartiteGraph &graph, Algorithm alg, int threshold){
   

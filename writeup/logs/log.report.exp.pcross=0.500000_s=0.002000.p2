@@ -1,0 +1,7 @@
+Maximum degree of data point is 30
+Data read from file in 56.939000 seconds
+Blocker constructed from file in 2.063000 seconds
+Num Blocks = 500
+Block ordering executed in 0.220000 seconds
+HOGWILD TIMING: 2 threads: 3000000 datapoints, 10000 dimensions, 24 epochs: 26.473000 seconds: 0.033000 shuffle time
+HOGWILD TIMING: 2 threads: 3000000 datapoints, 10000 dimensions, 24 epochs: 21.087000 seconds: 0.019000 shuffle time
