@@ -1,9 +1,9 @@
 import problem_generator as pg
 import sys
 
-N = 1000
-d = 100
-sparsity_levels = [0.02]
+N = 100000
+d = 10000
+sparsity_levels = [0.002]
 structure = "blockmodel"
 
 print("Creating corpus to test blockmodel [N = %d, d = %d]..." % (N, d))

@@ -72,7 +72,6 @@ GraphBlocker::GraphBlocker(const char *file_name){
 void simple_bfs(BipartiteGraph&, int);
 void greedy(BipartiteGraph&, int);
 
-
 void GraphBlocker::execute(BipartiteGraph &graph, Algorithm alg, int threshold){
   
   offsets.resize(1,0);

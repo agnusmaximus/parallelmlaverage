@@ -18,6 +18,21 @@
 
 using namespace std;
 
+
+void block_assignments_toFile(vector<int>& datapoint_blocks, int num_blocks, 
+			      const char* file_name){
+  FILE* f = fopen(file_name, "w");
+  fprintf(f,"%d %d\n", datapoint_blocks.size(), num_blocks);
+
+  for(int i = 0; i < datapoint_blocks.size(); i++){
+    fprintf(f,"%d\n", datapoint_blocks[i]);
+  }
+
+  fclose(f);
+  return;
+}
+
+
 double get_loss(double *model, vector<DataPoint> data){
   double loss = 0.0;
   double dot;
