@@ -16,15 +16,19 @@
 %%% MACROS %%%
 
 \newcommand{\ltwonorm}[1]{\left|\left|{#1}\right|\right|}
-\newcommand{\xvec}{\mathbf{v}}
+\newcommand{\xvec}{\mathbf{x}}
 \newcommand{\HW}{\textsc{Hogwild!}}
 \newcommand{\RR}{\mathbb{R}}
+=======
+\newcommand{\blocks}{\mathcal{B}}
+\newcommand{\neighs}[1]{\mathcal{N}\left({#1}\right)}
 
 %%%%%%%%%%%
 
 \begin{document}
 
 \title{Cache-Friendly Shuffles for Asynchronous Stochastic Optimization}
+\author{Maximilian Lam, Horia Mania, and Maxim Rabinovich}
 
 \maketitle
 \section{Introduction}
@@ -74,21 +78,73 @@ limited subset of the parameters and to use these blocks constrain the order in 
 Further, if different threads are further required to iterate through the blocks in different orders, we expect it to have the additional beneficial effect of reducing conflicting model accesses across threads, thereby also decreasing false sharing due to cache coherence
 effects.
 
-The remainder of this report elaborates on our approach and provides evidence for these hypotheses. In Section~\ref{sec:memory-model}, we provide a simple fast-slow memory model analysis of the Hogwild algorithm and frame the problem of optimally blocking datapoints as a 
-graph partitioning problem in the bipartite datapoint-parameter dependence graph. In Section~\ref{sec:ls}, we investigate how the structure of the datapoint-parameter graph affects the potential gains from effective blocking. In Section~\ref{sec:w2v}, we go on to show that a particular blocking strategy
-based on iterated min-cut can achieve substantial gains, both in runtime and speedup, on a real machine learning problem, namely the learning task for the popular Word2Vec model for word embeddings~\citep{}. Finally, in Section~\ref{sec:conc}, we reflect on our analysis and propose several avenues
-for further work.
+The remainder of this report elaborates on our approach and provides evidence for these hypotheses. In Section~\ref{sec:alg-spec}, we explain the details of our proposed algorithm and introduce the bipartite datapoint-parameter dependence graph that underlies it. In Section~\ref{sec:memory-model}, we provide a simple 
+two-level memory model analysis of the \HW~ algorithm and frame the problem of optimally blocking datapoints as a graph partitioning problem in the dependence graph. In Section~\ref{sec:ls}, we investigate how the structure of the datapoint-parameter graph affects the potential gains from 
+effective blocking. In Section~\ref{sec:w2v}, we go on to show that a particular blocking strategy based on iterated min-cut can achieve substantial gains, both in runtime and speedup, on a real machine learning problem, namely the learning task for the popular Word2Vec model for word embeddings~\citep{}. Finally, in 
+Section~\ref{sec:conc}, we reflect on our analysis and propose several avenues for further work.
+
+\section{Block-Constrained Shuffling}\label{sec:alg-spec}
+
+Our approach to making \HW~ memory access efficient hinges on constraining the order in which the algorithm processes data points. Typically, each thread
+in the algorithm processes the data points in a randomly selected thread-specific ordering, meaning that the data
+point processed by a thread at some iteration $j$ need not share any parameters with the data point processed at iteration $j - 1$ or $j + 1$. We aim to remedy this defect.
+
+Specifically, we aim to group the datapoints into blocks that mostly depend on the same parameters, and such that each block depends only a comparatively small number of 
+distinct parameters. Given this blocking, we constrain the order in which threads process datapoints to be consistent with the blocking. Here consistency means that, as the thread iterates through
+the data, once it has processed a data point from some block, it will not process any more data points outside that block until it has finished with the entire block.
+
+We can make the algorithm specification more precise as follows. Let the blocks of data points be given by $\blocks = \lbrace B_{1}, \dots, B_{K} \rbrace$, where each $B_{k} = \lbrace i_{k1}, \dots, i_{km_{k}}\rbrace$ is a set of data point indices. Then we assume that the sequential ordering
+$I_{p} = \left(i_{p1}, \dots, i_{pn}\right)$ according to which thread $p$ processes data points has the form $\left(I_{pa_{1}}, \dots, I_{pa_{K}}\right)$, where each $I_{pa_{k}}$ is an ordering of the indices in $B_{k}$. 
+
+We point out, anticipating the analysis in Section~\ref{sec:memory-model}, that the problem of choosing a good blocking bears a strong resemblance to the graph partitioning problem that arises in sparse matrix-vector multiply~\citep{}. The difference is that the dependence graph for our problem
+links datapoints to parameters and therefore has a bipartite structure. The blocking problem is then simply a graph partitioning problem on one side of this graph. 
+
+To be more precise, we write each $f_{i}$ as a function of a set $S_{i}$ of $s_{i}$ parameters, out of $d$ model parameters total. To highlight this structure, we write $f_{i}\left(\xvec\right) = f_{i}\left(\xvec_{S_i}\right)$. Datapoint $i$ is then connected to all the parameters in $S_{i}$,
+with edges interpreted as undirected. As a consequence, parameter $j$ is connected to all data points $i$ such that $j \in S_{i}$. Figure~\ref{} gives a schematic of such a graph.
 
 \section{A Simplified Memory Model Analysis}\label{sec:memory-model}
 
 Simplified memory models can provide useful guidance when optimizing algorithm performance, as the case of matrix-matrix multiply illustrates~\citep{}. In this section, we use a two-level memory model to estimate the computational intensity of the algorithm
-in terms of the blocking structure and use the resulting estimate to formalize the problem of finding an optimally memory access efficient blocking as a graph partitioning problem.
+in terms of the blocking structure and use the resulting estimate to formalize the problem of finding an optimally memory access efficient blocking as a graph partitioning problem in the datapoint-parameter graph described in Section~\ref{sec:alg-spec}.
 
-Concretely, assume the memory hierarchy has two levels, fast and slow, where fast memory contains sufficient storage for $L$ model parameters. Further suppose that each $f_{i}$ can be written as a function of a set $S_{i}$ of $s_{i}$ parameters, out of $d$ model parameters total. To highlight this structure, we write 
-$f_{i}\left(x\right) = f_{i}\left(x_{S_i}\right)$. We assume further that reads and writes have equal cost and that the computational effort required to obtain the model update based on datapoint $i$ is proportional to $s_{i}$, say equal to $cs_{i}$ for some absolute constant $c > 0$. Note that under these assumptions, a model update based on datapoint $i$ requires $s_{i}$ parameter reads to compute the update, $cs_{i}$ steps of computation (e.g. flops) to compute the update, and $s_{i}$ parameter writes to actually perform the update.
+Concretely, assume the memory hierarchy has two levels, fast and slow, where fast memory contains sufficient storage for $M$ model parameters and has zero access cost. We assume further that reads and writes have equal cost and that the computational effort required to obtain the model update based on datapoint $i$ is proportional to $s_{i}$, say equal to $cs_{i}$ for some absolute constant $c > 0$. 
 
+Note that under this framework, a model update based on datapoint $i$ requires $s_{i}$ parameter reads to compute the update, $cs_{i}$ steps of computation (e.g. flops) to compute the update, and $s_{i}$ parameter writes to actually perform the update. 
 
+Now let the order in which a thread performs updates based on data points be $I = \lbrace i_{1}, \dots, i_{n}\rbrace$. To process data point $i_{j}$, the
+algorithm needs to read in some number $r_{j}\left(I\right)$ of model parameters to perform the update; the remaining $s_{i_j} - r_{j}\left(I\right)$ are
+already in fast memory and therefore cost nothing to access. The total number of reads is therefore given by $\sum_{i = 1}^{n} s_{i} - \sum_{j = 1}^{n} r_{j}\left(I\right)$, while the total number of writes is given by $\sum_{i} s_i$. The computational intensity can therefore be written as
+\begin{align}
+q\left(I\right) & = \frac{c\sum_{i = 1}^{n} s_{i}}{2\sum_{i = 1}^{n} s_{i} - \sum_{j = 1}^{n} r_{j}\left(I\right)} . 
+\end{align}
+The problem of maximizing $q$ is therefore equivalent to the problem of minimizing the sum
+\begin{align}
+r\left(I\right) & = \sum_{j = 1}^{n} r_{j}\left(I\right) . 
+\end{align}
 
+In the context of the blocking algorithm, we can bound $r\left(I\right)$ as follows. Let the blocking structure be given by $\blocks = \lbrace B_{1}, \dots, B_{K} \rbrace$. Let $m_{k}$ be the number of distinct parameters touched by block $k$, or, more formally, $m_{k} = \left|\cup_{i \in B_{k}} S_{i}\right|$, which is also
+equal to the number of neighbors of $B_{k}$, $\neighs{B_{k}}$, in the datapoint-parameter dependence graph. Provided each $m_{k}$ is bounded by the fast memory size $M$, we have
+\begin{align}
+r\left(I\right) & \leq \sum_{k = 1}^{K} m_{k} . 
+\end{align}
+Writing $m_{k} = \left|\neighs{B_{k}}\right|$, we thus find that the graph partitioning problem we face can be formulated as
+\begin{align}\label{eq:comb-opt}
+\min \sum_{k = 1}^{K} \left|\neighs{B_{k}}\right| ~~ \text{subject to}~~ \left|\neighs{B_{k}}\right| \leq M,~ 1 \leq k \leq K .
+\end{align}
+
+As this problem bears a strong resemblance to the NP-hard set cover problem~\citep{}, we do not attempt to solve it exactly. Instead, we investigate three heuristics for solving it:
+\begin{enumerate}
+\item
+{\bf Truncated breadth-first search.} In this approach, we do not fix the number of blocks in advance. Instead, we iterate through the data points and whenever we encounter one that has not yet been assigned a block, we start a breadth-first search for datapoints to put in a new block including the data point initiating the 
+search. Whenever the search encounters a data point that has not yet been assigned to a block, it adds it to the new block and enqueues all of its neighbors that have not themselves been assigned to a block. The search halts either when the queue is empty, or when the number of data points assigned to he new block
+exceeds a client-specified threshold.
+
+\item
+{\bf Greedy streaming.} In this approach, we fix the number of blocks before the algorithm starts. Then, we iterate through the data points and at each step, add the next data point to the block $B_{k}$ that makes the objective in~\eqref{eq:comb-opt} as small as possible.
+
+\item
+{\bf Iterated min-cut.} In this approach, we again fix the number of blocks in advance, specifically setting $K = 2^{\kappa}$, where $\kappa \geq 0$ is a depth parameter. We then perform $\kappa$ recursive min-cuts and keep the bottom level of the resulting hierarchical blocking.
+\end{enumerate}
 
 \section{Least Squares}\label{sec:ls}
 
