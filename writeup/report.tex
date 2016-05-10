@@ -50,7 +50,7 @@ SGD and its close cousins have the advantage of being simply parallelizable. Ind
 
 % Theory.
 % Explain systems issues at high level.
-There have been numerous variants of this method proposed and under variants sets of assumptions theoretical analyses show that under different regimes one should expect speedups in practice~\cite{niu2011hogwild, lian2015asynchronous, reddi2015variance, de2015taming, liu2015asynchronous}. \citet{mania2015perturbed} show under weak assumptions that as long as the number of processors are $\Ocal(n)$, where $n$ is the number of data points, \HW{} satisfies the same convergence rate as serial SGD. Therefore, one would hope that as long as the number of processors is not too large compared to the number of data points of the data set, \HW{} achieves nearly ideal speedup. 
+There have been numerous variants of this method proposed and under variants sets of assumptions theoretical analyses show that under different regimes one should expect speedups in practice~\cite{niu2011hogwild, lian2015asynchronous, reddi2015variance, de2015taming, liu2015asynchronous}. In \cite{mania2015perturbed}, the authors show under weak assumptions that as long as the number of processors are $\Ocal(n)$, where $n$ is the number of data points, \HW{} satisfies the same convergence rate as serial SGD. Therefore, one would hope that as long as the number of processors is not too large compared to the number of data points of the data set, \HW{} achieves nearly ideal speedup. 
 
 
 Unfortunately, the simple story fails for a number of reasons, many of them systems-related. As the number of threads becomes large, the architecture of the machine
@@ -63,14 +63,14 @@ alterations to the algorithm become not only desirable but absolutely necessary.
 A great deal of work has gone into understanding the statistical and computational properties of multi-node and multi-machine versions of the algorithm~\cite{zhang2014dimmwitted, dean2012large}. The recent DimmWitted system
 explored the design space of Hogwild-type algorithms in significant detail, tuning several knobs like: how much of the data each thread used; whether independent copies of the model were stored by each thread,
 or only on each NUMA node, or whether only a single global version of the model was maintained at all times; and how often threads received updated versions of other threads' models in the case of model replication. They
-found substantial differences in performance across these settings, and identified important computational-statistical tradeoffs to guide further work. In prior work,~\citet{dean2012large} had undertaken a similar study in the rather different multi-machine setting.
+found substantial differences in performance across these settings, and identified important computational-statistical tradeoffs to guide further work. In prior work~\cite{dean2012large}, the authors had undertaken a similar study in the rather different multi-machine setting.
 
 % Pivot to single-node case (ref Jellyfish, Buckwild).
 Comparatively little attention has been paid to the simpler setting of a single node, despite the fact that failing to take the memory access pattern into account can limit the speedup from parallelization
 both on the individual node in isolation and in the context of larger multi-node or multi-machine systems. A notable exception to this general trend is the Jellyfish system for large-scale matrix factorization, which employs a 
 blocking scheme to ensure that no two threads access the same parameters in any given epoch---a design choice that also ensures a high degree of cache locality within each thread's memory accesses since each thread's 
-assigned block depends only on a fraction of the total model parameters~\citep{recht2013parallel}. And more recently, further support for the idea that memory access optimizations can greatly increase the efficiency of optimization algorithms
-has come from work showing that low-precision arithmetic variants of the Hogwild algorithm can achieve substantially better speedups than their high-precision predecessors~\citep{de2015taming}.
+assigned block depends only on a fraction of the total model parameters~\cite{recht2013parallel}. And more recently, further support for the idea that memory access optimizations can greatly increase the efficiency of optimization algorithms
+has come from work showing that low-precision arithmetic variants of the Hogwild algorithm can achieve substantially better speedups than their high-precision predecessors~\cite{de2015taming}.
 
 % Introduce our approach
 In this report, we investigate a general-purpose methodology for optimizing the memory access efficiency of Hogwild-style algorithms. Building on the Jellyfish results, we propose to group datapoints into blocks that each access only a 
@@ -79,7 +79,7 @@ Further, if different threads are further required to iterate through the blocks
 
 The remainder of this report elaborates on our approach and provides evidence for these hypotheses. In Section~\ref{sec:alg-spec}, we explain the details of our proposed algorithm and introduce the bipartite datapoint-parameter dependence graph that underlies it. In Section~\ref{sec:memory-model}, we provide a simple 
 two-level memory model analysis of the \HW~ algorithm and frame the problem of optimally blocking datapoints as a graph partitioning problem in the dependence graph. In Section~\ref{sec:ls}, we investigate how the structure of the datapoint-parameter graph affects the potential gains from 
-effective blocking. In Section~\ref{sec:w2v}, we go on to show that a particular blocking strategy based on iterated min-cut can achieve substantial gains, both in runtime and speedup, on a real machine learning problem, namely the learning task for the popular Word2Vec model for word embeddings~\citep{arora2015rand}. Finally, in 
+effective blocking. In Section~\ref{sec:w2v}, we go on to show that a particular blocking strategy based on iterated min-cut can achieve substantial gains, both in runtime and speedup, on a real machine learning problem, namely the learning task for the popular Word2Vec model for word embeddings~\cite{arora2015rand}. Finally, in 
 Section~\ref{sec:conc}, we reflect on our results and propose several avenues for further work.
 
 \section{Block-Constrained Shuffling}\label{sec:alg-spec}
@@ -109,22 +109,22 @@ assume that each function $f_{e_i}(\xvec)$ depends only on coordinates of $\xvec
 Simplified memory models can provide useful guidance when optimizing algorithm performance, as the case of matrix-matrix multiply illustrates. In this section, we use a two-level memory model to estimate the computational intensity of the algorithm
 in terms of the blocking structure and use the resulting estimate to formalize the problem of finding an optimally memory access efficient blocking as a graph partitioning problem in the datapoint-parameter graph described in Section~\ref{sec:alg-spec}.
 
-Concretely, assume the memory hierarchy has two levels, fast and slow, where fast memory contains sufficient storage for $M$ model parameters and has zero access cost. We assume further that reads and writes have equal cost and that the computational effort required to obtain the model update based on datapoint $i$ is proportional to $s_{i}$, say equal to $cs_{i}$ for some absolute constant $c > 0$. 
+Concretely, assume the memory hierarchy has two levels, fast and slow, where fast memory contains sufficient storage for $M$ model parameters and has zero access cost. We assume further that reads and writes have equal cost and that the computational effort required to obtain the model update based on datapoint $i$ is proportional to the cardinality $|e_{i}|$, say equal to $c|e_{i}|$ for some absolute constant $c > 0$. 
 
-Note that under this framework, a model update based on datapoint $i$ requires $s_{i}$ parameter reads to compute the update, $cs_{i}$ steps of computation (e.g. flops) to compute the update, and $s_{i}$ parameter writes to actually perform the update. 
+Note that under this framework, a model update based on datapoint $i$ requires $|e_{i}|$ parameter reads to compute the update, $c|e_{i}|$ steps of computation (e.g. flops) to compute the update, and $|e_{i}|$ parameter writes to actually perform the update. 
 
 Now let the order in which a thread performs updates based on data points be $I = \lbrace i_{1}, \dots, i_{n}\rbrace$. To process data point $i_{j}$, the
-algorithm needs to read in some number $r_{j}\left(I\right)$ of model parameters to perform the update; the remaining $s_{i_j} - r_{j}\left(I\right)$ are
-already in fast memory and therefore cost nothing to access. The total number of reads is therefore given by $\sum_{i = 1}^{n} s_{i} - \sum_{j = 1}^{n} r_{j}\left(I\right)$, while the total number of writes is given by $\sum_{i} s_i$. The computational intensity can therefore be written as
+algorithm needs to read in some number $r_{j}\left(I\right)$ of model parameters to perform the update; the remaining $|e_{i_j}| - r_{j}\left(I\right)$ are
+already in fast memory and therefore cost nothing to access. The total number of reads is therefore given by $\sum_{i = 1}^{n} |e_{i}| - \sum_{j = 1}^{n} r_{j}\left(I\right)$, while the total number of writes is given by $\sum_{i} |e_i|$. The computational intensity can therefore be written as
 \begin{align}
-q\left(I\right) & = \frac{c\sum_{i = 1}^{n} s_{i}}{2\sum_{i = 1}^{n} s_{i} - \sum_{j = 1}^{n} r_{j}\left(I\right)} . 
+q\left(I\right) & = \frac{c\sum_{i = 1}^{n} |e_{i}|}{\sum_{i = 1}^{n} |e_{i}| + \sum_{j = 1}^{n} r_{j}\left(I\right)} . 
 \end{align}
 The problem of maximizing $q$ is therefore equivalent to the problem of minimizing the sum
 \begin{align}
 r\left(I\right) & = \sum_{j = 1}^{n} r_{j}\left(I\right) . 
 \end{align}
 
-In the context of the blocking algorithm, we can bound $r\left(I\right)$ as follows. Let the blocking structure be given by $\blocks = \lbrace B_{1}, \dots, B_{K} \rbrace$. Let $m_{k}$ be the number of distinct parameters touched by block $k$, or, more formally, $m_{k} = \left|\cup_{i \in B_{k}} S_{i}\right|$, which is also
+In the context of the blocking algorithm, we can bound $r\left(I\right)$ as follows. Let the blocking structure be given by $\blocks = \lbrace B_{1}, \dots, B_{K} \rbrace$. Let $m_{k}$ be the number of distinct parameters touched by block $k$, or, more formally, $m_{k} = \left|\cup_{i \in B_{k}} e_{i}\right|$, which is also
 equal to the number of neighbors of $B_{k}$, $\neighs{B_{k}}$, in the datapoint-parameter dependence graph. Provided each $m_{k}$ is bounded by the fast memory size $M$, we have
 \begin{align}
 r\left(I\right) & \leq \sum_{k = 1}^{K} m_{k} . 
@@ -134,7 +134,7 @@ Writing $m_{k} = \left|\neighs{B_{k}}\right|$, we thus find that the graph parti
 \min \sum_{k = 1}^{K} \left|\neighs{B_{k}}\right| ~~ \text{subject to}~~ \left|\neighs{B_{k}}\right| \leq M,~ 1 \leq k \leq K .
 \end{align}
 
-As this problem bears a strong resemblance to the NP-hard set cover problem~\citep{}, we do not attempt to solve it exactly. Instead, we investigate three heuristics for solving it:
+As this problem bears a strong resemblance to the NP-hard set cover problem~\cite{arora2009computational}, we do not attempt to solve it exactly. Instead, we investigate three heuristics for solving it:
 \begin{enumerate}
 \item
 {\bf Truncated breadth-first search.} In this approach, we do not fix the number of blocks in advance. Instead, we iterate through the data points and whenever we encounter one that has not yet been assigned a block, we start a breadth-first search for datapoints to put in a new block including the data point initiating the 
@@ -149,47 +149,46 @@ exceeds a client-specified threshold.
 
 \section{Least Squares}\label{sec:ls}
 
-To test our hypotheses about the impact of cache effects on the speed of asynchronous optimization algorithms and to show the benefits of our proposed method, we implemented a \HW{} least squares solver. More precisely, we minimize the loss 
+We have chosen least squares as a first application for testing the gains brought by cache friendly shuffles.
+More precisely, we  implemented the \HW{} method for optimizing the least squares objective 
 \begin{equation}
 \label{eq:LS}
-F(\xvec) = \sum_{i = 1}^n \ltwonorm{\langle a_i, \xvec \rangle - b_i}^2
+F(\xvec) = \sum_{i = 1}^n \ltwonorm{\langle a_i, \xvec \rangle - b_i}^2,
 \end{equation}
-via asynchronous stochastic optimization, where $a_i, \xvec \in \RR^d$ and $b_i\in \RR$. 
-At each iteration we sample a data-point $(a_i, b_i)$, we read the coordinates of the model $\xvec$ that belong to the support of the vector $a_i$, and compute the gradient $2(\langle a_i, \xvec\rangle - b_i)a_i$ and update the model $\xvec$ in the shared memory.
+where $a_i, \xvec \in \RR^d$ and $b_i\in \RR$. 
+At each iteration the algorithm chooses a data-point $(a_i, b_i)$, it reads the coordinates of the model $\xvec$ that belong to the support of the vector $a_i$, computes the gradient $2(\langle a_i, \xvec\rangle - b_i)a_i$, and updates the model $\xvec$ accordingly in shared memory.
 
-The benefits of studying this problem are twofold. Firstly, it is easy to describe the bipartite graph described above. Each data point $(a_i,b_i)$ is connected to the coordinates of $\xvec$ that belong to the support of $a_i$. This property allows us to easily generate synthetic data with different structures of the bipartite graph and test what properties of the bipartite graph impact performance. Secondly, the analysis of this problem yields insights for any optimization problem of the form 
+The benefits of working with this problem are twofold. Firstly, it is easy to see the correspondence between the data points $(a_i, b_i)$ and the bipartite graph described in Section~\ref{sec:alg-spec}. Each data point $(a_i,b_i)$ is connected to the coordinates of $\xvec$ that belong to the support of $a_i$. Therefore, we can easily generate synthetic data with different structures of the bipartite graph and test what properties of the bipartite graph impact performance. Secondly, the analysis of least squares yields insights into any optimization problem of the form 
+
 \begin{equation}
 F(\xvec) = \sum_{i = 1}^n \ell (\langle a_i, \xvec\rangle, b_i),
 \end{equation}
-where $\ell \colon \RR \times \RR \rightarrow \RR$ is some loss function. For example, training a linear SVM requires optimizing such an objective. 
+where $\ell \colon \RR \times \RR \rightarrow \RR$ is some loss function. For example, the objective of a linear SVM takes this form. 
 
 
 \subsection{Graph Structures Considered}
 
-All the data sets we generated have $n = 3\cdot 10^6$ data-points and $d = 10^4$ parameters. The non-zero entries of the data-points $(a_i, b_i)$ have been sampled uniformly from the interval $(-1,1)$.  We made these choices because for datasets of this size the standard \HW{} method achieves good speedup for up to $12$ threads, allowing us to observe what benefits our method brings in a setting where \HW{} performs well. 
+All the data sets we generated have $n = 3\cdot 10^6$ data points and $d = 10^4$ parameters. The non-zero entries of the data-points $(a_i, b_i)$ have been sampled uniformly from the interval $(-1,1)$.  We made these choices because on datasets of this size the standard \HW{} method achieves good speedup for up to $12$ threads. Therefore, on such data, we can observe what benefits our method brings in a setting where \HW{} performs well. 
 
 \subsubsection*{Uniform}
 
-To generate a datapoint $(a_i, b_i)$ under this model we sample uniformly at random and without-replacement a set of $k$ parameters (in our experiments we chose $k = 20$) out of the total $10^4$ parameters of $a_i\in \RR^{10^4}$ and assign them a value sampled uniformly at random from $(-1,1)$. The real value $b_i$ is uniformly sampled from $(-1,1)$. 
-
+To generate a datapoint $(a_i, b_i)$ under this model we sample uniformly at random and without-replacement a set of $k$ parameters (in our experiments we chose $k = 20$) out of the total $10^4$ parameters of $\xvec$ and connect the datat point $i$ to these parameters.  The corresponding coordinates of $a_i$ are sampled uniformly at random from $(-1,1)$ and the coordinates that do not have an edge connected to the data point are set to zero. The real value $b_i$ is uniformly sampled from $(-1,1)$. 
 
 \subsubsection*{Preferential-Attachment}
 
-A dataset under this model is generated sequentially. Firstly we connect the datapoint $(a_1, b_1)$ to a set of $k$ parameters chosen uniformly at random without replacement. Then, for each new datapoint $(a_i, b_i)$ we connect it to a $k$ parameters chosen without replacement with a probability proportional to their current degree in the bipartite graph (i.e. the number of datapoints that depend on them so far). The datapoints are shuffled at the end.
+A dataset under this model is generated sequentially. Firstly we connect the data point $(a_1, b_1)$ to a set of $k$ parameters chosen uniformly at random without replacement. Then, for each new data point $(a_i, b_i)$ we connect it to a $k$ parameters chosen without replacement with a probability proportional to their current degree in the bipartite graph (i.e. the number of datapoints that depend on them so far). Given the bipartite graph the coordinates of $(a_i, b_i)$ are either set to zero or sampled uniformly at random from $(-1,1)$. The datapoints are shuffled at the end.
 
 
 \subsubsection*{Stochastic Block Model}
 
-Under this model we group the parameters into disjoint sets of $k$-parameters. Denote by $b$ the number of groups of parameters obtained. Then, for each group of parameters choose without replacement $\lfloor \frac{n}{b}\rfloor$ data-points and connect each of them to all of the parameters in the group. Finally, connect each data point to $k'$-parameters chosen uniformly from the blocks that do not correspond to that datapoint. The number $k'$ is called the \emph{cross-degree}. Under this model there are well defined partition of the bipartite graph that satisfies the properties described in Section~\ref{sec:memory-model}, these are given by the groups of $\lfloor \frac{n}{b}\rfloor$ used to generate the graph. In some of our experiments we use this true partitioning of the graph to find the best possible gains that our method could yield given it fiends the optimal partitioning.
+Under this model we group the parameters into disjoint sets of $k$-parameters. Denote by $b$ the number of groups of parameters obtained. Then, for each group of parameters choose without replacement $\lfloor \frac{n}{b}\rfloor$ data points and connect each of them to all of the parameters in the group. Finally, connect each data point to $k'$-parameters chosen uniformly from the blocks that do not correspond to that data point. The number $k'$ is called the \emph{cross-degree}. Under this model there is an implicit partition of the bipartite graph that optimizes the objective described in Section~\ref{sec:memory-model}, this partition is given by the groups of $\lfloor \frac{n}{b}\rfloor$ used to generate the graph. In our experiments we use this true partitioning of the graph to find the best possible gains that our method could yield assuming it finds the optimal partitioning.
    
-
 \subsection{Experimental results}
 
-We implemented the \HW{} algorithm for optimizing objective \eqref{eq:LS} in C++ and ran the experiments on 
-We ran our experiments on the Edison compute nodes which feature two twelve core 2.4 GHz processors. 
-However, we used up to twelve threads and pinned them to individual cores of one NUMA node to avoid effects of NUMA.
+We implemented the \HW{} algorithm for optimizing objective \eqref{eq:LS} in C++ and ran the experiments on the Edison compute nodes which feature two twelve core 2.4 GHz processors. 
+Nonetheless, to avoid undesirable effects due to non-uniform memory accesses, we used up to twelve threads and pinned them to individual cores of one NUMA node. 
 
-In Figures~\ref{fig:} and~\ref{fig:} we compare the standard \HW{} method with our version of the algorithm that uses cache-friendly shuffles generated by a the greedy-streaming algorithm described in Section~\ref{sec:memory-model}. These result are unsurprising since graphs generated by uniform and preferential-attachment models have no true underlying graph structure. Therefore, there is no way of partitioning the graphs so that we obtain gains in the sense of Section~\ref{sec:}. Nonetheless, it is reassuring to see that our method does not perform worse than the standard \HW{} algorithm. 
+In Figures~\ref{fig:unif} and~\ref{fig:pref} we compare the standard \HW{} method with our version of the algorithm on two problems having the uniform structure and preferential attachment structure respectively. To compute the data point blocks we used the greedy-streaming algorithm described in Section~\ref{sec:memory-model}. We observe no gains from using our method for these graph structures. These results are unsurprising since graphs generated by uniform and preferential-attachment models have no true underlying block structure. Therefore, there is no way of partitioning the graphs so that we obtain gains in the sense of Section~\ref{sec:memory-model}. Nonetheless, it is reassuring to see that our method does not perform worse than the standard \HW{} algorithm. 
 
 \begin{figure}[h!]
 \centering
@@ -207,11 +206,48 @@ In Figures~\ref{fig:} and~\ref{fig:} we compare the standard \HW{} method with o
   \label{fig:unif-pref}
 \end{figure}
  
-Figures~\ref{}-\ref{} show the same comparison for the stochastic block model for different values of the cross-degree. To measure the ideal gains we could hope to obtain from the 
-cache-friendly shuffles we use the true blocks to generated the shuffles. Figure~\ref{} shows the gains of using the cache-friendly shuffles based on a partition generated by the greedy-streaming 
-algorithm. In these experiments we observer an additive gain from using the cache-friendly shuffles, for the different values of the cross-degree our method performs better by approximately $10$ seconds for when using $1$ thread, and the gain gets halved each time we double the number of threads used. This behavior occurs because the number of times a parameter is found in the L1-cache remains constant with increasing values of the crossing-degree (for small enough crossing-degree). 
+Figures~\ref{fig:pcross0} \ref{fig:pcross0.1}, \ref{fig:pcross0.5}, \ref{fig:pcross1} show the same comparison for the stochastic block model for different values of the cross-degree. To measure the ideal gains we could hope to obtain from the 
+cache-friendly shuffles we use the true blocks to generated the shuffles. We have noticed similar gains by using the greedy streaming algorithm for small values of the cross degree. 
+
+\begin{figure}[h!]
+\centering
+    \begin{subfigure}[b]{0.49\columnwidth}
+	\centerline{\includegraphics[width = 0.85\columnwidth, trim={0 0.1cm  0 0}, clip]{report_LS_speedup_blockmodel_pcross=0.pdf}}
+      \caption{\scriptsize Cross degree 0}
+      \label{fig:pcross0}
+    \end{subfigure}
+   \begin{subfigure}[b]{0.49\columnwidth}
+      	\centerline{\includegraphics[width = 0.85\columnwidth, trim={0 0.1cm  0 0}, clip]{report_LS_speedup_blockmodel_pcross=01.pdf}}
+      \caption{\scriptsize Cross degree 2}
+      \label{fig:pcross0.1}
+    \end{subfigure}
+ \begin{subfigure}[b]{0.49\columnwidth}
+	\centerline{\includegraphics[width = 0.85\columnwidth, trim={0 0.1cm  0 0}, clip]{report_LS_speedup_blockmodel_pcross=05.pdf}}
+      \caption{\scriptsize Cross degree 10}
+      \label{fig:pcross0.5}
+    \end{subfigure}
+   \begin{subfigure}[b]{0.49\columnwidth}
+      	\centerline{\includegraphics[width = 0.85\columnwidth, trim={0 0.1cm  0 0}, clip]{report_LS_speedup_blockmodel_pcross=1.pdf}}
+      \caption{\scriptsize Cross degree 20}
+      \label{fig:pcross1}
+    \end{subfigure}
+  \caption{Plotting speedup as a function of the number of threads for problems generated according to the stochastic block model. The problems have $3$ million datapoints and $10000$ parameters. Each datapoint depends on $20$ plus the cross-degree parameters.}
+  \label{fig:unif-pref}
+\end{figure}
+
+In these experiments we observe an additive gain from using the cache-friendly shuffles, for the different values of the cross-degree. Our method performs better by approximately $10$ seconds when using $1$ thread regardless of the cross degree, and the gain gets halved each time we double the number of threads used. This behavior occurs because the number of times a parameter is accessed in the L1-cache remains constant with increasing values of the crossing-degree (for small enough crossing-degree). 
 
 
+To show that the gains are additive in Figure~\ref{fig:crossratio} we plot the ratio of the gain and the running time of standard serial \HW{} as a function of cross degree.
+\begin{figure}[h!]
+\centering
+    \begin{subfigure}[b]{0.49\columnwidth}
+	\centerline{\includegraphics[width = 0.85\columnwidth, trim={0 0.1cm  0 0}, clip]{report_serial_cache_gains.pdf}}
+      \caption{\scriptsize }
+      \label{fig:crossratio}
+    \end{subfigure}
+  \caption{The ratio of the gain and the running time of standard serial \HW{} as a function of cross degree.}
+\end{figure}
 
 
 \section{Word Embeddings}\label{sec:w2v}
