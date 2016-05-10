@@ -16,6 +16,8 @@
 %%% MACROS %%%
 
 \newcommand{\ltwonorm}[1]{\left|\left|{#1}\right|\right|}
+\newcommand{\xvec}{\mathbf{v}}
+\newcommand{\HW}{\textsc{Hogwild!}}
 
 %%%%%%%%%%%
 
@@ -88,6 +90,26 @@ $f_{i}\left(x\right) = f_{i}\left(x_{S_i}\right)$. We assume further that reads 
 
 
 \section{Least Squares}\label{sec:ls}
+
+To test our hypotheses about the impact of cache effects on the speed of asynchronous optimization algorithms and to show the benefits of our proposed method, we implemented a \HW{} least squares solver. More precisely, we minimize the loss 
+\begin{equation}
+F(\xvec) = \sum_{i = 1}^n 
+\end{equation}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \section{Word Embeddings}\label{sec:w2v}
 
