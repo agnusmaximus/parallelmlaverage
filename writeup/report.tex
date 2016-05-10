@@ -18,6 +18,7 @@
 \newcommand{\ltwonorm}[1]{\left|\left|{#1}\right|\right|}
 \newcommand{\xvec}{\mathbf{v}}
 \newcommand{\HW}{\textsc{Hogwild!}}
+\newcommand{\RR}{\mathbb{R}}
 
 %%%%%%%%%%%
 
@@ -93,9 +94,51 @@ $f_{i}\left(x\right) = f_{i}\left(x_{S_i}\right)$. We assume further that reads 
 
 To test our hypotheses about the impact of cache effects on the speed of asynchronous optimization algorithms and to show the benefits of our proposed method, we implemented a \HW{} least squares solver. More precisely, we minimize the loss 
 \begin{equation}
-F(\xvec) = \sum_{i = 1}^n 
+\label{eq:LS}
+F(\xvec) = \sum_{i = 1}^n \ltwonorm{\langle a_i, \xvec \rangle - b_i}^2
 \end{equation}
+via asynchronous stochastic optimization, where $a_i, \xvec \in \RR^d$ and $b_i\in \RR$. 
+At each iteration we sample a data-point $(a_i, b_i)$, we read the coordinates of the model $\xvec$ that belong to the support of the vector $a_i$, and compute the gradient $2(\langle a_i, \xvec\rangle - b_i)a_i$ and update the model $\xvec$ in the shared memory.
 
+The benefits of studying this problem are twofold. Firstly, it is easy to describe the bipartite graph described above. Each data point $(a_i,b_i)$ is connected to the coordinates of $\xvec$ that belong to the support of $a_i$. This property allows us to easily generate synthetic data with different structures of the bipartite graph and test what properties of the bipartite graph impact performance. Secondly, the analysis of this problem yields insights for any optimization problem of the form 
+\begin{equation}
+F(\xvec) = \sum_{i = 1}^n \ell (\langle a_i, \xvec\rangle, b_i),
+\end{equation}
+where $\ell \colon \RR \times \RR \rightarrow \RR$ is some loss function. For example, training a linear SVM requires optimizing such an objective. 
+
+
+\subsection{Graph Structures Considered}
+
+All the data sets we generated have $n = 3\cdot 10^6$ data-points and $d = 10^4$ parameters. The non-zero entries of the data-points $(a_i, b_i)$ have been sampled uniformly from the interval $(-1,1)$.  We made these choices because for datasets of this size the standard \HW{} method achieves good speedup for up to $12$ threads, allowing us to observe what benefits our method brings in a setting where \HW{} performs well. 
+
+\subsubsection*{Uniform}
+
+To generate a datapoint $(a_i, b_i)$ under this model we sample uniformly at random and without-replacement a set of $k$ parameters (in our experiments we chose $k = 20$) out of the total $10^4$ parameters of $a_i\in \RR^{10^4}$ and assign them a value sampled uniformly at random from $(-1,1)$. The real value $b_i$ is uniformly sampled from $(-1,1)$. 
+
+
+\subsubsection*{Preferential-Attachment}
+
+A dataset under this model is generated sequentially. Firstly we connect the datapoint $(a_1, b_1)$ to a set of $k$ parameters chosen uniformly at random without replacement. Then, for each new datapoint $(a_i, b_i)$ we connect it to a $k$ parameters chosen without replacement with a probability proportional to their current degree in the bipartite graph (i.e. the number of datapoints that depend on them so far). The datapoints are shuffled at the end.
+
+
+\subsubsection*{Stochastic Block Model}
+
+Under this model we group the parameters into disjoint sets of $k$-parameters. Denote by $b$ the number of groups of parameters obtained. Then, for each group of parameters choose without replacement $\lfloor \frac{n}{b}\rfloor$ data-points and connect each of them to all of the parameters in the group. Finally, connect each data point to $k'$-parameters chosen uniformly from the blocks that do not correspond to that datapoint. Under this model there are ground 
+
+\subsection{Experimental results}
+
+We implemented the \HW{} algorithm for optimizing objective \eqref{eq:LS} in $C++$ and ran the experiments on 
+We ran our experiments on the Edison compute nodes which feature two twelve core 2.4 GHz processors. 
+However, we used up to twelve threads and pinned them to individual cores of one NUMA node to avoid effects of NUMA.
+
+
+
+
+
+
+
+
+\subsection{Discussion}
 
 
 
@@ -215,3 +258,8 @@ Finally, a shuffling that takes advantage of all levels of cache may yield furth
 Thus, a cache-oblivious shuffling method may be yet another area to explore.
 
 \end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
