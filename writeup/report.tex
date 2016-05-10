@@ -78,7 +78,13 @@ for further work.
 
 \section{A Simplified Memory Model Analysis}\label{sec:memory-model}
 
-Simplified memory models can provide a 
+Simplified memory models can provide useful guidance when optimizing algorithm performance, as the case of matrix-matrix multiply illustrates~\citep{}. In this section, we use a two-level memory model to estimate the computational intensity of the algorithm
+in terms of the blocking structure and use the resulting estimate to formalize the problem of finding an optimally memory access efficient blocking as a graph partitioning problem.
+
+Concretely, assume the memory hierarchy has two levels, fast and slow, where fast memory contains sufficient storage for $L$ model parameters. Further suppose that each $f_{i}$ can be written as a function of a set $S_{i}$ of $s_{i}$ parameters, out of $d$ model parameters total. To highlight this structure, we write 
+$f_{i}\left(x\right) = f_{i}\left(x_{S_i}\right)$. We assume further that reads and writes have equal cost and that the computational effort required to obtain the model update based on datapoint $i$ is proportional to $s_{i}$, say equal to $cs_{i}$ for some absolute constant $c > 0$. Note that under these assumptions, a model update based on datapoint $i$ requires $s_{i}$ parameter reads to compute the update, $cs_{i}$ steps of computation (e.g. flops) to compute the update, and $s_{i}$ parameter writes to actually perform the update.
+
+
 
 
 \section{Least Squares}\label{sec:ls}

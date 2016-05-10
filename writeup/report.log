@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.2.20)  9 MAY 2016 15:24
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=pdflatex 2014.2.20)  9 MAY 2016 17:07
 entering extended mode
 **C:/Users/mrabinovich/workspace/code/parallelmlaverage/writeup/report.tex
 (C:/Users/mrabinovich/workspace/code/parallelmlaverage/writeup/report.tex
@@ -205,53 +205,53 @@ LaTeX Warning: No \author given.
 [1
 
 {C:/Users/mrabinovich/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
-[2]
-Overfull \hbox (22.1908pt too wide) in paragraph at lines 95--118
+[2] [3]
+Overfull \hbox (22.1908pt too wide) in paragraph at lines 104--127
 \OT1/cmr/m/n/10.95 twelve core 2.4 GHz pro-ces-sors. How-ever, we used only up 
 to twelve cores/threads
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 95--118
+Underfull \hbox (badness 10000) in paragraph at lines 104--127
 
  []
 
 
-Overfull \hbox (71.3444pt too wide) in paragraph at lines 95--118
+Overfull \hbox (71.3444pt too wide) in paragraph at lines 104--127
 \OT1/cmr/m/n/10.95 We used the first $10[]$ bytes of En-glish Wikipedia from ht
 tp://mattmahoney.net/dc/textdata
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 95--118
+Underfull \hbox (badness 10000) in paragraph at lines 104--127
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 95--118
+Underfull \hbox (badness 10000) in paragraph at lines 104--127
 
  []
 
-[3] <./images/w2v_speedup_plot.pdf, id=23, 578.16pt x 433.62pt>
+<./images/w2v_speedup_plot.pdf, id=21, 578.16pt x 433.62pt>
 File: ./images/w2v_speedup_plot.pdf Graphic file (type pdf)
 
 <use ./images/w2v_speedup_plot.pdf>
-Package pdftex.def Info: ./images/w2v_speedup_plot.pdf used on input line 123.
+Package pdftex.def Info: ./images/w2v_speedup_plot.pdf used on input line 132.
 (pdftex.def)             Requested size: 312.97809pt x 234.73357pt.
  [4]
-<./images/w2v_problem_size_time_plot.pdf, id=28, 578.16pt x 433.62pt>
+<./images/w2v_problem_size_time_plot.pdf, id=29, 578.16pt x 433.62pt>
 File: ./images/w2v_problem_size_time_plot.pdf Graphic file (type pdf)
 
 <use ./images/w2v_problem_size_time_plot.pdf>
 Package pdftex.def Info: ./images/w2v_problem_size_time_plot.pdf used on input 
-line 128.
+line 137.
 (pdftex.def)             Requested size: 312.97809pt x 234.73357pt.
 
-<./images/w2v_time_loss_plot.pdf, id=29, 578.16pt x 433.62pt>
+<./images/w2v_time_loss_plot.pdf, id=30, 578.16pt x 433.62pt>
 File: ./images/w2v_time_loss_plot.pdf Graphic file (type pdf)
 
 <use ./images/w2v_time_loss_plot.pdf>
-Package pdftex.def Info: ./images/w2v_time_loss_plot.pdf used on input line 134
+Package pdftex.def Info: ./images/w2v_time_loss_plot.pdf used on input line 143
 .
 (pdftex.def)             Requested size: 312.97809pt x 234.73357pt.
  [5 <C:/Users/mrabinovich/workspace/code/parallelmlaverage/writeup/images/w2v_s
@@ -263,12 +263,12 @@ mlaverage/writeup/images/w2v_problem_size_time_plot.pdf): PDF inclusion: multip
 le pdfs with page group included in a single page
 >] [6 <C:/Users/mrabinovich/workspace/code/parallelmlaverage/writeup/images/w2v
 _time_loss_plot.pdf>]
-Underfull \hbox (badness 10000) in paragraph at lines 166--185
+Underfull \hbox (badness 10000) in paragraph at lines 175--194
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 166--185
+Underfull \hbox (badness 10000) in paragraph at lines 175--194
 
  []
 
@@ -281,23 +281,23 @@ Here is how much of TeX's memory you used:
  5649 multiletter control sequences out of 15000+200000
  11698 words of font info for 44 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
- 27i,13n,24p,385b,267s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 27i,13n,24p,389b,267s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Program Files (x86)/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/P
 rogram Files (x86)/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Program
  Files (x86)/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Program Files
  (x86)/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program Files (x86)
-/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program Files (x86)/MiKTeX
-/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files (x86)/MiKTeX/fonts/
-type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files (x86)/MiKTeX/fonts/type1/p
-ublic/amsfonts/cm/cmr17.pfb><C:/Program Files (x86)/MiKTeX/fonts/type1/public/a
-msfonts/cm/cmr8.pfb><C:/Program Files (x86)/MiKTeX/fonts/type1/public/amsfonts/
-cm/cmsy10.pfb><C:/Program Files (x86)/MiKTeX/fonts/type1/public/amsfonts/cm/cms
-y6.pfb><C:/Program Files (x86)/MiKTeX/fonts/type1/public/amsfonts/cm/cmti10.pfb
-><C:/Program Files (x86)/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-
-Output written on report.pdf (7 pages, 201012 bytes).
+/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi6.pfb><C:/Program Files (x86)/MiKTeX
+/fonts/type1/public/amsfonts/cm/cmmi8.pfb><C:/Program Files (x86)/MiKTeX/fonts/
+type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files (x86)/MiKTeX/fonts/type1/p
+ublic/amsfonts/cm/cmr12.pfb><C:/Program Files (x86)/MiKTeX/fonts/type1/public/a
+msfonts/cm/cmr17.pfb><C:/Program Files (x86)/MiKTeX/fonts/type1/public/amsfonts
+/cm/cmr8.pfb><C:/Program Files (x86)/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy
+10.pfb><C:/Program Files (x86)/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy6.pfb>
+<C:/Program Files (x86)/MiKTeX/fonts/type1/public/amsfonts/cm/cmti10.pfb><C:/Pr
+ogram Files (x86)/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on report.pdf (7 pages, 210949 bytes).
 PDF statistics:
- 219 PDF objects out of 1000 (max. 8388607)
+ 223 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  16 words of extra memory for PDF output out of 10000 (max. 10000000)
 
